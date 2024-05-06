@@ -73,6 +73,8 @@ namespace KoikatuVR
             set { _UseLegacyInputSimulator = value; TriggerPropertyChanged("UseLegacyInputSimulator"); }
         }
         private bool _UseLegacyInputSimulator;
+        public bool EnablePOV { get { return _EnablePOV; } set { _EnablePOV = value; TriggerPropertyChanged("EnablePOV"); } }
+        private bool _EnablePOV = true;
     }
 
     public class KeySet

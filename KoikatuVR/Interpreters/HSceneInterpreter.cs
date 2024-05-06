@@ -10,6 +10,7 @@ namespace KoikatuVR.Interpreters
         bool _active;
         HSceneProc _proc;
         Caress.VRMouth _vrMouth;
+        POV _pov;
 
         public override void OnStart()
         {
@@ -32,6 +33,7 @@ namespace KoikatuVR.Interpreters
                 Manager.Scene.GetRootComponent<HSceneProc>("HProc") is HSceneProc proc &&
                 proc.enabled)
             {
+                _pov = VR.Camera.gameObject.AddComponent<POV>();
                 _vrMouth = VR.Camera.gameObject.AddComponent<Caress.VRMouth>();
                 AddControllerComponent<Caress.CaressController>();
                 _proc = proc;
@@ -43,6 +45,7 @@ namespace KoikatuVR.Interpreters
         {
             if (_active)
             {
+                GameObject.Destroy(_pov);
                 GameObject.Destroy(_vrMouth);
                 DestroyControllerComponent<Caress.CaressController>();
                 _proc = null;

@@ -126,6 +126,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controls\SchoolTool.cs" />
     <Compile Include="KoikatuSettings.cs" />
+    <Compile Include="POV.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VRGIN\VRGIN\VRGIN.csproj">
