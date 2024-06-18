@@ -32,6 +32,9 @@ namespace KoikatuVR
 
         private Quaternion _tmp_head_y; // for POV_MODE.EYE
 
+        private SteamVR_Controller.Device L_device;
+        private SteamVR_Controller.Device R_device;
+
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -45,6 +48,10 @@ namespace KoikatuVR
             _settings = VR.Context.Settings as KoikatuSettings;
 
             _tmp_head_y = Quaternion.identity;
+
+            L_device = SteamVR_Controller.Input((int)VR.Mode.Left.Tracking.index);
+
+            R_device = SteamVR_Controller.Input((int)VR.Mode.Right.Tracking.index);
         }
 
         private void SetCameraToCharEye(ChaControl target)
@@ -106,7 +113,8 @@ namespace KoikatuVR
             {
                 for(int i = 0; i < targets.Length; i++)
                 {
-                    if(ChaControl.ReferenceEquals(targets[i], _currentTarget) && _currentTarget.sex != 1)
+                    if(ChaControl.ReferenceEquals(targets[i], _currentTarget) && 
+                       ((_currentTarget.sex == (int)POVConfig.targetGender.Value) || (POVConfig.targetGender.Value == POVConfig.Gender.All)))
                     {
                         return i;
                     }
@@ -131,7 +139,7 @@ namespace KoikatuVR
 
                 if (_currentTarget)
                 {
-                    if (_currentTarget.sex != 1) // 1 is female, only choose male as target
+                    if ((POVConfig.targetGender.Value == POVConfig.Gender.All) || (_currentTarget.sex == (int)POVConfig.targetGender.Value)) // 1 is female
                     {
                         if (_povMode == POV_MODE.EYE || _povMode == POV_MODE.HEAD || _povMode == POV_MODE.TELEPORT)
                         {
@@ -201,32 +209,49 @@ namespace KoikatuVR
         {
             if (_settings.EnablePOV == false) return;
             // Press Key (default: Y) to change POV Mode, configurable in BepInEX Plugin Settings (F1)
-            if (POVConfig.switchPOVModeKey.Value.IsDown())
+            if (POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
+            {
+                var button_id = (POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                if (L_device.GetPressDown(button_id) || R_device.GetPressDown(button_id))
+                {
+                    if (_povMode == POV_MODE.EYE) {resetRotationXZ();}
+                    _povMode = (POV_MODE)(((int)(_povMode + 1)) % (int)(POV_MODE.TOTAL));
+                }
+            }
+            else if (Input.GetKeyDown((KeyCode)POVConfig.switchPOVModeKey.Value)) // Use Keyboard Key
             {
                 if (_povMode == POV_MODE.EYE) {resetRotationXZ();}
                 _povMode = (POV_MODE)(((int)(_povMode + 1)) % (int)(POV_MODE.TOTAL));
             }
 
-            // When left hand controller is Hand Tool and visible, Press VR Trigger button to set _active
-            if ((!_active) && VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled)
+            if (!_active) // Activate POV under Hand Tool if user press VR Trigger button / Key 
             {
-                var device = SteamVR_Controller.Input((int)VR.Mode.Left.Tracking.index);
-                if (device.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger))
+                if (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
                 {
-                    _active = true;
-                    initPOVTarget();
-                    return;
+                    var button_id = (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                    // When left hand controller is Hand Tool and visible, Press VR button to set _active
+                    if (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled && L_device.GetPressDown(button_id))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
+                    // When right hand controller is Hand Tool and visible, Press VR button to set _active
+                    else if (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled && R_device.GetPressDown(button_id))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
                 }
-            }
-            // When right hand controller is Hand Tool and visible, Press VR Trigger button to set _active
-            else if ((!_active) && VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled)
-            {
-                var device = SteamVR_Controller.Input((int)VR.Mode.Right.Tracking.index);
-                if (device.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger))
+                else // Use Keyboard Key
                 {
-                    _active = true;
-                    initPOVTarget();
-                    return;
+                    if ((VR.Mode.Left.ToolIndex == 2 || VR.Mode.Right.ToolIndex == 2) && Input.GetKeyDown((KeyCode)POVConfig.POVKey.Value))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
                 }
             }
             // When there is no Hand Tool, deactive
@@ -240,16 +265,22 @@ namespace KoikatuVR
 
             if (_active)
             {
-                // Press VR Trigger button to change target POV character
-                if (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled)
+                if (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
                 {
-                    var device = SteamVR_Controller.Input((int)VR.Mode.Left.Tracking.index);
-                    if (device.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger)) {SwitchToNextChar();}
+                    var button_id = (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                    // Press VR button to change target POV character
+                    if (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled && L_device.GetPressDown(button_id))
+                    {
+                        SwitchToNextChar();
+                    }
+                    else if (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled && R_device.GetPressDown(button_id))
+                    {
+                        SwitchToNextChar();
+                    }
                 }
-                else if (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled)
+                else // Use Keyboard Key
                 {
-                    var device = SteamVR_Controller.Input((int)VR.Mode.Right.Tracking.index);
-                    if (device.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger)) {SwitchToNextChar();}
+                    if (Input.GetKeyDown((KeyCode)POVConfig.POVKey.Value)) {SwitchToNextChar();}
                 }
             }
 

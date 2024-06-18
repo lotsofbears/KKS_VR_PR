@@ -299,19 +299,210 @@ namespace KoikatuVR
     public class POVConfig
     {
         private const string sectionPOV = "4. POV between characters (Hand Tool in free H)";
-        public static ConfigEntry<KeyboardShortcut> switchPOVModeKey { get; private set; }
+        public static ConfigEntry<POVKeyList> switchPOVModeKey { get; private set; }
+        public static ConfigEntry<POVKeyList> POVKey { get; private set; }
+        public static ConfigEntry<Gender> targetGender { get; private set; }
 
+        public enum POVKeyList
+        {
+            [Description("VR Trigger Button")] // k_EButton_SteamVR_Trigger
+            VR_TRIGGER = KeyCode.None,
+            [Description("VR Button2(A/X).Depend on device")] // k_EButton_A
+            VR_BUTTON2 = 1, // Any number, not in KeyCode
+            [Description("Left mouse(=VR Trigger Button)")]
+            LBUTTON = KeyCode.Mouse0,
+            [Description("Right mouse(=VR Right Touchpad Click)")]
+            RBUTTON = KeyCode.Mouse1,
+            [Description("Middle mouse(=VR Touchpad Click)")]
+            MBUTTON = KeyCode.Mouse2,
+            [Description("Keyboard A")]
+            A = KeyCode.A,
+            [Description("Keyboard B")]
+            B = KeyCode.B,
+            [Description("Keyboard C")]
+            C = KeyCode.C,
+            [Description("Keyboard D")]
+            D = KeyCode.D,
+            [Description("Keyboard E")]
+            E = KeyCode.E,
+            [Description("Keyboard F")]
+            F = KeyCode.F,
+            [Description("Keyboard G")]
+            G = KeyCode.G,
+            [Description("Keyboard H")]
+            H = KeyCode.H,
+            [Description("Keyboard I")]
+            I = KeyCode.I,
+            [Description("Keyboard J")]
+            J = KeyCode.J,
+            [Description("Keyboard K")]
+            K = KeyCode.K,
+            [Description("Keyboard L")]
+            L = KeyCode.L,
+            [Description("Keyboard M")]
+            M = KeyCode.M,
+            [Description("Keyboard N")]
+            N = KeyCode.N,
+            [Description("Keyboard O")]
+            O = KeyCode.O,
+            [Description("Keyboard P")]
+            P = KeyCode.P,
+            [Description("Keyboard Q")]
+            Q = KeyCode.Q,
+            [Description("Keyboard R")]
+            R = KeyCode.R,
+            [Description("Keyboard S")]
+            S = KeyCode.S,
+            [Description("Keyboard T")]
+            T = KeyCode.T,
+            [Description("Keyboard U")]
+            U = KeyCode.U,
+            [Description("Keyboard V")]
+            V = KeyCode.V,
+            [Description("Keyboard W")]
+            W = KeyCode.W,
+            [Description("Keyboard X")]
+            X = KeyCode.X,
+            [Description("Keyboard Y")]
+            Y = KeyCode.Y,
+            [Description("Keyboard Z")]
+            Z = KeyCode.Z,
+            [Description("Keyboard 0")]
+            ALPHA0 = KeyCode.Alpha0,
+            [Description("Keyboard 1")]
+            ALPHA1 = KeyCode.Alpha1,
+            [Description("Keyboard 2")]
+            ALPHA2 = KeyCode.Alpha2,
+            [Description("Keyboard 3")]
+            ALPHA3 = KeyCode.Alpha3,
+            [Description("Keyboard 4")]
+            ALPHA4 = KeyCode.Alpha4,
+            [Description("Keyboard 5")]
+            ALPHA5 = KeyCode.Alpha5,
+            [Description("Keyboard 6")]
+            ALPHA6 = KeyCode.Alpha6,
+            [Description("Keyboard 7")]
+            ALPHA7 = KeyCode.Alpha7,
+            [Description("Keyboard 8")]
+            ALPHA8 = KeyCode.Alpha8,
+            [Description("Keyboard 9")]
+            ALPHA9 = KeyCode.Alpha9,
+            [Description("Keyboard Numpad 0")]
+            NUMPAD0 = KeyCode.Keypad0,
+            [Description("Keyboard Numpad 1")]
+            NUMPAD1 = KeyCode.Keypad1,
+            [Description("Keyboard Numpad 2")]
+            NUMPAD2 = KeyCode.Keypad2,
+            [Description("Keyboard Numpad 3")]
+            NUMPAD3 = KeyCode.Keypad3,
+            [Description("Keyboard Numpad 4")]
+            NUMPAD4 = KeyCode.Keypad4,
+            [Description("Keyboard Numpad 5")]
+            NUMPAD5 = KeyCode.Keypad5,
+            [Description("Keyboard Numpad 6")]
+            NUMPAD6 = KeyCode.Keypad6,
+            [Description("Keyboard Numpad 7")]
+            NUMPAD7 = KeyCode.Keypad7,
+            [Description("Keyboard Numpad 8")]
+            NUMPAD8 = KeyCode.Keypad8,
+            [Description("Keyboard Numpad 9")]
+            NUMPAD9 = KeyCode.Keypad9,
+            [Description("Keyboard F1")]
+            F1 = KeyCode.F1,
+            [Description("Keyboard F2")]
+            F2 = KeyCode.F2,
+            [Description("Keyboard F3")]
+            F3 = KeyCode.F3,
+            [Description("Keyboard F4")]
+            F4 = KeyCode.F4,
+            [Description("Keyboard F5")]
+            F5 = KeyCode.F5,
+            [Description("Keyboard F6")]
+            F6 = KeyCode.F6,
+            [Description("Keyboard F7")]
+            F7 = KeyCode.F7,
+            [Description("Keyboard F8")]
+            F8 = KeyCode.F8,
+            [Description("Keyboard F9")]
+            F9 = KeyCode.F9,
+            [Description("Keyboard F10")]
+            F10 = KeyCode.F10,
+            [Description("Keyboard F11")]
+            F11 = KeyCode.F11,
+            [Description("Keyboard F12")]
+            F12 = KeyCode.F12,
+            [Description("Keyboard Tab")]
+            TAB = KeyCode.Tab,
+            [Description("Keyboard Enter")]
+            RETURN = KeyCode.Return,
+            [Description("Keyboard Esc")]
+            ESC = KeyCode.Escape,
+            [Description("Keyboard Space")]
+            SPACE = KeyCode.Space,
+            [Description("Keyboard Home")]
+            HOME = KeyCode.Home,
+            [Description("Keyboard End")]
+            END = KeyCode.End,
+            [Description("Keyboard arrow left")]
+            LEFT = KeyCode.LeftArrow,
+            [Description("Keyboard arrow up")]
+            UP = KeyCode.UpArrow,
+            [Description("Keyboard arrow right")]
+            RIGHT = KeyCode.RightArrow,
+            [Description("Keyboard arrow down")]
+            DOWN = KeyCode.DownArrow,
+            [Description("Keyboard Ins")]
+            INSERT = KeyCode.Insert,
+            [Description("Keyboard Del")]
+            DELETE = KeyCode.Delete,
+            [Description("Keyboard Page Up")]
+            PAGEUP = KeyCode.PageUp,
+            [Description("Keyboard Page Down")]
+            PAGEDOWN = KeyCode.PageDown,
+            [Description("Keyboard Backspace")]
+            BACK = KeyCode.Backspace,
+            [Description("Keyboard Left Shift")]
+            LEFTSHIFT = KeyCode.LeftShift,
+            [Description("Keyboard Right Shift")]
+            RIGHTSHIFT = KeyCode.RightShift,
+            [Description("Keyboard Left Ctrl")]
+            LEFTCTRL = KeyCode.LeftControl,
+            [Description("Keyboard Right Ctrl")]
+            RIGHTCTRL = KeyCode.RightControl,
+            [Description("Keyboard Left Alt")]
+            LEFTALT = KeyCode.LeftAlt,
+            [Description("Keyboard Right Alt")]
+            RIGHTALT = KeyCode.RightAlt
+        }
+        public enum Gender
+        {
+            Male = 0,  // must same as Koikatsu Male ChaControl.sex = 0
+            Female = 1, // must same as Koikatsu Female ChaControl.sex = 1
+            All
+        }
         public POVConfig(ConfigFile config, KoikatuSettings settings)
         {
             var enablePOV = config.Bind(sectionPOV, "POV", true,
                 "Switch POV between characters in free H scenes (only works in Hand Tool)");
             Tie(enablePOV, v => settings.EnablePOV = v);
 
-            switchPOVModeKey = config.Bind(sectionPOV, "Switch POV Mode", new KeyboardShortcut(KeyCode.Y),
+            switchPOVModeKey = config.Bind(sectionPOV, "Switch POV Mode (1~3)", POVKeyList.Y,
                 new ConfigDescription(
-                    "Use VR Trigger Button to switch POV between characters. Three Modes:\r\n1: Camera is fixed at character's eye.\r\n2: Camera moves when character's head moves.\r\n3: Camera doesn't move when character's head moves (jump to character).",
+                    "Use VR Button/Key to switch POV between characters. Three Modes:\r\n1: Camera is fixed at character's eye.\r\n2: Camera moves when character's head moves. (Default)\r\n3: Camera doesn't move when character's head moves (jump to character).",
                     null,
                     new ConfigurationManagerAttributes { Order = -1 }));
+
+            POVKey = config.Bind(sectionPOV, "Switch POV Camera", POVKeyList.VR_TRIGGER,
+                new ConfigDescription(
+                    "Use this setting to switch the POV camera between target characters.",
+                    null,
+                    new ConfigurationManagerAttributes { Order = -2 }));
+
+            targetGender = config.Bind(sectionPOV, "Target", Gender.Male,
+                new ConfigDescription(
+                    "The Gender of the POV targets.",
+                    null,
+                    new ConfigurationManagerAttributes { Order = -3 }));
         }
         private static void Tie<T>(ConfigEntry<T> entry, Action<T> set)
         {

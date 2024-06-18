@@ -61,7 +61,9 @@ namespace KoikatuVR
         [HarmonyPostfix]
         static void PostInitialize(ChaControl __instance)
         {
-            if (__instance.sex == 0)
+            if ((__instance.sex == 0 && POVConfig.targetGender.Value == POVConfig.Gender.Male) ||
+                (__instance.sex == 1 && POVConfig.targetGender.Value == POVConfig.Gender.Female) ||
+                (POVConfig.targetGender.Value == POVConfig.Gender.All))
             {
                 __instance.GetOrAddComponent<VRMale>();
             }
