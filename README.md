@@ -32,7 +32,7 @@ This plugin assumes that your VR controller has the following buttons/controls:
 * Application menu button
 * Trigger button
 * Grip button
-* Touchpad
+* Touchpad or Thumbstick
 
 You may need to tweak button assignments in SteamVR's per-game settings if your
 controllers don't natively have these. See the Controller Support section for
@@ -68,7 +68,7 @@ The warp tool allows you to move around in the 3D space.
 
 Use the touchpad to teleport. Before you finish teleporting, you can draw a
 circle along the rim of the trackpad (or similarly rotate the thumbstick)
-to change your orientation after teleporting.
+to change your would-be orientation after teleporting.
 
 Holding the Grip button takes you into grab action. Here you can move around
 by "grabbing" the world. If you additionally press Trigger, you can also rotate
@@ -106,8 +106,8 @@ For the hand tool:
 
 For touchpad inputs, you need to press the touchpad or click the thumbstick.
 Just touching the touchpad or tilting the thumbstick won't be recognized.
-An exception to this rule is mouse wheel scroll actions, which only require
-touching.
+Exceptions to this rule are mouse wheel scroll actions and rotate actions,
+which only require touching.
 
 ## Situation-specific controls
 
@@ -158,6 +158,17 @@ pull the Trigger.
 You can also kiss or lick the female by moving your head to the right place.
 This can be turned off in the config.
 
+You can undress a female character by putting a controller on one of her
+clothing items, then pressing the touchpad. A single touchpad click will
+perform one level of undressing. If you press and hold the touchpad,
+move the controller away and then release the touchpad, it will completely
+remove that part of clothing.
+
+Unfortunately this direct undressing operation doesn't work as expected for
+all clothes because the plugin doesn't exactly know what parts of
+body each clothing item covers. You can always fall back to
+using the menu for clothing state changes.
+
 When changing location, you can use the green laser to point to a new location
 icon and pull the Trigger to confirm.
 
@@ -184,6 +195,10 @@ file or create a new issue).
 * Valve Index
 * Vive
 
+### HTC Vive
+
+Works out of the box.
+
 ### HP motion controllers
 
 The following button assignments are needed:
@@ -192,7 +207,7 @@ The following button assignments are needed:
 * B and Y buttons: Application Menu Button
 * Joystick: Trackpad position & value
 
-In addition, you need to make it "pretend to be Vive controllers".
+In addition, you need to make it "pretend to be Oculus Touch controllers".
 
 ## Common issues
 

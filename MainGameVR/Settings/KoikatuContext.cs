@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Visuals;
+using static UnityStandardAssets.CinematicEffects.Bloom;
 
 namespace KKS_VR.Settings
 {
@@ -11,13 +12,12 @@ namespace KKS_VR.Settings
     {
         private DefaultMaterialPalette _Materials;
 
-        private VRSettings _Settings;
+        private KoikatuSettings _Settings;
 
         [XmlIgnore] public IMaterialPalette Materials => _Materials;
-
         [XmlIgnore] public VRSettings Settings => _Settings;
 
-        public bool ConfineMouse { get; set; }
+        public bool ConfineMouse => _Settings.UseLegacyInputSimulator;
 
         public bool EnforceDefaultGUIMaterials { get; set; }
 
@@ -62,7 +62,6 @@ namespace KKS_VR.Settings
         {
             _Materials = new DefaultMaterialPalette();
             _Settings = settings;
-            ConfineMouse = true;
             EnforceDefaultGUIMaterials = false;
             GUIAlternativeSortingMode = false;
             GuiLayer = "Default";

@@ -38,5 +38,14 @@ namespace KKS_VR.Caress
             while (!consumed) yield return null;
             HandCtrlHooks.InjectMouseButtonUp(0);
         }
+
+        /// <summary>
+        /// Is the specified female speaking? Moans are ignored.
+        /// </summary>
+        public static bool IsSpeaking(HSceneProc proc, int femaleIndex)
+        {
+            return proc.voice.nowVoices[femaleIndex].state == HVoiceCtrl.VoiceKind.voice &&
+                   Manager.Voice.IsPlay(proc.flags.transVoiceMouth[femaleIndex], true);
+        }
     }
 }

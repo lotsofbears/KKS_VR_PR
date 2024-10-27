@@ -38,7 +38,6 @@ namespace KKS_VR.Controls
             var origin = VR.Camera.Origin;
             var oldOriginPosition = origin.position;
             var oldOriginRotation = origin.rotation;
-            var oldCameraPos = VR.Camera.transform.position;
 
             base.OnUpdate();
 

@@ -5,6 +5,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using KKAPI;
+using KKAPI.Utilities;
 using KKS_VR.Features;
 using KKS_VR.Fixes;
 using KKS_VR.Settings;
@@ -12,6 +13,7 @@ using Unity.XR.OpenVR;
 using UnityEngine;
 using Valve.VR;
 using VRGIN.Core;
+using WindowsInput;
 
 namespace KKS_VR
 {
@@ -112,6 +114,9 @@ namespace KKS_VR
             // VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
             UpdateNearClipPlane(settings);
             settings.AddListener("NearClipPlane", (_, _1) => UpdateNearClipPlane(settings));
+            
+            SetInputSimulator(settings);
+            settings.AddListener("UseLegacyInputSimulator", (_, _1) => SetInputSimulator(settings));
 
             VR.Manager.SetMode<GameStandingMode>();
 
@@ -137,6 +142,18 @@ namespace KKS_VR
         private void UpdateNearClipPlane(KoikatuSettings settings)
         {
             VR.Camera.gameObject.GetComponent<UnityEngine.Camera>().nearClipPlane = settings.NearClipPlane;
+        }
+
+        private void SetInputSimulator(KoikatuSettings settings)
+        {
+            if (settings.UseLegacyInputSimulator)
+            {
+                VR.Manager.Input = new InputSimulator();
+            }
+            else
+            {
+                VR.Manager.Input = new RobustInputSimulator();
+            }
         }
 
         private static void TweakShadowSettings()

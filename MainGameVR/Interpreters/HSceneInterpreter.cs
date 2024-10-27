@@ -18,7 +18,7 @@ namespace KKS_VR.Interpreters
         public override void OnStart()
         {
             _leftController = VR.Mode.Left.gameObject.AddComponent<Caress.CaressController>();
-            _rightController = VR.Mode.Left.gameObject.AddComponent<Caress.CaressController>();
+            _rightController = VR.Mode.Right.gameObject.AddComponent<Caress.CaressController>();
             _pov = VR.Camera.gameObject.AddComponent<Camera.POV>();
             _pov.Initialize(_leftController.getController(), _rightController.getController());
             _currentBackgroundColor = Manager.Config.HData.BackColor;

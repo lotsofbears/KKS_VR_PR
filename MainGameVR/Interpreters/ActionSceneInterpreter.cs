@@ -148,7 +148,7 @@ namespace KKS_VR.Interpreters
                 pos = player.position;
                 pos.y += _IsStanding ? _Settings.StandingCameraPos : _Settings.CrouchingCameraPos;
             }
-
+            
             VRCameraMover.Instance.MoveTo(
                 pos + cf * 0.23f, // 首が見えるとうざいのでほんの少し前目にする
                 onlyPosition ? headCam.rotation : player.rotation,
@@ -196,7 +196,7 @@ namespace KKS_VR.Interpreters
 
             if (!dash)
             {
-                VR.Input.Keyboard.KeyDown(VirtualKeyCode.SHIFT);
+                VR.Input.Keyboard.KeyDown(VirtualKeyCode.LSHIFT);
                 _Dashing = true;
             }
 
@@ -213,7 +213,7 @@ namespace KKS_VR.Interpreters
 
             if (_Dashing)
             {
-                VR.Input.Keyboard.KeyUp(VirtualKeyCode.SHIFT);
+                VR.Input.Keyboard.KeyUp(VirtualKeyCode.LSHIFT);
                 _Dashing = false;
             }
 

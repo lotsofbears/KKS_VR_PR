@@ -77,36 +77,34 @@ namespace KKS_VR.Fixes.Mirror
             GL.invertCulling = !oldInvertCulling;
 
             UpdateCameraModes(cam, reflectionData.camera);
-
+            
             if (cam.stereoEnabled)
             {
                 if (cam.stereoTargetEye == StereoTargetEyeMask.Both || cam.stereoTargetEye == StereoTargetEyeMask.Left)
                 {
-                    var eyePos = cam.transform.TransformPoint(SteamVR.instance.eyes[0].pos);
-                    var eyeRot = cam.transform.rotation * SteamVR.instance.eyes[0].rot;
-                    var projectionMatrix = GetSteamVRProjectionMatrix(cam, EVREye.Eye_Left);
-                    var target = m_UseSharedRenderTexture ? m_SharedReflectionTextureLeft : reflectionData.left;
+                    Matrix4x4 projectionMatrix = GetSteamVRProjectionMatrix(cam, Valve.VR.EVREye.Eye_Left);
+                    var viewMatrix = cam.GetStereoViewMatrix(UnityEngine.Camera.StereoscopicEye.Left);
+                    RenderTexture target = m_UseSharedRenderTexture ? m_SharedReflectionTextureLeft : reflectionData.left;
                     reflectionData.propertyBlock.SetTexture(s_LeftTexturePropertyID, target);
 
-                    RenderMirror(reflectionData.camera, target, eyePos, eyeRot, projectionMatrix);
+                    RenderMirror(reflectionData.camera, target, projectionMatrix, viewMatrix);
                 }
 
                 if (cam.stereoTargetEye == StereoTargetEyeMask.Both || cam.stereoTargetEye == StereoTargetEyeMask.Right)
                 {
-                    var eyePos = cam.transform.TransformPoint(SteamVR.instance.eyes[1].pos);
-                    var eyeRot = cam.transform.rotation * SteamVR.instance.eyes[1].rot;
-                    var projectionMatrix = GetSteamVRProjectionMatrix(cam, EVREye.Eye_Right);
-                    var target = m_UseSharedRenderTexture ? m_SharedReflectionTextureRight : reflectionData.right;
+                    Matrix4x4 projectionMatrix = GetSteamVRProjectionMatrix(cam, Valve.VR.EVREye.Eye_Right);
+                    var viewMatrix = cam.GetStereoViewMatrix(UnityEngine.Camera.StereoscopicEye.Right);
+                    RenderTexture target = m_UseSharedRenderTexture ? m_SharedReflectionTextureRight : reflectionData.right;
                     reflectionData.propertyBlock.SetTexture(s_RightTexturePropertyID, target);
 
-                    RenderMirror(reflectionData.camera, target, eyePos, eyeRot, projectionMatrix);
+                    RenderMirror(reflectionData.camera, target, projectionMatrix, viewMatrix);
                 }
             }
             else
             {
-                var target = m_UseSharedRenderTexture ? m_SharedReflectionTextureLeft : reflectionData.left;
+                RenderTexture target = m_UseSharedRenderTexture ? m_SharedReflectionTextureLeft : reflectionData.left;
                 reflectionData.propertyBlock.SetTexture(s_LeftTexturePropertyID, target);
-                RenderMirror(reflectionData.camera, target, cam.transform.position, cam.transform.rotation, cam.projectionMatrix);
+                RenderMirror(reflectionData.camera, target, cam.projectionMatrix, cam.worldToCameraMatrix);
             }
 
             // Apply the property block containing the texture references to the renderer
@@ -122,28 +120,25 @@ namespace KKS_VR.Fixes.Mirror
             s_InsideRendering = false;
         }
 
-        private void RenderMirror(UnityEngine.Camera reflectionCamera, RenderTexture targetTexture, Vector3 camPosition, Quaternion camRotation, Matrix4x4 camProjectionMatrix)
+        void RenderMirror(UnityEngine.Camera reflectionCamera, RenderTexture targetTexture, Matrix4x4 camProjectionMatrix, Matrix4x4 camViewMatrix)
         {
-            // Copy camera position/rotation/projection data into the reflectionCamera
-            reflectionCamera.ResetWorldToCameraMatrix();
-            reflectionCamera.transform.position = camPosition;
-            reflectionCamera.transform.rotation = camRotation;
+            // Copy camera projection matrix into the reflectionCamera
             reflectionCamera.projectionMatrix = camProjectionMatrix;
-            reflectionCamera.targetTexture = targetTexture;
 
+            reflectionCamera.targetTexture = targetTexture;
             reflectionCamera.cullingMask = ~(1 << 4) & m_ReflectLayers.value; // never render water layer
 
             // find out the reflection plane: position and normal in world space
-            var pos = transform.position;
-            var normal = transform.up;
+            Vector3 pos = transform.position;
+            Vector3 normal = transform.up;
 
             // Reflect camera around reflection plane
-            var worldSpaceClipPlane = Plane(pos, normal);
-            reflectionCamera.worldToCameraMatrix *= CalculateReflectionMatrix(worldSpaceClipPlane);
+            Vector4 worldSpaceClipPlane = Plane(pos, normal);
+            reflectionCamera.worldToCameraMatrix = camViewMatrix * CalculateReflectionMatrix(worldSpaceClipPlane);
 
             // Setup oblique projection matrix so that near plane is our reflection
             // plane. This way we clip everything behind it for free.
-            var cameraSpaceClipPlane = CameraSpacePlane(reflectionCamera, pos, normal);
+            Vector4 cameraSpaceClipPlane = CameraSpacePlane(reflectionCamera, pos, normal);
             reflectionCamera.projectionMatrix = reflectionCamera.CalculateObliqueMatrix(cameraSpaceClipPlane);
 
             // Set camera position and rotation (even though it will be ignored by the render pass because we
@@ -350,7 +345,7 @@ namespace KKS_VR.Fixes.Mirror
             return reflectionMat;
         }
 
-        public static Matrix4x4 GetSteamVRProjectionMatrix(UnityEngine.Camera cam, EVREye eye)
+        public static Matrix4x4 GetSteamVRProjectionMatrix(UnityEngine.Camera cam, Valve.VR.EVREye eye)
         {
             var proj = SteamVR.instance.hmd.GetProjectionMatrix(eye, cam.nearClipPlane, cam.farClipPlane);
             var m = new Matrix4x4();

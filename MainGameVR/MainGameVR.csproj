@@ -198,6 +198,7 @@
     <Compile Include="Camera\BackgroundDisplayer.cs" />
     <Compile Include="AnimationCrossFader.cs" />
     <Compile Include="Camera\VREffector.cs" />
+    <Compile Include="Caress\Undresser.cs" />
     <Compile Include="Fixes\ReduceAssetUnloads.cs" />
     <Compile Include="Controls\ButtonsSubtool.cs" />
     <Compile Include="Camera\CameraControlControl.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Caress\LongDistanceKissMachine.cs" />
     <Compile Include="Caress\VRMouth.cs" />
     <Compile Include="Controls\GrabAction.cs" />
+    <Compile Include="RobustInputSimulator.cs" />
     <Compile Include="Util\DebugHooks.cs" />
     <Compile Include="Fixes\GameFixes.cs" />
     <Compile Include="Features\PrivacyScreen.cs" />

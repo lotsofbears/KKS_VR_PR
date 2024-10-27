@@ -127,6 +127,18 @@ namespace KKS_VR.Settings
 
         private float _NearClipPlane;
 
+        public bool UseLegacyInputSimulator
+        {
+            get => _UseLegacyInputSimulator;
+            set
+            {
+                _UseLegacyInputSimulator = value;
+                TriggerPropertyChanged("UseLegacyInputSimulator");
+            }
+        }
+
+        private bool _UseLegacyInputSimulator;
+
         public bool EnablePOV
         {
             get => _EnablePOV;
