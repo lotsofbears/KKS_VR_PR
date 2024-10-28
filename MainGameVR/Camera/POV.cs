@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using VRGIN.Controls;
 using VRGIN.Core;
@@ -11,8 +9,10 @@ using KKS_VR.Settings;
 public enum POV_MODE
 {
     // Press Key (default: Y) to change POV Mode, configurable in BepInEX Plugin Settings (F1)
-    EYE = 0,      // Mode1: Tracking Eye Position (Default)
-    TELEPORT = 1, // Mode2: Teleport(Jump) to next character when trigger controller
+    EYE = 0,      // Mode1: Tracking Eye Position & Rotation
+    HEAD = 1,     // Mode2: Only Tracking Eye Position (Default)
+    TELEPORT = 2, // Mode3: Teleport(Jump) to next character when trigger controller
+    TOTAL = 3     // Total num of Enum
 }
 
 namespace KKS_VR.Camera
@@ -28,6 +28,8 @@ namespace KKS_VR.Camera
         private bool _active;
 
         private KoikatuSettings _settings;
+
+        private Quaternion _tmp_head_y; // for POV_MODE.EYE
 
         public void Initialize(Controller left, Controller right)
         {
@@ -46,70 +48,163 @@ namespace KKS_VR.Camera
             // HScene Init
             _currentChara = null;
 
-            _povMode = POV_MODE.EYE;
+            _povMode = POV_MODE.HEAD;
 
             _active = false;
 
             _settings = VR.Context.Settings as KoikatuSettings;
+
+            _tmp_head_y = Quaternion.identity;
+        }
+
+        private void SetCameraToCharEye(ChaControl target)
+        {
+            var position = GetEyes(target).position;
+            var rotation = GetEyes(target).rotation;
+
+            // Set Camera to Character Eye
+            VRManager.Instance.Mode.MoveToPosition(position, rotation, false);
+        }
+
+        // from VRGIN ControlMode.cs
+        private void MoveToPositionEx(Vector3 targetPosition, Quaternion rotation = default(Quaternion))
+        {
+            // Camera rotates with character eye
+            VR.Camera.SteamCam.origin.rotation = rotation * _tmp_head_y;
+
+            float targetY = targetPosition.y;
+            float myY = VR.Camera.SteamCam.head.position.y;
+            targetPosition = new Vector3(targetPosition.x, targetY, targetPosition.z);
+            var myPosition = new Vector3(VR.Camera.SteamCam.head.position.x, myY, VR.Camera.SteamCam.head.position.z);
+            VR.Camera.SteamCam.origin.position += (targetPosition - myPosition);
+        }
+
+        // from VRGIN ControlMode.cs
+        private Quaternion MakeUpright(Quaternion rotation)
+        {
+            return Quaternion.Euler(0, rotation.eulerAngles.y, 0);
+        }
+        private void resetRotationXZ()
+        {
+            VR.Camera.SteamCam.origin.rotation = MakeUpright(VR.Camera.SteamCam.origin.rotation);
+            _tmp_head_y = Quaternion.identity;
         }
 
         private Transform GetHead(ChaControl human)
         {
             return human.objHead.GetComponentsInParent<Transform>().First((Transform t) => t.name.StartsWith("c") && t.name.ToLower().Contains("j_head"));
         }
-        private Transform GetEyePose(ChaControl human)
+        private Transform GetEyes(ChaControl human)
         {
             Transform transform = human.objHeadBone.transform.Descendants().FirstOrDefault((Transform t) => t.name.StartsWith("c") && t.name.ToLower().EndsWith("j_faceup_tz"));
-            if (transform == null)
+            if (!transform)
             {
                 VRLog.Info("Creating eyes, {0}", human.name);
                 transform = new GameObject("cf_j_faceup_tz").transform;
                 transform.SetParent(GetHead(human), false);
                 transform.transform.localPosition = new Vector3(0f, 0.07f, 0.05f);
             }
+            else
+            {
+                VRLog.Debug("Found eyes, {0}", human.name);
+            }
             return transform;
         }
-
-        private void UpdateCurrentChara(List<ChaControl> targets)
+        private int getCurrChaIdx(ChaControl[] targets)
         {
-            // Rotate targets only when currentCharaIdx is found and it is not the last element already
-            int currentCharaIdx = targets.IndexOf(_currentChara);
-            if (currentCharaIdx > -1 && currentCharaIdx < targets.Count - 1)
+            if (_currentChara)
             {
-                // Rotate the list using LINQ
-                var rotated = targets.Skip(currentCharaIdx + 1).Concat(targets.Take(currentCharaIdx + 1)).ToList();
-                targets.Clear();
-                targets.AddRange(rotated);
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    if (ChaControl.ReferenceEquals(targets[i], _currentChara) &&
+                       ((_currentChara.sex == (int)POVConfig.targetGender.Value) || (POVConfig.targetGender.Value == POVConfig.Gender.All)))
+                    {
+                        return i;
+                    }
+                }
             }
+            // cannot find last pov character (initialize / deleted)
+            return targets.Length - 1;
+        }
 
-            foreach (var target in targets)
+        // set _currentChara
+        private void nextChar(ChaControl[] targets, int currentTargetIndex, bool keep_char = false)
+        {
+            var cnt = 0;
+
+            while (cnt < targets.Length)
             {
-                if (target.sex == 1) // 1 is female, only choose male as target
-                    continue;
+                if ((keep_char && cnt == 0) == false)
+                {
+                    currentTargetIndex = (currentTargetIndex + 1) % targets.Length;
+                }
+                _currentChara = targets[currentTargetIndex];
 
-                // Set Camera to Character Eye
-                var targetEyePose = GetEyePose(target);
-                var tvec = targetEyePose.position;
-                var quat = Quaternion.Euler(0, targetEyePose.rotation.eulerAngles.y, 0);
-                VRManager.Instance.Mode.MoveToPosition(tvec, quat, false);
-                VRLog.Info("POV target found, {0}", target.name);
-                _currentChara = target;
-                return;
+                if (_currentChara)
+                {
+                    if ((POVConfig.targetGender.Value == POVConfig.Gender.All) || (_currentChara.sex == (int)POVConfig.targetGender.Value)) // 1 is female
+                    {
+                        if (_povMode == POV_MODE.EYE || _povMode == POV_MODE.HEAD || _povMode == POV_MODE.TELEPORT)
+                        {
+                            SetCameraToCharEye(_currentChara);
+
+                            if (_povMode == POV_MODE.EYE)
+                            {
+                                // _tmp_head_y : the initial y when jump to character
+                                _tmp_head_y = MakeUpright(VR.Camera.SteamCam.origin.rotation) *
+                                                               Quaternion.Inverse(MakeUpright(VR.Camera.SteamCam.head.rotation));
+                            }
+                        }
+                        return;
+                    }
+                }
+                cnt++;
             }
+            // target character not found
+            _currentChara = null;
+        }
+
+        public void SwitchToNextChar()
+        {
+            // Change to next target character
+            if (!_active) return;
+
+            ChaControl[] targets = GameObject.FindObjectsOfType<ChaControl>();
+            var currentTargetIndex = getCurrChaIdx(targets);
+            nextChar(targets, currentTargetIndex, false);
+        }
+
+        private void initPOVTarget()
+        {
+            // Inherit last target character if still alive, otherwise find a new target character
+            ChaControl[] targets = GameObject.FindObjectsOfType<ChaControl>();
+            var currentTargetIndex = getCurrChaIdx(targets);
+            nextChar(targets, currentTargetIndex, true);
         }
 
         private void SetPOV()
         {
-            if (_currentChara == null) return;
+            if (!_active) return;
 
-            switch (_povMode)
+            if (_currentChara)
             {
-                case POV_MODE.EYE:
-                    VRManager.Instance.Mode.MoveToPosition(GetEyePose(_currentChara).position, false);
-                    break;
-                case POV_MODE.TELEPORT:
-                default:
-                    break;
+                switch (_povMode)
+                {
+                    case POV_MODE.EYE:
+                        MoveToPositionEx(GetEyes(_currentChara).position, GetEyes(_currentChara).rotation);
+                        break;
+
+                    case POV_MODE.HEAD:
+                        VRManager.Instance.Mode.MoveToPosition(GetEyes(_currentChara).position, false);
+                        break;
+
+                    case POV_MODE.TELEPORT:
+                        // Already Teleport in SwitchToNextChar
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
 
@@ -117,41 +212,82 @@ namespace KKS_VR.Camera
         {
             if (_settings.EnablePOV == false) return;
             // Press Key (default: Y) to change POV Mode, configurable in BepInEX Plugin Settings (F1)
-            if (POVConfig.switchPOVModeKey.Value.IsDown())
+            if (POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
             {
-                _povMode = (POV_MODE)(((int)_povMode + 1) % Enum.GetValues(typeof(POV_MODE)).Length);
-                VRLog.Info("Switching to POV_MODE {0}", (int)_povMode);
+                var button_id = (POVConfig.switchPOVModeKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                if (_leftController.Input.GetPressDown(button_id) || _rightController.Input.GetPressDown(button_id))
+                {
+                    if (_povMode == POV_MODE.EYE) { resetRotationXZ(); }
+                    _povMode = (POV_MODE)(((int)(_povMode + 1)) % (int)(POV_MODE.TOTAL));
+                }
+            }
+            else if (Input.GetKeyDown((KeyCode)POVConfig.switchPOVModeKey.Value)) // Use Keyboard Key
+            {
+                if (_povMode == POV_MODE.EYE) { resetRotationXZ(); }
+                _povMode = (POV_MODE)(((int)(_povMode + 1)) % (int)(POV_MODE.TOTAL));
             }
 
-            var isControllerActive =
-                (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled) ||
-                (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled);
-            var isTriggered =
-                _leftController.Input.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger) ||
-                _rightController.Input.GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-
-            // When left | right hand controller is Hand Tool and visible
-            if (isControllerActive && isTriggered)
+            if (!_active) // Activate POV under Hand Tool if user press VR Trigger button / Key 
             {
-                // Press VR Trigger button to set _active
-                if (!_active)
+                if (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
                 {
-                    _active = true;
+                    var button_id = (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                    // When left hand controller is Hand Tool and visible, Press VR button to set _active
+                    if (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled && _leftController.Input.GetPressDown(button_id))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
+                    // When right hand controller is Hand Tool and visible, Press VR button to set _active
+                    else if (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled && _rightController.Input.GetPressDown(button_id))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
                 }
-                List<ChaControl> targets = GameObject.FindObjectsOfType<ChaControl>().ToList();
-                UpdateCurrentChara(targets);
+                else // Use Keyboard Key
+                {
+                    if ((VR.Mode.Left.ToolIndex == 2 || VR.Mode.Right.ToolIndex == 2) && Input.GetKeyDown((KeyCode)POVConfig.POVKey.Value))
+                    {
+                        _active = true;
+                        initPOVTarget();
+                        return;
+                    }
+                }
             }
             // When there is no Hand Tool, deactive
             else if (_active && VR.Mode.Left.ToolIndex != 2 && VR.Mode.Right.ToolIndex != 2)
             {
                 _active = false;
+                if (_povMode == POV_MODE.EYE) { resetRotationXZ(); }
+                return;
             }
 
-            // Only update POV if active
             if (_active)
             {
-                SetPOV();
+                if (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER || POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_BUTTON2) // Use VR button
+                {
+                    var button_id = (POVConfig.POVKey.Value == POVConfig.POVKeyList.VR_TRIGGER) ? Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger : Valve.VR.EVRButtonId.k_EButton_A;
+                    // Press VR button to change target POV character
+                    if (VR.Mode.Left.ToolIndex == 2 && VR.Mode.Left.ActiveTool.isActiveAndEnabled && _leftController.Input.GetPressDown(button_id))
+                    {
+                        SwitchToNextChar();
+                    }
+                    else if (VR.Mode.Right.ToolIndex == 2 && VR.Mode.Right.ActiveTool.isActiveAndEnabled && _rightController.Input.GetPressDown(button_id))
+                    {
+                        SwitchToNextChar();
+                    }
+                }
+                else // Use Keyboard Key
+                {
+                    if (Input.GetKeyDown((KeyCode)POVConfig.POVKey.Value)) { SwitchToNextChar(); }
+                }
             }
+
+
+            SetPOV();
         }
     }
 }

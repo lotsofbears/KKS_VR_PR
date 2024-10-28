@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using VRGIN.Core;
+using KKS_VR.Settings;
 
 namespace KKS_VR.Features
 {
@@ -54,7 +55,12 @@ namespace KKS_VR.Features
         [HarmonyPostfix]
         private static void PostInitialize(ChaControl __instance)
         {
-            if (__instance.sex == 0) __instance.GetOrAddComponent<HideMaleHead>();
+            if ((__instance.sex == 0 && POVConfig.targetGender.Value == POVConfig.Gender.Male) ||
+                (__instance.sex == 1 && POVConfig.targetGender.Value == POVConfig.Gender.Female) ||
+                (POVConfig.targetGender.Value == POVConfig.Gender.All))
+            {
+                __instance.GetOrAddComponent<HideMaleHead>();
+            }
         }
     }
 }
