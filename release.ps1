@@ -11,18 +11,18 @@ Remove-Item -Force -Path ($out) -Recurse -ErrorAction SilentlyContinue
 # KK -------------------------------------
 Write-Output ("Creating KK release")
 
-New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\plugins\KoikatuVR\Images") | Out-Null
-New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\patchers\KoikatuVR") | Out-Null
+New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\plugins\KK_MainGameVR\Images") | Out-Null
+New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\patchers\KK_MainGameVR") | Out-Null
 New-Item -ItemType Directory -Force -Path ($out + "\Koikatu_Data") | Out-Null
 
-Copy-Item -Path ($dir + "\KK\*") -Destination ($out + "\BepInEx\plugins\KoikatuVR") -ErrorAction Stop -Force | Out-Null
+Copy-Item -Path ($dir + "\KK\*") -Destination ($out + "\BepInEx\plugins\KK_MainGameVR") -ErrorAction Stop -Force | Out-Null
 # Copy-Item copies empty directories and I don't see any way to tell it to only copy files
-Remove-Item -Path ($out + "\BepInEx\plugins\KoikatuVR\Data") -Force
-Remove-Item -Path ($out + "\BepInEx\plugins\KoikatuVR\Patcher") -Force
-Remove-Item -Path ($out + "\BepInEx\plugins\KoikatuVR\Plugins") -Force
+Remove-Item -Path ($out + "\BepInEx\plugins\KK_MainGameVR\Data") -Force
+Remove-Item -Path ($out + "\BepInEx\plugins\KK_MainGameVR\Patcher") -Force
+Remove-Item -Path ($out + "\BepInEx\plugins\KK_MainGameVR\Plugins") -Force
 
-Copy-Item -Path ($dir + "\KK\Patcher\*") -Destination ($out + "\BepInEx\patchers\KoikatuVR") | Out-Null
-Copy-Item -Path ($dir + "\KK\Images\*") -Destination ($out + "\BepInEx\plugins\KoikatuVR\Images\") -Force | Out-Null
+Copy-Item -Path ($dir + "\KK\Patcher\*") -Destination ($out + "\BepInEx\patchers\KK_MainGameVR") | Out-Null
+Copy-Item -Path ($dir + "\KK\Images\*") -Destination ($out + "\BepInEx\plugins\KK_MainGameVR\Images\") -Force | Out-Null
 Copy-Item -Path ($dir + "\KK\Data\*") -Destination ($out + "\Koikatu_Data") -Recurse  | Out-Null
 
 $ver = "v" + (Get-ChildItem -Path ($dir + "\KK\KoikatuVR.dll") -Force -ErrorAction Stop)[0].VersionInfo.FileVersion.ToString() -replace "([\d+\.]+?\d+)[\.0]*$", '${1}'
