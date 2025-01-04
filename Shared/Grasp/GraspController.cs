@@ -517,6 +517,11 @@ namespace KK_VR.Grasp
         private bool AttemptToScrollBodyPart(bool increase)
         {
             // Only bodyParts directly from the tracker live at 0 index, i.e. firstly interacted with.
+
+#if KK
+            if (KoikatuInterpreter.IsParty) return false;
+#endif
+
             if (_helper != null && _heldBodyParts.Count > 0 && (_heldBodyParts[0].name == PartName.HandL || _heldBodyParts[0].name == PartName.HandR))
             {
                 _helper.ScrollHand(_heldBodyParts[0].name, _heldChara, increase);
@@ -542,6 +547,9 @@ namespace KK_VR.Grasp
         }
         internal bool OnFreeHorizontalScroll(Tracker.Body trackerPart, ChaControl chara, bool increase)
         {
+#if KK
+            if (KoikatuInterpreter.IsParty) return false;
+#endif
             if (_helper != null && trackerPart == Tracker.Body.HandL || trackerPart == Tracker.Body.HandR)
             {
                 _helper.ScrollHand((PartName)trackerPart, chara, increase);
