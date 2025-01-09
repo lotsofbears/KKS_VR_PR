@@ -72,11 +72,11 @@ namespace KK_VR.Handlers
             }
             //_bodyPart.effector.rotationWeight = 1f;
             //_bodyPart.effector.target = _bodyPart.anchor;
-            if (_bodyPart.chain != null)
+            if (_bodyPart.goal != null && !_bodyPart.goal.IsBusy)
             {
                 _bodyPart.chain.bendConstraint.weight = KoikatuInterpreter.Settings.IKDefaultBendConstraint;
             }
-            if (_bodyPart.effector.maintainRelativePositionWeight != 1f && KoikatuInterpreter.Settings.MaintainLimbOrientation)
+            if (_bodyPart.effector.maintainRelativePositionWeight != 1f && KoikatuInterpreter.Settings.MaintainLimbOrientation && _bodyPart.IsHand)
             {
                 _translateEx = true;
                 //_translateOffset = _bodyPart.afterIK.position - transform.position;
@@ -134,8 +134,8 @@ namespace KK_VR.Handlers
         {
             // By default we want to have "effector.maintainRelativePositionWeight" in full weight, but on attached we want it at zero,
             // but doing so changes calculations of IK Solver quite a bit, thus we compensate over the course of 1 second.
-            // We look at initial delta vector between OffsetEffector (this gameObject) and actual bone that we see rendered after IK,
-            // then each frame we adjust our position based on change of this delta. As result there is only a miniscule offset(at least there should be, it's impossible to notice)
+            // We look at initial vector between OffsetEffector (this gameObject) and actual bone that we see rendered after IK,
+            // then each frame we adjust our position based on change vector change. As result there is only a miniscule offset(at least there should be, it's impossible to notice)
             // between desired position with full 'maintainRelativePositionWeight' and actual without 'maintainRelativePositionWeight'.
 
             _effector.maintainRelativePositionWeight = Mathf.Clamp01(_effector.maintainRelativePositionWeight - Time.deltaTime);
@@ -154,13 +154,16 @@ namespace KK_VR.Handlers
                 _hand.OnBecomingParent();
             }
             _hand = null;
-            _translateEx = true;
+            if (_bodyPart.IsHand)
+            {
+                _translateEx = true;
+                _translateExOffset = _anchor.position - _bodyPart.afterIK.position;
+            }
             _attach = true;
             _target = target;
             _bodyPart.visual.Hide();
             _bodyPart.state = State.Attached;
 
-            _translateExOffset = _anchor.position - _bodyPart.afterIK.position;
 
             _offsetRot = Quaternion.Inverse(_target.rotation) * _anchor.rotation;
             _offsetPos = _target.InverseTransformPoint(_anchor.position);
@@ -178,7 +181,7 @@ namespace KK_VR.Handlers
             {
                 if (_translateEx)
                 {
-                    if (_follow)
+                    if (!_attach)
                     {
                         if (KoikatuInterpreter.Settings.MaintainLimbOrientation)
                         {

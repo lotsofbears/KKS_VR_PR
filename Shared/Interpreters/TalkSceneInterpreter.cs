@@ -284,7 +284,7 @@ namespace KK_VR.Interpreters
             {
                 _lateHitReaction = true;
             }
-            Features.LoadVoice.PlayVoice(Random.value < 0.4f ? Features.LoadVoice.VoiceType.Laugh : Features.LoadVoice.VoiceType.Short, chara);
+            Features.LoadGameVoice.PlayVoice(Random.value < 0.4f ? Features.LoadGameVoice.VoiceType.Laugh : Features.LoadGameVoice.VoiceType.Short, chara);
         }
 
         /// <summary>
@@ -404,15 +404,19 @@ namespace KK_VR.Interpreters
                     return;
                 }
             }
+
             var head = VR.Camera.Head;
+            player.rotation = rotation * Quaternion.Euler(0f, 180f, 0f);
             var eyePos = GetEyesPosition();
             var headPos = head.position;
-            headPos.y = floor.y + (eyePos.y - player.position.y);
-            VR.Camera.Origin.position += headPos - head.position;
+            headPos.y = floor.y + (eyePos.y - player.position.y) + KoikatuInterpreter.Settings.PositionOffsetY;
+
+
+            VR.Camera.Origin.position +=  headPos - head.position;
             var vec = player.position - eyePos;
+            player.position = head.position + vec;
 
             player.SetActive(true);
-            player.rotation = rotation * Quaternion.Euler(0f, 180f, 0f);
 
 
             // An option to keep the head behind vr camera, allowing it to remain visible
@@ -422,7 +426,6 @@ namespace KK_VR.Interpreters
             //    VRMale.ForceShowHead = true;
             //    position += player.transform.forward * -0.15f;
             //}
-            player.position = head.position + vec;
         }
 
     }

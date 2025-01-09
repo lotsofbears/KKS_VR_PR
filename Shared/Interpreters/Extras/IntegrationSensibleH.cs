@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static HandCtrl;
+using static KK_VR.IntegrationMaleBreath;
 
 namespace KK_VR
 {
-    internal class IntegrationSensibleH
+    internal static class IntegrationSensibleH
     {
-        internal static bool active;
+        internal static bool IsActive => _active;
+        private static bool _active;
 
         // Concedes control of an aibu item.
         internal static Action<AibuColliderKind> ReleaseItem;
@@ -45,32 +47,82 @@ namespace KK_VR
         // Hook to start AutoMode.
         internal static Action OnUserInput;
 
-        // Custom top of the excitement gauge to trigger orgasm, set by SensibleH dynamically.
-        internal static Func<float> GetFemaleCeiling;
-        internal static Func<float> GetMaleCeiling;
+        //// Custom top of the excitement gauge to trigger orgasm, set by SensibleH dynamically.
+        //internal static Func<float> GetFemaleCeiling;
+        //internal static Func<float> GetMaleCeiling;
 
         internal static void Init()
         {
             var type = AccessTools.TypeByName("KK_SensibleH.AutoMode.LoopController");
-            active = type != null;
 
-            if (active)
+            if (type == null) return;
+
+            if (GetMethod(type, "ClickButton", out var clickButton))
             {
-                ClickButton = AccessTools.MethodDelegate<Action<string>>(AccessTools.FirstMethod(type, m => m.Name.Equals("ClickButton")));
-                ChangeLoop = AccessTools.MethodDelegate<Action<int>>(AccessTools.FirstMethod(type, m => m.Name.Equals("AlterLoop")));
-                ChangeAnimation = AccessTools.MethodDelegate<Action<int>>(AccessTools.FirstMethod(type, m => m.Name.Equals("PickAnimation")));
-                StopAuto = AccessTools.MethodDelegate<Action>(AccessTools.FirstMethod(type, m => m.Name.Equals("Sleep")));
-                OnUserInput = AccessTools.MethodDelegate<Action>(AccessTools.FirstMethod(type, m => m.Name.Equals("OnUserInput")));
-
-                type = AccessTools.TypeByName("KK_SensibleH.Caress.MoMiController");
-
-                ReleaseItem = AccessTools.MethodDelegate<Action<AibuColliderKind>>(AccessTools.FirstMethod(type, m => m.Name.Equals("ReleaseItem")));
-                JudgeProc = AccessTools.MethodDelegate<Action<AibuColliderKind>>(AccessTools.FirstMethod(type, m => m.Name.Equals("MoMiJudgeProc")));
-                OnLickStart = AccessTools.MethodDelegate<Action<AibuColliderKind>>(AccessTools.FirstMethod(type, m => m.Name.Equals("OnLickStart")));
-                OnKissStart = AccessTools.MethodDelegate<Action<AibuColliderKind>>(AccessTools.FirstMethod(type, m => m.Name.Equals("OnKissStart")));
-                OnKissEnd = AccessTools.MethodDelegate<Action>(AccessTools.FirstMethod(type, m => m.Name.Equals("OnKissEnd")));
-
+                ClickButton = AccessTools.MethodDelegate<Action<string>>(clickButton);
             }
+
+            if (GetMethod(type, "AlterLoop", out var alterLoop))
+            {
+                ChangeLoop = AccessTools.MethodDelegate<Action<int>>(alterLoop);
+            }
+
+            if (GetMethod(type, "PickAnimation", out var pickAnimation))
+            {
+                ChangeAnimation = AccessTools.MethodDelegate<Action<int>>(pickAnimation);
+            }
+
+            if (GetMethod(type, "Sleep", out var sleep))
+            {
+                StopAuto = AccessTools.MethodDelegate<Action>(sleep);
+            }
+
+            if (GetMethod(type, "OnUserInput", out var onUserInput))
+            {
+                OnUserInput = AccessTools.MethodDelegate<Action>(onUserInput);
+            }
+
+            type = AccessTools.TypeByName("KK_SensibleH.Caress.MoMiController");
+            if (type == null) return;
+
+
+            if (GetMethod(type, "ReleaseItem", out var releaseItem))
+            {
+                ReleaseItem = AccessTools.MethodDelegate<Action<AibuColliderKind>>(releaseItem);
+            }
+
+            if (GetMethod(type, "MoMiJudgeProc", out var moMiJudgeProc))
+            {
+                JudgeProc = AccessTools.MethodDelegate<Action<AibuColliderKind>>(moMiJudgeProc);
+            }
+
+            if (GetMethod(type, "OnLickStart", out var onLickStart))
+            {
+                OnLickStart = AccessTools.MethodDelegate<Action<AibuColliderKind>>(onLickStart);
+            }
+
+            if (GetMethod(type, "OnKissStart", out var onKissStart))
+            {
+                OnKissStart = AccessTools.MethodDelegate<Action<AibuColliderKind>>(onKissStart);
+            }
+
+            if (GetMethod(type, "OnKissEnd", out var onKissEnd))
+            {
+                OnKissEnd = AccessTools.MethodDelegate<Action>(onKissEnd);
+            }
+
+            _active = ClickButton != null
+                && ChangeLoop != null
+                && ChangeAnimation != null
+                && StopAuto != null
+                && OnUserInput != null
+                && ReleaseItem != null
+                && JudgeProc != null
+                && OnLickStart != null
+                && OnKissStart != null
+                && OnKissEnd != null;
+
+
         }
     }
 }

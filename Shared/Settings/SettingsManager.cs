@@ -388,7 +388,7 @@ namespace KK_VR.Settings
             #region SectionIK
 
 
-            var showGuideObjects = config.Bind(SectionIK, "Visual cue", true,
+            var showGuideObjects = config.Bind(SectionIK, "Visual cue", false,
                 new ConfigDescription(
                     "Show visual cue during IK manipulation that represent attachment point of a corresponding part of the body. " +
                     "The green hue signifies a possible attachment point.",
@@ -453,22 +453,14 @@ namespace KK_VR.Settings
 
 
             #region SectionGripMove
+            
 
-
-            var gripMoveEnableRotation = config.Bind(SectionGripMove, "Enable rotation", false,
+            var gripMoveStabilizationAmount = config.Bind(SectionGripMove, "Stabilization amount", 10,
                 new ConfigDescription(
-                    "Enable rotation while pressing 'Touchpad'",
-                    null,
-                    new ConfigurationManagerAttributes { Order = 10 }));
-            Tie(gripMoveEnableRotation, v => settings.GripMoveEnableRotation = v);
-
-
-            var gripMoveLimitRotation = config.Bind(SectionGripMove, "Limit movement during rotation", false,
-                new ConfigDescription(
-                    "Disable the position adjustment during rotation.",
-                    null,
-                    new ConfigurationManagerAttributes { Order = 9 }));
-            Tie(gripMoveLimitRotation, v => settings.GripMoveLimitRotation = v);
+                    "The bigger the number, the more 'average' rotation is",
+                     new AcceptableValueRange<int>(5, 20),
+                    new ConfigurationManagerAttributes { Order = 7 }));
+            Tie(gripMoveStabilizationAmount, v => settings.GripMoveStabilizationAmount = v);
 
 
             var stabilizeGripMove = config.Bind(SectionGripMove, "Stabilization", KoikatuSettings.GripMoveStabilization.OnlyRotation,
@@ -479,12 +471,20 @@ namespace KK_VR.Settings
             Tie(stabilizeGripMove, v => settings.GripMoveStabilize = v);
 
 
-            var gripMoveStabilizationAmount = config.Bind(SectionGripMove, "Stabilization amount", 10,
+            var gripMoveLimitRotation = config.Bind(SectionGripMove, "Limit movement during rotation", false,
                 new ConfigDescription(
-                    "The bigger the number, the more 'average' rotation is",
-                     new AcceptableValueRange<int>(5, 20),
-                    new ConfigurationManagerAttributes { Order = 7 }));
-            Tie(gripMoveStabilizationAmount, v => settings.GripMoveStabilizationAmount = v);
+                    "Disable the position adjustment during rotation.",
+                    null,
+                    new ConfigurationManagerAttributes { Order = 9 }));
+            Tie(gripMoveLimitRotation, v => settings.GripMoveLimitRotation = v);
+
+
+            var gripMoveEnableRotation = config.Bind(SectionGripMove, "Enable rotation", false,
+                new ConfigDescription(
+                    "Enable rotation while pressing 'Touchpad'",
+                    null,
+                    new ConfigurationManagerAttributes { Order = 10 }));
+            Tie(gripMoveEnableRotation, v => settings.GripMoveEnableRotation = v);
 
 
             #endregion
@@ -501,7 +501,7 @@ namespace KK_VR.Settings
 
             var fixMirrors = config.Bind(SectionPerformance, "Fix mirrors", true,
                 "Fix mirror reflections. Adds ~10-20% to gpu load when camera looks at the mirror.\n" +
-                "Otherwise the reflection is of subpar quality.");
+                "Otherwise the reflection is of subpar quality, but performance doesn't suffer.");
             Tie(fixMirrors, v => settings.FixMirrors = v);
 
 

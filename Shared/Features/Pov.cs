@@ -254,6 +254,10 @@ namespace KK_VR.Features
                     MouthGuide.Instance.PauseInteractions = false;
                 }
             }
+            if (IntegrationMaleBreath.IsActive)
+            {
+                IntegrationMaleBreath.OnPov(true, _target);
+            }
         }
 
         private void StartMoveToHead(float speed = 1f)
@@ -288,9 +292,17 @@ namespace KK_VR.Features
 
         internal void OnGraspEnd()
         {
-            if (_active &&  !_newAttachPoint)
+            if (_active)
             {
-                CameraIsFar(0.25f);
+                if (_newAttachPoint)
+                {
+                    // A bit of a clutch.
+                    _mode = Mode.Follow;
+                }
+                else
+                {
+                    CameraIsFar(0.25f);
+                }
             }
         }
 
@@ -385,6 +397,10 @@ namespace KK_VR.Features
                 if (_active && !_newAttachPoint)
                 {
                     _newAttachPoint = true;
+                    if (IntegrationMaleBreath.IsActive)
+                    {
+                        IntegrationMaleBreath.OnPov(false, _target);
+                    }
                     return true;
                 }
             }
@@ -399,10 +415,12 @@ namespace KK_VR.Features
             _newAttachPoint = false;
             _forceHideHead = false;
             _moveTo = null;
-
+            if (IntegrationMaleBreath.IsActive)
+            {
+                IntegrationMaleBreath.OnPov(false, _target);
+            }
             if (MouthGuide.Instance != null)
             {
-                MouthGuide.Instance.PauseInteractions = false;
                 MouthGuide.Instance.OnUnImpersonation();
             }
         }
@@ -420,7 +438,7 @@ namespace KK_VR.Features
                     var target = _target.sex == 1 ? _target : FindObjectsOfType<ChaControl>()
                         .Where(c => c.sex == 1 && c.objTop.activeSelf && c.visibleAll)
                         .FirstOrDefault();
-                    _moveTo = new MoveToPoi(target != null ? target : _target, Sleep );
+                    _moveTo = new MoveToPoi(target != null ? target : _target, onFinish: Sleep);
                 }
             }
             else
