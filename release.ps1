@@ -9,7 +9,7 @@ $out = $dir + "\out"
 Remove-Item -Force -Path ($out) -Recurse -ErrorAction SilentlyContinue
 
 # KK -------------------------------------
-Write-Output ("Creating KK release")
+Write-Output ("# Creating KK release #")
 
 New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\plugins\KK_MainGameVR\Images") | Out-Null
 New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\patchers\KK_MainGameVR_Patcher") | Out-Null
@@ -29,10 +29,16 @@ $ver = "v" + (Get-ChildItem -Path ($dir + "\KK\KoikatuVR.dll") -Force -ErrorActi
 Write-Output ("Version " + $ver)
 Compress-Archive -Path ($out + "\*") -Force -CompressionLevel "Optimal" -DestinationPath ($dir +"KK_VR_" + $ver + ".zip")
 
-Remove-Item -Force -Path ($out) -Recurse -ErrorAction SilentlyContinue
+# KK Party
+Write-Output ("Also creating KK Party release")
+
+Rename-Item ($out + "\Koikatu_Data") -NewName "Koikatsu Party_Data"
+Compress-Archive -Path ($out + "\*") -Force -CompressionLevel "Optimal" -DestinationPath ($dir +"KKParty_VR_" + $ver + ".zip")
+
+Remove-Item -Force -Path ($out) -Recurse -ErrorAction Inquire
 
 # KKS ------------------------------------
-Write-Output ("Creating KKS release")
+Write-Output ("# Creating KKS release #")
 
 New-Item -ItemType Directory -Force -Path ($out + "\BepInEx\plugins\KKS_VR\Images") | Out-Null
 New-Item -ItemType Directory -Force -Path ($out + "\CharaStudio_Data") | Out-Null
