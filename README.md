@@ -1,5 +1,5 @@
 # VR Plugin for Koikatsu and Koikatsu Sunshine
-A BepInEx plugin for Koikatsu (KK) and Koikatsu Sunshine (KKS) that allows you to play the main game and studio (Sunshine only) in VR. 
+A BepInEx plugin for Koikatsu (KK/KKP) and Koikatsu Sunshine (KKS) that allows you to play the main game and studio (Sunshine only) in VR. 
 The difference from the official VR modules is that you have access to the full game/studio, while the official modules have limited features and spotty mod support.
 
 
@@ -20,10 +20,13 @@ The studio part is a fork of the [KKS_CharaStudioVR](https://vr-erogamer.com/arc
 
 ## Installation
 
-1. Make sure BepInEx, KKSAPI and all their dependencies have been installed.
-2. Download the latest [release](https://github.com/IllusionMods/KKS_VR/releases) for the corresponding game.
+1. Make sure BepInEx, KKAPI / KKSAPI and all their dependencies have been installed.
+2. Download the latest [release](https://github.com/IllusionMods/KKS_VR/releases) for the corresponding game. Make sure you get the right version or the plugin won't work and might even break your game.
+   - KK_VR is for Koikatu (the Japanese release)
+   - KKParty_VR is for Koikatsu Party (the Steam/international release)
+   - KKS_VR is for Koikatsu Sunshine (the sequel)
 3. Extract the zip into the game folder (where the abdata and BepInEx folders are).
-4. Create a shortcut to Koikatu.exe and/or KoikatsuSunshine.exe and/or CharaStudio.exe, and add `--vr` to the command line.
+4. Create a shortcut to Koikatu.exe and/or KoikatsuSunshine.exe and/or CharaStudio.exe, and add `--vr` to the command line. If you use a custom launcher from [IllusionLaunchers](https://github.com/IllusionMods/IllusionLaunchers) you may be able to start from within it, depending on the version.
 
 The game (not the studio) also can be launched without any added arguments if SteamVR is running.
 
@@ -32,7 +35,7 @@ The game (not the studio) also can be launched without any added arguments if St
  * If VR mode doesn't launch, make sure that neither of controllers is asleep during game launch.
  * For best compatibility use together with [KK HF Patch](https://github.com/ManlyMarco/KK-HF_Patch) or [KKS HF Patch](https://github.com/ManlyMarco/KKS-HF_Patch).
 
-## Controls Game
+## Controls in the main game and FreeH
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/IllusionMods/KKS_VR/master/Images/logo-github.gif">
@@ -199,8 +202,8 @@ Available in **Roaming Scene**.
 * **DirectionDown** to crouch or stand up.
 * **Horizontal direction** to turn.
 
-## Controls Studio
-**Warning: This section was written for [KK_MainGameVR](https://github.com/mosirnik/KK_MainGameVR) and serves as a loose, vague reference for an actual functional.**
+## Controls in CharaStudio
+**Warning: This section was written for [KK_MainGameVR](https://github.com/mosirnik/KK_MainGameVR) and is out of date. Some sections may be inaccurate or flat out wrong.**
 
 This plugin assumes that your VR controller has the following buttons/controls:
 
