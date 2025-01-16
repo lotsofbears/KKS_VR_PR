@@ -160,12 +160,22 @@ namespace KK_VR.Settings
                     new ConfigurationManagerAttributes { Order = -20 }));
             Tie(longPress, v => settings.LongPress = v);
 
+
             var enableSFX = config.Bind(SectionGeneral, "Enable sfx", true,
                 new ConfigDescription(
                     "SFX for controller touch",
                      null,
                     new ConfigurationManagerAttributes { Order = -15 }));
             Tie(enableSFX, v => settings.EnableSFX = v);
+
+
+            var mainHand = config.Bind(SectionGeneral, "Main hand", KoikatuSettings.Handedness.Right,
+                new ConfigDescription(
+                    "Default attachment side of the menu",
+                     null,
+                    new ConfigurationManagerAttributes { Order = -21 }));
+            Tie(mainHand, v => settings.MainHand = v);
+
 
             #endregion
 
