@@ -203,6 +203,7 @@ namespace KK_VR.Settings
         public float ShortPress {  get; set; }
         public float LongPress { get; set; }
         public bool EnableSFX { get; set; }
+        public Handedness MainHand { get; set; }
         public enum GripMoveStabilization
         {
             None,
@@ -230,7 +231,11 @@ namespace KK_VR.Settings
             Average,
             Auto
         }
-
+        public enum Handedness
+        {
+            Left,
+            Right
+        }
         public enum MovementTypeH
         {
             Disabled,

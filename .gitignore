@@ -41,3 +41,4 @@ PatcherLoader/Libs
 /bin
 /PostBuild.bat
 /_ReSharper.Caches
+/.editorconfig
