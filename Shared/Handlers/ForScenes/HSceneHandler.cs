@@ -136,15 +136,15 @@ namespace KK_VR.Handlers
         protected override void DoReaction(float velocity)
         {
            //VRPlugin.Logger.LogDebug($"DoReaction:{_tracker.colliderInfo.behavior.react}:{_tracker.colliderInfo.behavior.touch}:{_tracker.reactionType}:{velocity}");
-            if (_settings.AutomaticTouching > KoikatuSettings.SceneType.TalkScene)
+            if (GameSettings.AutomaticTouching.Value > GameSettings.SceneType.TalkScene)
             {
                 if (velocity > 1.5f || (_tracker.reactionType == Tracker.ReactionType.HitReaction && !IsAibuItemPresent(out _)))
                 {
-                    if (_settings.TouchReaction != 0f 
+                    if (GameSettings.TouchReaction.Value != 0f 
                         && HSceneInterpreter.mode == HFlag.EMode.aibu
                         && GraspHelper.Instance != null 
                         && !GraspHelper.Instance.IsGraspActive(_tracker.colliderInfo.chara)
-                        && UnityEngine.Random.value < _settings.TouchReaction)
+                        && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
                     {
                         GraspHelper.Instance.TouchReaction(_tracker.colliderInfo.chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
                     }

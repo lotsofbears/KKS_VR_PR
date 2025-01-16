@@ -2,6 +2,7 @@
 using static KK_VR.Grasp.GraspController;
 using UnityEngine;
 using KK_VR.Interpreters;
+using KK_VR.Settings;
 
 namespace KK_VR.Grasp
 {
@@ -12,7 +13,7 @@ namespace KK_VR.Grasp
     {
         internal readonly GameObject gameObject;
         private readonly Renderer _renderer;
-        private bool _enable = KoikatuInterpreter.Settings.ShowGuideObjects;
+        private bool _enable = KoikSettings.IKShowGuideObjects.Value;
         private readonly static List<Color> _colors =
         [
             new(1f, 0f, 0f, 0.2f), // Red

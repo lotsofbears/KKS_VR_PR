@@ -15,6 +15,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using VRGIN.Core;
 using KK_VR.Controls;
+using KK_VR.Settings;
 
 namespace KK_VR.Interpreters
 {
@@ -64,7 +65,7 @@ namespace KK_VR.Interpreters
                 _pressedButtons[index, 0] = true;
                 if (IsInputState(InputState.Grasp))
                 {
-                    AddWait(index, EVRButtonId.k_EButton_SteamVR_Trigger, _settings.ShortPress);
+                    AddWait(index, EVRButtonId.k_EButton_SteamVR_Trigger, GameSettings.ShortPress.Value);
                 }
                 else
                 {
@@ -145,7 +146,7 @@ namespace KK_VR.Interpreters
                 {
                     if (!IsTriggerPress(index))
                     {
-                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, _settings.LongPress - 0.1f);
+                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, GameSettings.LongPress.Value - 0.1f);
                     }
                 }
                 else
@@ -156,7 +157,7 @@ namespace KK_VR.Interpreters
                     }
                     else if (!HandHolder.GetHand(index).Grasp.OnTouchpadResetHeld())
                     {
-                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, _settings.ShortPress);
+                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, GameSettings.ShortPress.Value);
                     }
                 }
             }
@@ -227,7 +228,7 @@ namespace KK_VR.Interpreters
                         }
                         else
                         {
-                            AddWait(index, direction, _settings.LongPress);
+                            AddWait(index, direction, GameSettings.LongPress.Value);
                         }
                     }
                     break;

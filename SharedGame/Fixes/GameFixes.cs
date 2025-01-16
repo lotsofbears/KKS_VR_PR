@@ -28,7 +28,6 @@ namespace KK_VR.Fixes
     [HarmonyPatch(typeof(ChaControl))]
     public class ChaControlPatches1
     {
-        public static KoikatuSettings _setting = VR.Settings as KoikatuSettings;
         [HarmonyPrefix]
         [HarmonyPatch(nameof(ChaControl.LateUpdateForce))]
         private static bool PreLateUpdateForce(ChaControl __instance)
@@ -45,7 +44,7 @@ namespace KK_VR.Fixes
 
         public static bool SafeToSkipUpdate(ChaControl chara)
         {
-            return _setting.OptimizeHInsideRoaming
+            return GameSettings.OptimizeHInsideRoaming.Value
                 && KoikatuInterpreter.CurrentScene > KoikatuInterpreter.SceneType.ActionScene
                 && chara.objTop != null
                 && !chara.objTop.activeSelf;

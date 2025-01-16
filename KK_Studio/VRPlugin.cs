@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using KKAPI;
-using KKAPI.MainGame;
 using KK_VR.Features;
 using KK_VR.Fixes;
-using KK_VR.Interpreters;
 using KK_VR.Settings;
+using KKAPI;
+using KKAPI.MainGame;
 using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
-using VRGIN.Controls.Handlers;
 
 namespace KK_VR
 {
     [BepInPlugin(GUID, Name, Version)]
-    [BepInProcess(KoikatuAPI.GameProcessName)]
-    [BepInProcess(KoikatuAPI.GameProcessNameSteam)]
+    [BepInProcess(KoikatuAPI.StudioProcessName)]
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
-    [BepInDependency(KK.PluginFinalIK.GUID, KK.PluginFinalIK.Version)]
-    [BepInIncompatibility("bero.crossfadervr")]
     public class VRPlugin : BaseUnityPlugin
     {
-        public const string GUID = "kk.vr.game";
-        public const string Name = "MainGameVR";
+        public const string GUID = "kk.vr.studio";
+        public const string Name = "StudioVR";
         public const string Version = Constants.Version;
 
         internal static new ManualLogSource Logger;
@@ -35,7 +33,7 @@ namespace KK_VR
         {
             Logger = base.Logger;
 
-            var settings = new GameSettings().Create(Config);
+            var settings = StudioSettings.Create(Config);
 
             if (Environment.CommandLine.Contains("--vr") || SteamVRDetector.IsRunning)
             {
@@ -45,19 +43,18 @@ namespace KK_VR
             CrossFader.Initialize(Config, enabled);
         }
 
-        private const string DeviceOpenVR = "OpenVR";
         private IEnumerator LoadDevice(VRSettings settings)
         {
             //yield return new WaitUntil(() => Manager.Scene. initialized);
             //yield return new WaitUntil(() => Manager.Scene.initialized && Manager.Scene.LoadSceneName == "Title");
-            
-            if (UnityEngine.VR.VRSettings.loadedDeviceName != DeviceOpenVR)
+            var openVR = "OpenVR";
+            if (UnityEngine.VR.VRSettings.loadedDeviceName != openVR)
             {
-                UnityEngine.VR.VRSettings.LoadDeviceByName(DeviceOpenVR);
+                UnityEngine.VR.VRSettings.LoadDeviceByName(openVR);
                 yield return null;
             }
-            UnityEngine.VR.VRSettings.enabled = true; 
-            while (UnityEngine.VR.VRSettings.loadedDeviceName != DeviceOpenVR)
+            UnityEngine.VR.VRSettings.enabled = true;
+            while (UnityEngine.VR.VRSettings.loadedDeviceName != openVR)
             {
                 yield return null;
             }
@@ -73,30 +70,31 @@ namespace KK_VR
             }
 
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
-            VRManager.Create<Interpreters.KoikatuInterpreter>(new KoikContext(settings));
+            VRManager.Create<Interpreters.KoikStudioInterpreter>(new KoikContext(settings));
 
-            VR.Manager.SetMode<GameStandingMode>();
+            VR.Manager.SetMode<StudioStandingMode>();
 
             VRFade.Create();
             GraphicRaycasterPatches.Initialize();
-            NativeMethods.DisableProcessWindowsGhosting();
 
-
-            GameAPI.RegisterExtraBehaviour<InterpreterHooks>(GUID);
-
-            Logger.LogInfo("Finished loading into VR mode!");
-        }
-
-        
-        
-
-        private static class NativeMethods
-        {
             // It's been reported in #28 that the game window defocues when
             // the game is under heavy load. We disable window ghosting in
             // an attempt to counter this.
+            NativeMethods.DisableProcessWindowsGhosting();
+
+            //if (SettingsManager.EnableBoop.Value)
+            //{
+            //    VRBoop.Initialize();
+            //}
+            Logger.LogInfo("Finished loading into VR mode!");
+        }
+
+        private static class NativeMethods
+        {
             [DllImport("user32.dll")]
             public static extern void DisableProcessWindowsGhosting();
         }
+
+
     }
 }

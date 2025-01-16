@@ -46,9 +46,9 @@ namespace KK_VR.Interpreters
             //ResetCamera();
             //ResetState();
             DisableCameraSystem();
-            if (_settings.ShadowsOptimization == KoikatuSettings.ShadowType.Auto)
+            if (KoikSettings.ShadowSetting.Value == KoikSettings.ShadowType.Auto)
             {
-                KoikatuInterpreter.TweakShadowSettings(KoikatuSettings.ShadowType.Average);
+                KoikSettings.UpdateShadowSetting(KoikSettings.ShadowType.Average);
             }
             base.OnStart();
         }

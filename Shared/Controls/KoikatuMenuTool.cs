@@ -8,6 +8,7 @@ using static Illusion.Utils;
 using VRGIN.Visuals;
 using VRGIN.Core;
 using KK_VR.Interpreters;
+using KK_VR.Settings;
 
 namespace KK_VR.Controls
 {
@@ -18,7 +19,7 @@ namespace KK_VR.Controls
         private static GUIQuad _gui;
         internal KoikatuMenuTool(int index)
         {
-            if (!_gui && index == (int)KoikatuInterpreter.Settings.MainHand)
+            if (!_gui && index == (int)KoikSettings.MainHand.Value)
             {
                 _gui = GUIQuad.Create();
                 _gui.transform.parent = VR.Mode.Right.transform;

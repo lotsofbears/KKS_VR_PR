@@ -9,6 +9,7 @@ using static KK_VR.Interpreters.HSceneInterpreter;
 using VRGIN.Core;
 using Random = UnityEngine.Random;
 using UnityEngine;
+using KK_VR.Settings;
 
 namespace KK_VR.Interpreters
 {
@@ -223,7 +224,7 @@ namespace KK_VR.Interpreters
                 }
                 else if (IsInputState(InputState.Grasp))
                 {
-                    AddWait(index, EVRButtonId.k_EButton_SteamVR_Trigger, _settings.ShortPress);
+                    AddWait(index, EVRButtonId.k_EButton_SteamVR_Trigger, KoikSettings.ShortPress.Value);
                 }
                 else 
                 {
@@ -324,7 +325,7 @@ namespace KK_VR.Interpreters
                                 else
                                 {
                                     // Reaction/Lean to kiss.
-                                    wait = _settings.LongPress;
+                                    wait = GameSettings.LongPress.Value;
                                 }
                             }
                             else
@@ -374,7 +375,7 @@ namespace KK_VR.Interpreters
                         else if (IsHPointMove)
                         {
                             if (direction == TrackpadDirection.Right)
-                                wait = _settings.LongPress;
+                                wait = KoikSettings.LongPress.Value;
                             else
                                 _interpreter.GetHPointMove.Return();
                         }
@@ -390,7 +391,7 @@ namespace KK_VR.Interpreters
                             }
                         }
                         else
-                            wait = _settings.LongPress;
+                            wait = KoikSettings.LongPress.Value;
                     }
                     break;
             }
@@ -435,7 +436,7 @@ namespace KK_VR.Interpreters
                         if (!IsTriggerPress(index))
                         {
                             // Reset to upright. 
-                            AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, _settings.LongPress - 0.1f); // 0.7f
+                            AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, GameSettings.LongPress.Value - 0.1f); // 0.7f
                         }
                     }
 
@@ -448,7 +449,7 @@ namespace KK_VR.Interpreters
                     }
                     else if (!HandHolder.GetHand(index).Grasp.OnTouchpadResetHeld())
                     {
-                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, _settings.ShortPress);
+                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, KoikSettings.ShortPress.Value);
                     }
                 }
 
@@ -486,13 +487,13 @@ namespace KK_VR.Interpreters
                             IntegrationSensibleH.ReleaseItem(touch);
                         }
                         HSceneInterpreter.EnableNip(touch);
-                        if (_settings.HideHandOnUserInput != Settings.KoikatuSettings.HandType.None)
+                        if (GameSettings.HideHandOnUserInput.Value != GameSettings.HandType.None)
                         {
-                            if (_settings.HideHandOnUserInput > Settings.KoikatuSettings.HandType.ControllerItem)
+                            if (GameSettings.HideHandOnUserInput.Value > GameSettings.HandType.ControllerItem)
                             {
                                 HSceneInterpreter.ShowAibuHand(touch, false);
                             }
-                            if (_settings.HideHandOnUserInput != Settings.KoikatuSettings.HandType.CaressItem)
+                            if (GameSettings.HideHandOnUserInput.Value != GameSettings.HandType.CaressItem)
                             {
                                 HandHolder.GetHand(index).SetItemRenderer(false);
                             }

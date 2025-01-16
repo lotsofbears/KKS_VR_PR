@@ -35,7 +35,6 @@ namespace KK_VR.Handlers
             set => _tracker = value is ControllerTracker t ? t : null;
         }
         protected HandHolder _hand;
-        protected KoikatuSettings _settings;
         protected Controller _controller;
         //protected ModelHandler.ItemType _item;
         private bool _unwind;
@@ -56,7 +55,6 @@ namespace KK_VR.Handlers
             _tracker = new ControllerTracker();
             _tracker.SetBlacklistDic(_hand.Grasp.GetBlacklistDic);
 
-            _settings = VR.Context.Settings as KoikatuSettings;
             _controller = _hand.Controller;
         }
         protected virtual void Update()

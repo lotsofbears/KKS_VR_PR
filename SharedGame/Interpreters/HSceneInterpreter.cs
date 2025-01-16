@@ -150,11 +150,11 @@ namespace KK_VR.Interpreters
 #else
             Manager.Config.HData.HInitCamera = true;
 #endif
-            if (_settings.ShadowsOptimization == KoikatuSettings.ShadowType.Auto)
+            if (GameSettings.ShadowSetting.Value == GameSettings.ShadowType.Auto)
             {
-                KoikatuInterpreter.TweakShadowSettings(KoikatuSettings.ShadowType.Close);
+                GameSettings.UpdateShadowSetting(GameSettings.ShadowType.Close);
             }
-            if (KoikatuInterpreter.Settings.AutoEnterPov)
+            if (GameSettings.PovAutoEnter.Value)
             {
                 SmoothMover.Instance.MoveToPoV();
             }

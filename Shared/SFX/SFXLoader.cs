@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine;
 using VRGIN.Core;
 using System.Reflection;
+using KK_VR.Settings;
 
 namespace KK_VR.Holders
 {
@@ -33,7 +34,7 @@ namespace KK_VR.Holders
         }
         internal void PlaySfx(float volume, Sfx sfx, Surface surface, Intensity intensity, bool overwrite)
         {
-            if (!KoikatuInterpreter.Settings.EnableSFX) return;
+            if (!KoikSettings.EnableSFX.Value) return;
             if (_audioSource.isPlaying)
             {
                 if (!overwrite) return;

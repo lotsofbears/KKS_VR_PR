@@ -6,6 +6,7 @@ using VRGIN.Core;
 using KK_VR.Interpreters;
 using KK_VR.Handlers;
 using KKAPI.Utilities;
+using KK_VR.Settings;
 
 namespace KK_VR.Camera
 {
@@ -28,7 +29,7 @@ namespace KK_VR.Camera
         internal void MoveToPoV()
         {
             var mode = HSceneInterpreter.mode;
-            if (PoV.Active || (KoikatuInterpreter.Settings.AutoEnterPov && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
+            if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
                 StartCoroutine(WaitForLag(PoV.Instance.StartPov, null));
@@ -39,7 +40,7 @@ namespace KK_VR.Camera
             //VRPlugin.Logger.LogDebug("VRMoverH:MoveToInH");
             StopAllCoroutines();
             var mode = HSceneInterpreter.mode;
-            if (PoV.Active || (KoikatuInterpreter.Settings.AutoEnterPov && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
+            if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
                 if (spotChange)
@@ -76,7 +77,7 @@ namespace KK_VR.Camera
                 var head = VR.Camera.Head;
                 var uprightRot = Quaternion.Euler(0f, origin.eulerAngles.y, 0f);
                 //var uprightRot = Quaternion.Euler(0f, head.eulerAngles.y, 0f);
-                var lerpMultiplier = KoikatuInterpreter.Settings.FlightSpeed * 90f / Quaternion.Angle(head.rotation, uprightRot);
+                var lerpMultiplier = KoikSettings.FlightSpeed.Value * 90f / Quaternion.Angle(head.rotation, uprightRot);
                 var lerp = 0f;
                 var startRot = origin.rotation;
                 Vector3 oldPos;
@@ -199,7 +200,7 @@ namespace KK_VR.Camera
 
             }
             var lerp = 0f;
-            var lerpModifier = KoikatuInterpreter.Settings.FlightSpeed * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
+            var lerpModifier = GameSettings.FlightSpeed.Value * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
             var startPos = head.position;
             var startRot = origin.rotation;
             while (lerp < 1f)

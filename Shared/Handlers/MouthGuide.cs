@@ -121,7 +121,7 @@ namespace KK_VR.Handlers
 
         private bool HandleKissing()
         {
-            if (KoikatuInterpreter.Settings.AssistedKissing)
+            if (GameSettings.AssistedKissing.Value)
             {
                 var head = VR.Camera.Head;
                 if (Vector3.Distance(_eyes.position, head.position) < _kissDistance
@@ -141,11 +141,11 @@ namespace KK_VR.Handlers
                 var touch = Tracker.colliderInfo.behavior.touch;
                 if (touch != AibuColliderKind.none && !PauseInteractions && (_aibu || KoikatuInterpreter.SceneInput.IsGripMove()))
                 {
-                    if (touch == AibuColliderKind.mouth && KoikatuInterpreter.Settings.AssistedKissing)
+                    if (touch == AibuColliderKind.mouth && GameSettings.AssistedKissing.Value)
                     {
                         StartKiss();
                     }
-                    else if (touch < AibuColliderKind.reac_head && KoikatuInterpreter.Settings.AssistedLicking)
+                    else if (touch < AibuColliderKind.reac_head && GameSettings.AssistedLicking.Value)
                     {
                         StartLick(touch);
                     }
@@ -219,7 +219,7 @@ namespace KK_VR.Handlers
                 angleModRight = absModRight - (angleModRight - absModRight);
 
             var offsetRight = angleModRight / 15f; //  0.0667f; // /15f;
-            var offsetForward = KoikatuInterpreter.Settings.ProximityDuringKiss;
+            var offsetForward = GameSettings.ProximityDuringKiss.Value;
             var offsetUp = -0.04f - (Math.Abs(offsetRight) * 0.5f);
             var startDistance = Vector3.Distance(_eyes.position, head.position) - offsetForward;
 
@@ -240,7 +240,7 @@ namespace KK_VR.Handlers
                 oldEyesPos = _eyes.position;
                 yield return CoroutineUtils.WaitForEndOfFrame;
             }
-            _followRotation = KoikatuInterpreter.Settings.FollowRotationDuringKiss;
+            _followRotation = GameSettings.FollowRotationDuringKiss.Value;
             _followOffsetRot = Quaternion.Inverse(_followAfter.rotation) * VR.Camera.Origin.rotation;
 
             while (true)
@@ -276,7 +276,7 @@ namespace KK_VR.Handlers
         internal void UpdateOrientationOffsets()
         {
             var head = VR.Camera.Head;
-            _followRotation = KoikatuInterpreter.Settings.FollowRotationDuringKiss;
+            _followRotation = GameSettings.FollowRotationDuringKiss.Value;
             _followOffsetRot = Quaternion.Inverse(_followAfter.rotation) * VR.Camera.Origin.rotation;
             _followOffsetPos = _followAfter.InverseTransformPoint(head.position);
             if (_lookAt != null)
@@ -555,7 +555,7 @@ namespace KK_VR.Handlers
                                     origin.eulerAngles.y,
                                     headPitch ? origin.eulerAngles.z : 0f);
                            // }
-                            lerpMultiplier = KoikatuInterpreter.Settings.FlightSpeed * 30f / Quaternion.Angle(origin.rotation, uprightRot);
+                            lerpMultiplier = GameSettings.FlightSpeed.Value * 30f / Quaternion.Angle(origin.rotation, uprightRot);
                         }
                         var sStep = Mathf.SmoothStep(0f, 1f, lerp += Time.deltaTime * lerpMultiplier);
                         origin.rotation = Quaternion.Lerp(startRot, uprightRot, sStep);

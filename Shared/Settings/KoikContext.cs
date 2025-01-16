@@ -12,7 +12,7 @@ using VRGIN.Visuals;
 namespace KK_VR.Settings
 {
     [XmlRoot("Context")]
-    public class KoikatuContext : IVRManagerContext
+    public class KoikContext : IVRManagerContext
     {
         private DefaultMaterialPalette _Materials;
 
@@ -63,7 +63,7 @@ namespace KK_VR.Settings
         public bool ForceIMGUIOnScreen { get; set; }
 
 
-        public KoikatuContext(KoikatuSettings settings)
+        public KoikContext(VRSettings settings)
         {
             _Materials = new DefaultMaterialPalette();
             _Settings = settings;

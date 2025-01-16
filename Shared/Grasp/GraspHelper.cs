@@ -191,7 +191,7 @@ namespace KK_VR.Grasp
                 bodyPart.anchor.SetParent(bodyPart.beforeIK, worldPositionStays: false);
                 if (bodyPart is BodyPartHead head)
                 {
-                    head.headEffector.enabled = KoikatuInterpreter.Settings.IKHeadEffector == KoikatuSettings.HeadEffector.Always;
+                    head.headEffector.enabled = KoikSettings.IKHeadEffector.Value == KoikSettings.HeadEffector.Always;
                 }
                 bodyPart.guide.Init(bodyPart);
 
@@ -352,7 +352,7 @@ namespace KK_VR.Grasp
 
                         if (bodyPart.chain != null)
                         {
-                            bodyPart.chain.bendConstraint.weight = bodyPart.state == State.Default || bodyPart.goal.IsBusy ? 1f : KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+                            bodyPart.chain.bendConstraint.weight = bodyPart.state == State.Default || bodyPart.goal.IsBusy ? 1f : KoikSettings.IKDefaultBendConstraint.Value;
                         }
                     }
                 }
@@ -411,7 +411,7 @@ namespace KK_VR.Grasp
             }
         }
 
-        internal void ChangeMaintainRelativePosition(bool active)
+        internal void UpdateMaintainRelativePosition(bool active)
         {
             foreach (var bodyPartList in _bodyPartsDic.Values)
             {
@@ -422,7 +422,7 @@ namespace KK_VR.Grasp
             }
         }
 
-        internal void ChangeParentPush(float number)
+        internal void UpdatePushParent(float number)
         {
             foreach (var bodyPartList in _bodyPartsDic.Values)
             {

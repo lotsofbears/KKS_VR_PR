@@ -10,6 +10,7 @@ using static KK_VR.Grasp.GraspController;
 using KK_VR.Holders;
 using KK_VR.Grasp;
 using KK_VR.Interpreters;
+using KK_VR.Settings;
 
 namespace KK_VR.Handlers
 {
@@ -24,7 +25,7 @@ namespace KK_VR.Handlers
         private BodyPartHead _bodyPart;
         internal override void Follow(Transform target, HandHolder hand)
         {
-            if (KoikatuInterpreter.Settings.IKHeadEffector == Settings.KoikatuSettings.HeadEffector.Disabled)
+            if (KoikSettings.IKHeadEffector.Value == KoikSettings.HeadEffector.Disabled)
             {
                 return;
             }
@@ -80,7 +81,7 @@ namespace KK_VR.Handlers
         protected override void Disable()
         {
             base.Disable();
-            if (KoikatuInterpreter.Settings.IKHeadEffector != Settings.KoikatuSettings.HeadEffector.Always)
+            if (KoikSettings.IKHeadEffector.Value != KoikSettings.HeadEffector.Always)
             {
                 _bodyPart.headEffector.enabled = false;
             }

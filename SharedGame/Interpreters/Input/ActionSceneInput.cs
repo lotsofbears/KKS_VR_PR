@@ -4,6 +4,7 @@ using System.Text;
 using KK_VR.Camera;
 using KK_VR.Features;
 using KK_VR.Holders;
+using KK_VR.Settings;
 using UnityEngine;
 using VRGIN.Core;
 using WindowsInput.Native;
@@ -30,7 +31,7 @@ namespace KK_VR.Interpreters
             {
                 _eyes = actionScene.Player.chaCtrl.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
             }
-            return _eyes.TransformPoint(0f, _settings.PositionOffsetY, _settings.PositionOffsetZ);
+            return _eyes.TransformPoint(0f, GameSettings.PositionOffsetY.Value, GameSettings.PositionOffsetZ.Value);
         }
 
         enum Pressed
@@ -141,10 +142,10 @@ namespace KK_VR.Interpreters
                     }
                     break;
                 case TrackpadDirection.Left:
-                    Rotation(-_settings.RotationAngle);
+                    Rotation(-GameSettings.RotationAngle.Value);
                     break;
                 case TrackpadDirection.Right:
-                    Rotation(_settings.RotationAngle);
+                    Rotation(GameSettings.RotationAngle.Value);
                     break;
             }
             return false;
@@ -172,7 +173,7 @@ namespace KK_VR.Interpreters
 
         private void Rotation(float degrees)
         {
-            if (_settings.ContinuousRotation)
+            if (GameSettings.ContinuousRotation.Value)
             {
                 _continuousRotation = degrees;
             }
@@ -220,10 +221,10 @@ namespace KK_VR.Interpreters
             //var headCam = VR.Camera.transform;
 
             var pos = GetEyesPosition();
-            if (!_settings.UsingHeadPos)
+            if (!GameSettings.UsingHeadPos.Value)
             {
                 var player = actionScene.Player;
-                pos.y = player.position.y + (_standing ? _settings.StandingCameraPos : _settings.CrouchingCameraPos);
+                pos.y = player.position.y + (_standing ? GameSettings.StandingCameraPos.Value : GameSettings.CrouchingCameraPos.Value);
             }
 
             VR.Mode.MoveToPosition(pos, onlyPosition ? Quaternion.Euler(0f, VR.Camera.transform.eulerAngles.y, 0f) : _eyes.rotation, false);
@@ -241,10 +242,10 @@ namespace KK_VR.Interpreters
             var head = VR.Camera.Head;
 
             var vec = player.position - GetEyesPosition();
-            if (!_settings.UsingHeadPos)
+            if (!GameSettings.UsingHeadPos.Value)
             {
                 var attachPoint = player.position;
-                attachPoint.y = _standing ? _settings.StandingCameraPos : _settings.CrouchingCameraPos;
+                attachPoint.y = _standing ? GameSettings.StandingCameraPos.Value : GameSettings.CrouchingCameraPos.Value;
                 vec = player.position - attachPoint;
             }
             player.rotation = Quaternion.Euler(0f, head.eulerAngles.y, 0f);
@@ -256,7 +257,7 @@ namespace KK_VR.Interpreters
             if (!_crouching && actionScene.Player.chaCtrl.objTop != null)
             {
                 var objTop = actionScene.Player.chaCtrl.objTop;
-                if (_settings.CrouchByCameraPos && objTop.activeInHierarchy == true)
+                if (GameSettings.CrouchByCameraPos.Value && objTop.activeInHierarchy == true)
                 {
                     var delta_y = VR.Camera.transform.position.y - objTop.transform.position.y;
 

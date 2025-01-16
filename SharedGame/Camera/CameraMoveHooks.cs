@@ -10,6 +10,7 @@ using KK_VR.Interactors;
 using KK_VR.Interpreters;
 using UnityEngine;
 using VRGIN.Core;
+using KK_VR.Settings;
 
 // This file is a collection of hooks to move the VR camera at appropriate
 // points of the game.
@@ -185,7 +186,7 @@ namespace KK_VR.Camera
                 // We are starting from scratch.
                 // TODO: the height calculation below assumes standing mode.
 
-                if (KoikatuInterpreter.Settings.SmoothTransition && SmoothMover.Instance != null && !VRFade.IsFade)
+                if  (GameSettings.SmoothTransition.Value && SmoothMover.Instance != null && !VRFade.IsFade)
                 {
                     SmoothMover.Instance.MoveToInH(cameraPosition, cameraRotation, spotChange);
                 }

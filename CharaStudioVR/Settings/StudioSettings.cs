@@ -24,15 +24,18 @@ namespace KK_VR.Settings
         {
             var settings = new VRSettings();
 
+
             var ipdScale = config.Bind(SectionGeneral, "IPD Scale", 1f,
                 new ConfigDescription(
                     "Scale of the camera. The higher, the more gigantic the player is.",
                     new AcceptableValueRange<float>(0.25f, 4f)));
             Tie(ipdScale, v => settings.IPDScale = v);
 
+
             var rumble = config.Bind(SectionGeneral, "Rumble", true,
                 "Whether or not rumble is activated.");
             Tie(rumble, v => settings.Rumble = v);
+
 
             var rotationMultiplier = config.Bind(SectionGeneral, "Rotation multiplier", 1f,
                 new ConfigDescription(
@@ -40,6 +43,7 @@ namespace KK_VR.Settings
                     new AcceptableValueRange<float>(-4f, 4f),
                     new ConfigurationManagerAttributes { Order = -1 }));
             Tie(rotationMultiplier, v => settings.RotationMultiplier = v);
+
 
             var logLevel = config.Bind(SectionGeneral, "Log level", VRLog.LogMode.Info,
                 new ConfigDescription(

@@ -177,7 +177,7 @@ namespace KK_VR.Grasp
                     GameObject.Destroy(bodyPart.anchor.parent.gameObject);
                 }
                 bodyPart.anchor.SetParent(bodyPart.beforeIK, worldPositionStays: true);
-                if (instant || KoikatuInterpreter.Settings.ReturnBodyPartAfterSync)
+                if (instant || KoikSettings.IKReturnBodyPartAfterSync.Value)
                 {
                     bodyPart.guide.Sleep(instant);
                 }
@@ -711,7 +711,7 @@ namespace KK_VR.Grasp
             {
                 bodyGuide.OnSyncStart();
             }
-            bodyPart.chain.bendConstraint.weight = KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+            bodyPart.chain.bendConstraint.weight = KoikSettings.IKDefaultBendConstraint.Value;
             bodyPart.goal.Sleep();
         }
 
@@ -721,7 +721,7 @@ namespace KK_VR.Grasp
         {
             if (bodyPart.chain != null)
             {
-                bodyPart.chain.bendConstraint.weight = bodyPart.goal.IsBusy ? 1f : KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+                bodyPart.chain.bendConstraint.weight = bodyPart.goal.IsBusy ? 1f : KoikSettings.IKDefaultBendConstraint.Value;
             }
             bodyPart.guide.Attach(attachPoint);
             

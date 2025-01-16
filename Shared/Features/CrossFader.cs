@@ -45,7 +45,7 @@ namespace KK_VR.Features
                 VRPlugin.Logger.LogWarning("Disabling the AnimationCrossFader feature because KKS_CrossFader is installed");
                 return;
             }
-            var enabled = config.Bind(SettingsManager.SectionGeneral, "Cross-fade character animations", CrossFaderMode.OnlyInVr,
+            var enabled = config.Bind(KoikSettings.SectionGeneral, "Cross-fade character animations", CrossFaderMode.OnlyInVr,
                                       "Interpolate between animations/poses to make transitions look less jarring.\nChanges take effect after a scene change.");
 
             // Apply changes only after a scene change to avoid cutting off animations and possibly messing up state

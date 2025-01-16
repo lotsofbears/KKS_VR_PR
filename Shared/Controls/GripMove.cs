@@ -10,6 +10,7 @@ using UnityEngine;
 using KK_VR.Handlers;
 using KK_VR.Holders;
 using KK_VR.Interpreters;
+using KK_VR.Settings;
 
 namespace KK_VR.Controls
 {
@@ -41,7 +42,7 @@ namespace KK_VR.Controls
 
         private Vector3 _prevPos;
         private Quaternion _prevRot;
-        private readonly bool _rotInPlace = KoikatuInterpreter.Settings.GripMoveLimitRotation;
+        private readonly bool _rotInPlace = KoikSettings.GripMoveLimitRotation.Value;
         
         internal GripMove(HandHolder hand, HandHolder otherHand)
         {
@@ -219,31 +220,31 @@ namespace KK_VR.Controls
             if (press)
             {
                 UpdateAttachVec(); 
-                if (_moveLag == null && KoikatuInterpreter.Settings.GripMoveStabilize == Settings.KoikatuSettings.GripMoveStabilization.YawAndRotation)
+                if (_moveLag == null && KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.YawAndRotation)
                 {
-                    _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikatuInterpreter.Settings.GripMoveStabilizationAmount));
+                    _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
                 }
             }
         }
 
         internal void OnTouchpad(bool press)
         {
-            if (KoikatuInterpreter.Settings.GripMoveEnableRotation)
+            if (KoikSettings.GripMoveEnableRotation.Value)
             {
                 _alterRotation = press;
                 if (press)
                 {
                     if (_moveLag == null
-                        && (KoikatuInterpreter.Settings.GripMoveStabilize == Settings.KoikatuSettings.GripMoveStabilization.YawAndRotation
-                        || KoikatuInterpreter.Settings.GripMoveStabilize == Settings.KoikatuSettings.GripMoveStabilization.OnlyRotation))
+                        && (KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.YawAndRotation
+                        || KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.OnlyRotation))
                     {
-                        _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikatuInterpreter.Settings.GripMoveStabilizationAmount));
+                        _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
                     }
                 }
                 else
                 {
                     UpdateAttachVec();
-                    if (_attachPoint == null && _moveLag != null && KoikatuInterpreter.Settings.GripMoveStabilize == Settings.KoikatuSettings.GripMoveStabilization.OnlyRotation)
+                    if (_attachPoint == null && _moveLag != null && KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.OnlyRotation)
                     {
                         _moveLag = null;
                     }

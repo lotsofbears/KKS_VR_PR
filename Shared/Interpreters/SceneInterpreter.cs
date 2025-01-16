@@ -16,7 +16,6 @@ namespace KK_VR.Interpreters
     /// </summary>
     abstract class SceneInterpreter
     {
-        protected KoikatuSettings _settings = VR.Context.Settings as KoikatuSettings;
         internal virtual void OnStart()
         {
 #if KKS

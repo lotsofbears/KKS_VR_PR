@@ -71,7 +71,7 @@ namespace KK_VR.Interpreters
             {
                 _eyes = GetPlayer().chaCtrl.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
             }
-            return _eyes.TransformPoint(0f, _settings.PositionOffsetY, _settings.PositionOffsetZ);
+            return _eyes.TransformPoint(0f, GameSettings.PositionOffsetY.Value, GameSettings.PositionOffsetZ.Value);
         }
         public TalkSceneInterpreter(MonoBehaviour behaviour)
         {
@@ -95,9 +95,9 @@ namespace KK_VR.Interpreters
             SetHeight();
             HandHolder.UpdateHandlers<TalkSceneHandler>();
 
-            if (_settings.ShadowsOptimization == KoikatuSettings.ShadowType.Auto)
+            if (GameSettings.ShadowSetting.Value == GameSettings.ShadowType.Auto)
             {
-                KoikatuInterpreter.TweakShadowSettings(KoikatuSettings.ShadowType.Close);
+                GameSettings.UpdateShadowSetting(GameSettings.ShadowType.Close);
             }
         }
         private void SetHeight()
@@ -409,7 +409,7 @@ namespace KK_VR.Interpreters
             player.rotation = rotation * Quaternion.Euler(0f, 180f, 0f);
             var eyePos = GetEyesPosition();
             var headPos = head.position;
-            headPos.y = floor.y + (eyePos.y - player.position.y) + KoikatuInterpreter.Settings.PositionOffsetY;
+            headPos.y = floor.y + (eyePos.y - player.position.y) + GameSettings.PositionOffsetY.Value;
 
 
             VR.Camera.Origin.position +=  headPos - head.position;

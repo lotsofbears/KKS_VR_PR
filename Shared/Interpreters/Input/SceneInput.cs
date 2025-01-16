@@ -18,7 +18,6 @@ namespace KK_VR.Interpreters
     /// </summary>
     internal class SceneInput
     {
-        protected readonly KoikatuSettings _settings = VR.Context.Settings as KoikatuSettings;
         protected readonly List<InputWait> _waitList = [];
         protected InputState _inputState;
         protected bool IsWait => _waitList.Count != 0;
@@ -288,7 +287,7 @@ namespace KK_VR.Interpreters
                 {
                     if (!IsTriggerPress(index))
                     {
-                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, _settings.LongPress - 0.1f);
+                        AddWait(index, EVRButtonId.k_EButton_SteamVR_Touchpad, KoikSettings.LongPress.Value - 0.1f);
                     }
                 }
                 else

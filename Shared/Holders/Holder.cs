@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using static HandCtrl;
-using static KK_VR.Holders.HandHolder;
 using VRGIN.Core;
 using IllusionUtility.GetUtility;
 using KK_VR.Handlers;

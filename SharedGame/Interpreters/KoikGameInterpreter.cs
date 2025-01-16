@@ -36,12 +36,10 @@ namespace KK_VR.Interpreters
         internal static SceneInterpreter SceneInterpreter => _sceneInterpreter;
 
         internal static SceneInput SceneInput => _sceneInput;
-        internal static KoikatuSettings Settings => _settings;
         
         private static SceneType _currentScene;
         private static SceneInterpreter _sceneInterpreter;
         private static SceneInput _sceneInput;
-        private static KoikatuSettings _settings;
         private static KoikatuInterpreter _instance;
 #if KK
         internal static bool IsParty => _party;
@@ -59,14 +57,19 @@ namespace KK_VR.Interpreters
             _mirrorManager = new KK_VR.Fixes.Mirror.Manager();
             VR.Camera.gameObject.AddComponent<VREffector>();
             VR.Camera.gameObject.AddComponent<SmoothMover>();
-            _settings = VR.Context.Settings as KoikatuSettings;
-            TweakShadowSettings(_settings.ShadowsOptimization);
             SceneManager.sceneLoaded += OnSceneLoaded;
 #if KK
             _party = Paths.ProcessName.Equals($"Koikatsu Party");
 #endif
+            if (KoikSettings.EnableBoop.Value)
+            {
+                VRBoop.Initialize();
+            }
         }
-        
+        protected override void OnStart()
+        {
+            GameSettings.UpdateOnStart();
+        }
         protected override void OnUpdate()
         {
             UpdateScene();
@@ -111,7 +114,7 @@ namespace KK_VR.Interpreters
                 }
             }
 #endif
-            if (_settings.FixMirrors)
+            if (KoikSettings.FixMirrors.Value)
             {
                 foreach (var reflection in GameObject.FindObjectsOfType<MirrorReflection>())
                 {
@@ -374,28 +377,6 @@ namespace KK_VR.Interpreters
             yield return null;
             action.Invoke();
         }
-        internal static void TweakShadowSettings(KoikatuSettings.ShadowType shadowType)
-        {
-            // Grab "KKS_BetterShadowQualitySettings.dll" from HongFire patch or go to REPL, and configure it to own taste.
-            // Otherwise my take on "looks fine". Results should vary a bit depending on the VR hardware used.
-
-            QualitySettings.shadowProjection = ShadowProjection.StableFit;
-            QualitySettings.shadowCascades = 4;
-            QualitySettings.shadowCascade2Split = 0.33f;
-            QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
-            QualitySettings.shadows = ShadowQuality.All;
-
-            if (shadowType == KoikatuSettings.ShadowType.Close)
-            {
-                // Focus on proximity. Good while close, non-existent at mid range.
-                QualitySettings.shadowCascade4Split = new Vector3(0.025f, 0.085f, 0.25f);
-                QualitySettings.shadowDistance = 30;
-            }
-            else if (shadowType == KoikatuSettings.ShadowType.Average)
-            {
-                QualitySettings.shadowCascade4Split = new Vector3(0.06666667f, 0.2f, 0.4666667f);
-                QualitySettings.shadowDistance = 100;
-            }
-        }
+        
     }
 }

@@ -36,8 +36,8 @@ namespace KK_VR.Handlers
 
         protected override void DoReaction(float velocity)
         {
-            if (_settings.AutomaticTouching == KoikatuSettings.SceneType.Both
-                || _settings.AutomaticTouching == KoikatuSettings.SceneType.TalkScene)
+            if (GameSettings.AutomaticTouching.Value == GameSettings.SceneType.Both
+                || GameSettings.AutomaticTouching.Value == GameSettings.SceneType.TalkScene)
             {
                 var chara = _tracker.colliderInfo.chara;
                 var touch = _tracker.colliderInfo.behavior.touch;
@@ -53,7 +53,7 @@ namespace KK_VR.Handlers
                 }
                 else if (velocity > 1f || _tracker.reactionType == Tracker.ReactionType.HitReaction)
                 {
-                    if (GraspHelper.Instance != null && !GraspHelper.Instance.IsGraspActive(chara) && UnityEngine.Random.value < _settings.TouchReaction)
+                    if (GraspHelper.Instance != null && !GraspHelper.Instance.IsGraspActive(chara) && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
                     {
                         GraspHelper.Instance.TouchReaction(chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
                     }
