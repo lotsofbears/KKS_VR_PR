@@ -9,7 +9,7 @@ using VRGIN.Core;
 using System.Reflection;
 using KK_VR.Settings;
 
-namespace KK_VR.Holders
+namespace KK_VR.Features
 {
     /// <summary>
     /// Provides SFX for character <-> controller interactions

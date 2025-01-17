@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
-using IllusionUtility.SetUtility;
-using KK_VR.Caress;
 using KK_VR.Features;
-using KK_VR.Grasp;
-using KK_VR.Interactors;
 using KK_VR.Interpreters;
 using UnityEngine;
 using VRGIN.Core;
@@ -43,7 +39,7 @@ namespace KK_VR.Camera
                 // camera anyway in that case.
                 return;
             }
-            VRCameraMover.Instance.MaybeMoveADV(__instance, backTrans.position, backTrans.rotation);
+            CameraMover.Instance.MaybeMoveADV(__instance, backTrans.position, backTrans.rotation);
         }
     }
 
@@ -85,7 +81,7 @@ namespace KK_VR.Camera
 
             IEnumerator Postfix()
             {
-                VRCameraMover.Instance.HandleTextScenarioProgress(__instance);
+                CameraMover.Instance.HandleTextScenarioProgress(__instance);
                 yield break;
             }
         }
@@ -99,7 +95,7 @@ namespace KK_VR.Camera
         private static void PostSetNull(Transform transform)
         {
             VRLog.Debug("PostSetNull");
-            VRCameraMover.Instance.MaybeMoveTo(transform.position, transform.rotation);
+            CameraMover.Instance.MaybeMoveTo(transform.position, transform.rotation);
         }
 
 #if KKS
@@ -194,7 +190,7 @@ namespace KK_VR.Camera
                 {
                     var cameraHeight = lstFemale[0].transform.position.y + VR.Camera.transform.localPosition.y;
                     var destination = new Vector3(cameraPosition.x, cameraHeight, cameraPosition.z);
-                    VRCameraMover.Instance.MoveTo(destination, cameraRotation);
+                    CameraMover.Instance.MoveTo(destination, cameraRotation);
                 }
 
 

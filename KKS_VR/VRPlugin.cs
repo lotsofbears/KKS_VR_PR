@@ -15,6 +15,7 @@ using UnityEngine;
 using Valve.VR;
 using VRGIN.Core;
 using VRGIN.Helpers;
+using KK_VR.Camera;
 
 namespace KK_VR
 {
@@ -118,7 +119,7 @@ namespace KK_VR
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
             //TopmostToolIcons.Patch();
 
-            VRManager.Create<Interpreters.KoikGame>(new KoikContext(settings));
+            VRManager.Create<Interpreters.KoikGameInterp>(new KoikContext(settings));
 
             //// VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
             //UpdateNearClipPlane(settings);

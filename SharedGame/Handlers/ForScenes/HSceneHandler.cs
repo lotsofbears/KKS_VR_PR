@@ -1,27 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using VRGIN.Core;
-using VRGIN.Controls;
+﻿using System.Linq;
 using VRGIN.Helpers;
-using HarmonyLib;
-using UnityEngine;
 using KK_VR.Interpreters;
 using KK_VR.Settings;
-using KK_VR.Fixes;
-using KK_VR.Features;
-using KK_VR.Controls;
-using RootMotion.FinalIK;
 using static HandCtrl;
 using KK_VR.Caress;
-using ADV.Commands.Game;
-using KK_VR.Trackers;
-using ADV.Commands.Base;
-using static KKAPI.MainGame.TalkSceneUtils;
 using KK_VR.Grasp;
-using KK_VR.Handlers.Helpers;
 
 namespace KK_VR.Handlers
 {
@@ -72,7 +55,7 @@ namespace KK_VR.Handlers
                 HSceneInterp.handCtrl.DetachItemByUseAreaItem(touch - AibuColliderKind.muneL);
                 HSceneInterp.hFlag.click = HFlag.ClickKind.de_muneL + (int)touch - 2;
             }
-            else if (Interactors.Undresser.Undress(_tracker.colliderInfo.behavior.part, _tracker.colliderInfo.chara, decrease))
+            else if (Undresser.Undress(_tracker.colliderInfo.behavior.part, _tracker.colliderInfo.chara, decrease))
             {
                 //HandNoises.PlaySfx(_index, 1f, HandNoises.Sfx.Undress, HandNoises.Surface.Cloth);
             }

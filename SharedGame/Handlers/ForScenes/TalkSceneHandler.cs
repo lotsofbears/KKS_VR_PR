@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VRGIN.Core;
-using VRGIN.Controls;
-using VRGIN.Helpers;
+﻿using VRGIN.Helpers;
 using UnityEngine;
-using HarmonyLib;
-using KK_VR.Fixes;
 using KK_VR.Interpreters;
 using KK_VR.Settings;
 using KK_VR.Features;
-using KK_VR.Controls;
 using static HandCtrl;
-using KK_VR.Caress;
-using KK_VR.Interactors;
-using KK_VR.Trackers;
-using static KKAPI.MainGame.TalkSceneUtils;
 using KK_VR.Grasp;
 
 namespace KK_VR.Handlers

@@ -47,7 +47,7 @@ namespace KK_VR.Interpreters
             _instance = this;
             StartScene(SceneType.OtherScene, null);
             _mirrorManager = new KK_VR.Fixes.Mirror.Manager();
-            VR.Camera.gameObject.AddComponent<VREffector>();
+            VR.Camera.gameObject.AddComponent<EffectorVFX>();
             VR.Camera.gameObject.AddComponent<SmoothMover>();
             SceneManager.sceneLoaded += OnSceneLoaded;
 #if KK
@@ -113,7 +113,7 @@ namespace KK_VR.Interpreters
                     _mirrorManager.Fix(reflection);
                 }
             }
-            KoikatuMenuTool.TakeGui();
+            KoikMenuTool.TakeGui();
         }
 
         private void CreateHands()
@@ -339,7 +339,7 @@ namespace KK_VR.Interpreters
             else if (camera.GetComponent<CameraControl_Ver2>() != null)
             {
                 VRLog.Info("New main camera detected: moving to {0} {1}", camera.transform.position, camera.transform.eulerAngles);
-                Camera.VRCameraMover.Instance.MoveTo(camera.transform.position, camera.transform.rotation);
+                Camera.CameraMover.Instance.MoveTo(camera.transform.position, camera.transform.rotation);
                 VRLog.Info("moved to {0} {1}", VR.Camera.Head.position, VR.Camera.Head.eulerAngles);
                 VRLog.Info("Adding CameraControlControl");
                 camera.gameObject.AddComponent<Camera.CameraControlControl>();

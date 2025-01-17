@@ -17,10 +17,10 @@ namespace KK_VR.Camera
     /// A class responsible for moving the VR camera.
     /// TODO probably has some bugs since it was copied mostly as it is from KK to KKS
     /// </summary>
-    public class VRCameraMover
+    public class CameraMover
     {
-        public static VRCameraMover Instance => _instance ??= new VRCameraMover();
-        private static VRCameraMover _instance;
+        public static CameraMover Instance => _instance ??= new CameraMover();
+        private static CameraMover _instance;
 
         private Vector3 _lastPosition;
         private Quaternion _lastRotation;
@@ -29,7 +29,7 @@ namespace KK_VR.Camera
 
         public event OnMoveAction OnMove;
 
-        public VRCameraMover()
+        public CameraMover()
         {
             _lastPosition = Vector3.zero;
             _lastRotation = Quaternion.identity;
@@ -255,7 +255,7 @@ namespace KK_VR.Camera
             if (pretendFading || fadeOk || IsDestinationFar(position, rotation))
 #elif KKS
             //var fade = Manager.Scene.sceneFadeCanvas;
-            if (Features.VRFade.IsFade || IsDestinationFar(position, rotation))  //(pretendFading || IsDestinationFar(position, rotation))
+            if (VRFade.IsFade || IsDestinationFar(position, rotation))  //(pretendFading || IsDestinationFar(position, rotation))
 
             // No clue what this condition should be about, in KKS it doesn't work (always true).
             // KK has no problem with it('s alternative).

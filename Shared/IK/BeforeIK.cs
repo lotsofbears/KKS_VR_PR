@@ -1,9 +1,4 @@
-﻿using KK_VR.Fixes;
-using KK_VR.Interactors;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace KK_VR.IK
 {

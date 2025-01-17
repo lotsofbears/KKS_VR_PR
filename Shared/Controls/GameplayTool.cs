@@ -13,9 +13,9 @@ namespace KK_VR.Controls
     {
         private int _index;
 
-        private KoikatuMenuTool _menu;
+        private KoikMenuTool _menu;
 
-        private KoikatuMenuHandler _menuHandler;
+        private KoikMenuHandler _menuHandler;
 
         private Controller.TrackpadDirection _lastDirection;
 
@@ -64,8 +64,8 @@ namespace KK_VR.Controls
         {
             _init = true;
             _index = Owner == VR.Mode.Left ? 0 : 1;
-            _menu = new KoikatuMenuTool(_index);
-            _menuHandler = new KoikatuMenuHandler(Owner);
+            _menu = new KoikMenuTool(_index);
+            _menuHandler = new KoikMenuHandler(Owner);
         }
         internal void DestroyGripMove()
         {
@@ -113,7 +113,7 @@ namespace KK_VR.Controls
             {
                 if (!KoikGameInterp.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_ApplicationMenu, direction))
                 {
-                    KoikatuMenuTool.ToggleState();
+                    KoikMenuTool.ToggleState();
                 }
             }
 

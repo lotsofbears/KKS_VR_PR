@@ -135,7 +135,7 @@ namespace KK_VR.Interpreters
             }
 #if KKS
             // KKS swaps VFX all the time gotta keep up, KK doesn't seem like.
-            VREffector.Refresh();
+            EffectorVFX.Refresh();
 #endif
 
         }

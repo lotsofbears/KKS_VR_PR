@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace KK_VR.Features.Extras
+namespace KK_VR.Features
 {
     public static class VoiceBundles
     {

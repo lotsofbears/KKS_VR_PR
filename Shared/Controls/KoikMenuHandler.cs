@@ -13,7 +13,7 @@ using KK_VR.Holders;
 
 namespace KK_VR.Controls
 {
-    internal class KoikatuMenuHandler
+    internal class KoikMenuHandler
     {        /// <summary>
              /// Handler that is in charge of the menu interaction with controllers
              /// </summary>
@@ -53,7 +53,7 @@ namespace KK_VR.Controls
 
         internal void SetLastDirection(Controller.TrackpadDirection direction) => _lastDirection = direction;
 
-        internal KoikatuMenuHandler(Controller controller)
+        internal KoikMenuHandler(Controller controller)
         {
             //_controller = controller;
             _scaleVector = new Vector2((float)VRGUI.Width / Screen.width, (float)VRGUI.Height / Screen.height);

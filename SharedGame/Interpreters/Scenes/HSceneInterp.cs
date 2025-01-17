@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using VRGIN.Core;
 using HarmonyLib;
 using System.Collections.Generic;
 using KK_VR.Camera;
@@ -8,26 +7,16 @@ using System;
 using Manager;
 using System.Linq;
 using System.Collections;
-using KK_VR.Interpreters;
-using KK_VR.Caress;
 using Random = UnityEngine.Random;
 using static HFlag;
 using static HandCtrl;
-using static VRGIN.Controls.Controller;
-using Valve.VR;
 using KK_VR.Handlers;
 using KK_VR.Controls;
 using RootMotion.FinalIK;
-using ADV.Commands.H;
-using ADV;
 using KK_VR.Fixes;
-using System.Runtime.Serialization.Formatters;
-using KK_VR.Trackers;
-using KK_VR.Interactors;
 using KK_VR.Patches;
 using KK_VR.Grasp;
 using KK_VR.Holders;
-using System.Diagnostics;
 using KK_VR.Settings;
 
 namespace KK_VR.Interpreters

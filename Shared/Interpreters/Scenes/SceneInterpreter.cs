@@ -1,12 +1,4 @@
-﻿using VRGIN.Core;
-using UnityEngine;
-using VRGIN.Controls;
-using Valve.VR;
-using KK_VR.Settings;
-using System.Collections.Generic;
-using System.Linq;
-using KK_VR.Camera;
-using KK_VR.Holders;
+﻿using KK_VR.Camera;
 using UnityEngine.SceneManagement;
 
 namespace KK_VR.Interpreters
@@ -20,7 +12,7 @@ namespace KK_VR.Interpreters
         {
 #if KKS
             // KKS swaps VFX all the time gotta keep up, KK doesn't seem like.
-            VREffector.Refresh();
+            EffectorVFX.Refresh();
 #endif
         }
         internal virtual void OnDisable()

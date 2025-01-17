@@ -1,12 +1,5 @@
 ﻿using HarmonyLib;
-using KK_VR.Features;
 using KK_VR.Grasp;
-using KK_VR.Interactors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace KK_VR.Patches
 {

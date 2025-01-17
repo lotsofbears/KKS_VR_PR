@@ -1,27 +1,14 @@
-﻿using Illusion.Component.Correct;
-using KK.RootMotion.FinalIK;
-using KK_VR.Camera;
-using KK_VR.Fixes;
+﻿using KK.RootMotion.FinalIK;
 using KK_VR.Handlers;
 using KK_VR.IK;
 using KK_VR.Interpreters;
 using KK_VR.Settings;
-using KK_VR.Trackers;
-using KK_VR.Grasp;
-using RootMotion.FinalIK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using VRGIN.Core;
 using static KK_VR.Grasp.GraspController;
-using static KK_VR.Grasp.TouchReaction;
-using BodyPart = KK_VR.Grasp.BodyPart;
 using KK_VR.Holders;
-using static KK.RootMotion.FinalIK.IKSolverVR;
-using KK_VR.Features;
 
 namespace KK_VR.Grasp
 {

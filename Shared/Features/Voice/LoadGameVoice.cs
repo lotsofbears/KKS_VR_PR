@@ -1,7 +1,6 @@
 ﻿using BepInEx.Configuration;
 using HarmonyLib;
 using Illusion.Game;
-using KK_VR.Features.Extras;
 using KK_VR.Interpreters;
 using Manager;
 using System;

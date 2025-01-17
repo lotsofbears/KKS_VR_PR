@@ -137,7 +137,7 @@ namespace KK_VR.Fixes
     {
         public static void UpdateVRCamera()
         {
-            KoikGame.RunAfterUpdate(VRGIN.Core.VRCamera.Instance.UpdateCameraBlueprint);
+            KoikGameInterp.RunAfterUpdate(VRGIN.Core.VRCamera.Instance.UpdateCameraBlueprint);
         }
         static MethodBase TargetMethod()
         {

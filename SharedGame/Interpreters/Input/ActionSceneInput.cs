@@ -198,7 +198,7 @@ namespace KK_VR.Interpreters
 
             var camera = VR.Camera.transform;
             var newRotation = Quaternion.AngleAxis(degrees, Vector3.up) * camera.rotation;
-            VRCameraMover.Instance.MoveTo(camera.position, newRotation);
+            CameraMover.Instance.MoveTo(camera.position, newRotation);
             PlayerToCamera();
         }
         private void ContinuousRotation(float degrees)

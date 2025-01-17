@@ -1,23 +1,14 @@
-﻿using BepInEx;
-using Illusion.Extensions;
-using KK_VR;
-using KK_VR.Handlers;
+﻿using Illusion.Extensions;
 using KK_VR.Holders;
-using Manager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using UniRx;
 using UnityEngine;
-using VRGIN.Core;
-using static ActionGame.ActionChangeUI;
 using static HandCtrl;
-using static RootMotion.FinalIK.IKSolver;
-using Random = UnityEngine.Random;
 
-namespace KK_VR.Trackers
+namespace KK_VR.Handlers
 {
     class Tracker
     {

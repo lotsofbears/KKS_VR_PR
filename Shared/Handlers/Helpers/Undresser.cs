@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using VRGIN.Core;
-using HarmonyLib;
-
-using static ChaFileDefine;
-using KK_VR.Fixes;
 using static KK_VR.Features.LoadGameVoice;
-using KK_VR.Controls;
-using KK_VR.Features;
-using static KK_VR.Trackers.Tracker;
+using static KK_VR.Handlers.Tracker;
 
-namespace KK_VR.Interactors
+namespace KK_VR.Handlers
 {
     /// <summary>
     /// Simplified/expanded version from https://github.com/mosirnik/KK_MainGameVR

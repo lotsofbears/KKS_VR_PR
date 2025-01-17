@@ -12,7 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Camera\ActionCameraControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Camera\BackgroundDisplayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Camera\CameraMoveHooks.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Camera\VRCameraMover.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\CameraMover.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caress\CaressUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caress\HandCtrlHooks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\LocationPicker.cs" />
@@ -43,7 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\TalkScenePatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\TalkSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettingsManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\[obsolete]GameSettingsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\" />

@@ -1,14 +1,8 @@
-﻿using KK_VR.Grasp;
-using KK_VR.Interpreters;
-using KK_VR.Trackers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using KK_VR.Interpreters;
 using static HandCtrl;
 using UnityEngine;
 
-namespace KK_VR.Handlers.Helpers
+namespace KK_VR.Handlers
 {
     /// <summary>
     /// Feeds ~controller position to the hFlag.xy field 

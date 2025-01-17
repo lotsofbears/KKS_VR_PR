@@ -1,13 +1,12 @@
 ﻿using KK_VR.Interpreters;
 using Manager;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace KK_VR.Trackers
+namespace KK_VR.Handlers
 {
     // Supposed to be at disposal of component directly under controller's control.
     class ControllerTracker : Tracker

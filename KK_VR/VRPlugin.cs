@@ -14,6 +14,7 @@ using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Controls.Handlers;
+using KK_VR.Camera;
 
 namespace KK_VR
 {

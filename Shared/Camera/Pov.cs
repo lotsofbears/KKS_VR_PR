@@ -11,7 +11,7 @@ using KK_VR.Camera;
 using System;
 using UnityEngine.Events;
 
-namespace KK_VR.Features
+namespace KK_VR.Camera
 {
     public class PoV : MonoBehaviour
     {

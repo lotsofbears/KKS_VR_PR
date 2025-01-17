@@ -26,7 +26,7 @@ namespace KK_VR.Camera
 
         private BackgroundDisplayer()
         {
-            VRCameraMover.Instance.OnMove += OnCameraMove;
+            CameraMover.Instance.OnMove += OnCameraMove;
         }
 
         public void OnCameraMove()

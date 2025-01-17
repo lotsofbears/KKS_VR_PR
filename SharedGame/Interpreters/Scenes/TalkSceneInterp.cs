@@ -4,22 +4,15 @@ using System.Linq;
 using VRGIN.Core;
 using UnityEngine;
 using Manager;
-using UnityEngine.UI;
 using ADV;
 using Random = UnityEngine.Random;
 using RootMotion.FinalIK;
-using KK_VR.Fixes;
-using Valve.VR;
 using static HandCtrl;
 using static KK_VR.Interpreters.SceneExtras;
-using static VRGIN.Controls.Controller;
 using KK_VR.Handlers;
-using KK_VR.Features;
 using KK_VR.Camera;
-using KK_VR.Trackers;
 using KK_VR.Holders;
 using KK_VR.Grasp;
-using static KK_VR.Grasp.GraspController;
 using KK_VR.Settings;
 
 namespace KK_VR.Interpreters
@@ -400,7 +393,7 @@ namespace KK_VR.Interpreters
 #if DEBUG
                     VRPlugin.Logger.LogInfo($"Talk/Adv:PlacePlayer:Scene has extra male chara, impersonating");
 #endif
-                    VRCameraMover.Instance.Impersonate(child.GetComponent<ChaControl>());
+                    CameraMover.Instance.Impersonate(child.GetComponent<ChaControl>());
                     return;
                 }
             }

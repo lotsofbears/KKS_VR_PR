@@ -1,15 +1,7 @@
-﻿using KK_VR.Handlers;
-using KK_VR.Trackers;
-using RootMotion.FinalIK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using static KK_VR.Grasp.GraspController;
 using KK_VR.Holders;
 using KK_VR.Grasp;
-using KK_VR.Interpreters;
 using KK_VR.Settings;
 
 namespace KK_VR.Handlers

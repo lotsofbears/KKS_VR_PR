@@ -12,12 +12,12 @@ using KK_VR.Settings;
 
 namespace KK_VR.Controls
 {
-    internal class KoikatuMenuTool
+    internal class KoikMenuTool
     {
         internal bool IsAttached => _attached;
         private bool _attached;
         private static GUIQuad _gui;
-        internal KoikatuMenuTool(int index)
+        internal KoikMenuTool(int index)
         {
             if (!_gui && index == (int)KoikSettings.MainHand.Value)
             {

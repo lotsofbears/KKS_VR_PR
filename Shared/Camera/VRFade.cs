@@ -8,7 +8,7 @@ using ActionGame;
 using Manager;
 using KK_VR.Interpreters;
 
-namespace KK_VR.Features
+namespace KK_VR.Camera
 {
     /// <summary>
     /// A VR fader that replaces the fader of the base game.
@@ -86,7 +86,7 @@ namespace KK_VR.Features
                     _isFade = false;
                     _alpha = 0f;
                 }
-                if (TalkSceneInterp.advScene != null && KoikGame.SceneInterpreter is TalkSceneInterp talkInterpreter)
+                if (TalkSceneInterp.advScene != null && KoikGameInterp.SceneInterpreter is TalkSceneInterp talkInterpreter)
                 {
                     talkInterpreter.AdjustAdvScene();
                 }

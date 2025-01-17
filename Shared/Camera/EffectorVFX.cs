@@ -9,7 +9,7 @@ namespace KK_VR.Camera
     /// A component to be attached to the VR camera. Ensures that it has the
     /// same set of camera effects enabled as the game camera.
     /// </summary>
-    class VREffector : ProtectedBehaviour
+    class EffectorVFX : ProtectedBehaviour
     {
         protected override void OnUpdate()
         {
@@ -115,7 +115,7 @@ namespace KK_VR.Camera
         /// </summary>
         internal static void Refresh()
         {
-            var effector = VR.Camera.GetComponent<VREffector>();
+            var effector = VR.Camera.GetComponent<EffectorVFX>();
             if (effector != null && VR.Camera.Blueprint != null)
             {
                 effector.HandleNewGameCamera(VR.Camera.Blueprint);

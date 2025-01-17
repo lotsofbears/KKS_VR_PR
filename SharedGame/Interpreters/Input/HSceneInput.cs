@@ -10,6 +10,7 @@ using VRGIN.Core;
 using Random = UnityEngine.Random;
 using UnityEngine;
 using KK_VR.Settings;
+using KK_VR.Camera;
 
 namespace KK_VR.Interpreters
 {
