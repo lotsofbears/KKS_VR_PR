@@ -50,16 +50,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\BodyPartGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\HeadPartGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\PartGuide.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\ActionSceneHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\HSceneHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\TalkSceneHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Handler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\AibuItemMover.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\ItemLag.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\KissHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\SmoothDamp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ItemHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\MouthGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Holders\HandHolder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\KoikSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SFX\SFXLoader.cs" />

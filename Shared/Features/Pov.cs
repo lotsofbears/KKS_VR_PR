@@ -8,6 +8,8 @@ using KK_VR.Settings;
 using KK_VR.Interpreters;
 using KK_VR.Handlers;
 using KK_VR.Camera;
+using System;
+using UnityEngine.Events;
 
 namespace KK_VR.Features
 {
@@ -77,6 +79,11 @@ namespace KK_VR.Features
         private float _syncTimestamp;
         private Vector3 _prevFramePos;
         private bool _forceHideHead;
+
+
+        // EventHandler with custom generic arguments gives me a hard time, thus the unity implimentation.
+        public event UnityAction<bool> CameraBusy;
+        public event UnityAction<bool, ChaControl> Impersonation;
 
         private Vector3 GetEyesPosition() => _targetEyes.TransformPoint(_offsetVecEyes);
         private bool IsClimax => HSceneInterpreter.hFlag.nowAnimStateName.EndsWith("_Loop", System.StringComparison.Ordinal);
@@ -224,10 +231,11 @@ namespace KK_VR.Features
         public void CameraIsFarAndBusy()
         {
             CameraIsFar();
-            if (MouthGuide.Instance != null)
-            {
-                MouthGuide.Instance.PauseInteractions = true;
-            }
+            CameraBusy?.Invoke(true);
+            //if (MouthGuide.Instance != null)
+            //{
+            //    MouthGuide.Instance.PauseInteractions = true;
+            //}
         }
         public void CameraIsNear()
         {
@@ -241,23 +249,12 @@ namespace KK_VR.Features
             if (_target.sex == 1)
             {
                 GirlPoV = true;
-                if (MouthGuide.Instance != null)
-                {
-                    MouthGuide.Instance.PauseInteractions = true;
-                }
             }
             else
             {
                 GirlPoV = false;
-                if (MouthGuide.Instance != null)
-                {
-                    MouthGuide.Instance.PauseInteractions = false;
-                }
             }
-            if (IntegrationMaleBreath.IsActive)
-            {
-                IntegrationMaleBreath.OnPov(true, _target);
-            }
+            Impersonation?.Invoke(true, _target);
         }
 
         private void StartMoveToHead(float speed = 1f)
@@ -357,10 +354,11 @@ namespace KK_VR.Features
                 _prevTarget = _target;
                 _target = charas[currentCharaIndex + 1];
             }
-            if (MouthGuide.Instance != null)
-            {
-                MouthGuide.Instance.OnImpersonation(_target);
-            }
+            Impersonation?.Invoke(true, _target);
+            //if (MouthGuide.Instance != null)
+            //{
+            //    MouthGuide.Instance.OnImpersonation(_target);
+            //}
             _targetEyes = _target.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz");
             CameraIsFarAndBusy();
             UpdateSettings();
@@ -397,10 +395,11 @@ namespace KK_VR.Features
                 if (_active && !_newAttachPoint)
                 {
                     _newAttachPoint = true;
-                    if (IntegrationMaleBreath.IsActive)
-                    {
-                        IntegrationMaleBreath.OnPov(false, _target);
-                    }
+                    Impersonation?.Invoke(false, _target);
+                    //if (IntegrationMaleBreath.IsActive)
+                    //{
+                    //    IntegrationMaleBreath.OnPov(false, _target);
+                    //}
                     return true;
                 }
             }
@@ -415,14 +414,16 @@ namespace KK_VR.Features
             _newAttachPoint = false;
             _forceHideHead = false;
             _moveTo = null;
-            if (IntegrationMaleBreath.IsActive)
-            {
-                IntegrationMaleBreath.OnPov(false, _target);
-            }
-            if (MouthGuide.Instance != null)
-            {
-                MouthGuide.Instance.OnUnImpersonation();
-            }
+
+            Impersonation?.Invoke(false, _target);
+            //if (IntegrationMaleBreath.IsActive)
+            //{
+            //    IntegrationMaleBreath.OnPov(false, _target);
+            //}
+            //if (MouthGuide.Instance != null)
+            //{
+            //    MouthGuide.Instance.OnUnImpersonation();
+            //}
         }
 
         private void Disable(bool moveTo)

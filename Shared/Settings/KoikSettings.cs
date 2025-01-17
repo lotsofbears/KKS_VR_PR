@@ -16,9 +16,9 @@ namespace KK_VR.Settings
     public abstract class KoikSettings
     {
         public const string SectionGeneral = "0. General";
-        //public const string SectionRoaming = "1. Roaming";
-        //public const string SectionEventScenes = "2. Event scenes";
-        //public const string SectionH = "3. H Scene";
+        public const string SectionRoaming = "1. Roaming";
+        public const string SectionEventScenes = "2. Event scenes";
+        public const string SectionH = "3. H Scene";
         public const string SectionPov = "4. Impersonation (PoV)";
         public const string SectionIK = "5. Inverse Kinematics (IK)";
         public const string SectionGripMove = "6. GripMove";
@@ -26,13 +26,13 @@ namespace KK_VR.Settings
 
         public enum SceneType
         {
-            Disabled,
-#if STUDIO
-            Enabled,
-#else
+            Disable,
+#if GAME
             TalkScene,
             HScene,
-            Both
+            Both,
+#elif STUDIO
+            Enable,
 #endif
         }
         public enum Handedness
@@ -72,51 +72,81 @@ namespace KK_VR.Settings
             Average,
             Auto
         }
-        public static ConfigEntry<Impersonation> Pov { get; private set; }
-        public static ConfigEntry<float> RotationAngle { get; private set; }
-        public static ConfigEntry<bool> EnableBoop { get; private set; }
-        public static ConfigEntry<SceneType> AutomaticTouching { get; private set; }
+        #region General
 
+        public static ConfigEntry<float> RotationAngle { get; private set; }
         public static ConfigEntry<bool> PrivacyScreen { get; private set; }
         public static ConfigEntry<float> NearClipPlane { get; private set; }
         public static ConfigEntry<float> PositionOffsetY { get; private set; }
         public static ConfigEntry<float> PositionOffsetZ { get; private set; }
-        public static ConfigEntry<bool> HideHeadInPov { get; private set; }
-        public static ConfigEntry<PovMovementType> FlyInPov { get; private set; }
         public static ConfigEntry<Handedness> MainHand { get; private set; }
-
-        public static ConfigEntry<ShadowType> ShadowSetting { get; private set; }
-
+        public static ConfigEntry<bool> EnableBoop { get; private set; }
         public static ConfigEntry<float> ShortPress { get; private set; }
         public static ConfigEntry<float> LongPress { get; private set; }
         public static ConfigEntry<bool> EnableSFX { get; private set; }
+        public static ConfigEntry<ShadowType> ShadowSetting { get; private set; }
+
+        #endregion
+
+
+        #region Roaming
+        public static ConfigEntry<bool> ContinuousRotation { get; private set; }
+
+        #endregion
+
+
+        #region Pov
+
+        public static ConfigEntry<Impersonation> Pov { get; private set; }
+        public static ConfigEntry<PovMovementType> FlyInPov { get; private set; }
+        public static ConfigEntry<bool> HideHeadInPov { get; private set; }
+        public static ConfigEntry<float> FlightSpeed { get; private set; }
+        public static ConfigEntry<int> PovDeviationThreshold { get; private set; }
+        public static ConfigEntry<bool> PovAutoEnter { get; private set; }
+
+        #endregion
+
+
+        #region H
+
+        public static ConfigEntry<SceneType> AutomaticTouching { get; private set; }
+        public static ConfigEntry<float> TouchReaction { get; private set; }
+
+        #endregion
+
+
+        #region GripMove
 
         public static ConfigEntry<GripMoveStabilization> GripMoveStabilize { get; private set; }
         public static ConfigEntry<bool> GripMoveLimitRotation { get; private set; }
         public static ConfigEntry<int> GripMoveStabilizationAmount { get; private set; }
         public static ConfigEntry<bool> GripMoveEnableRotation { get; private set; }
-        public static ConfigEntry<float> FlightSpeed { get; private set; }
 
+        #endregion
+
+
+        #region IK
 
         public static ConfigEntry<bool> IKMaintainRelativePosition { get; private set; }
         public static ConfigEntry<float> IKPushParent { get; private set; }
-
-        /// <summary>
-        /// Very expensive, about ~10-20% extra gpu load.
-        /// </summary>
-        public static ConfigEntry<bool> FixMirrors { get; private set; }
-
-
-        public static ConfigEntry<float> TouchReaction { get; private set; }
-        public static ConfigEntry<int> PovDeviationThreshold { get; private set; }
-        public static ConfigEntry<bool> ContinuousRotation { get; private set; }
 
         public static ConfigEntry<bool> IKShowGuideObjects { get; private set; }
         public static ConfigEntry<HeadEffector> IKHeadEffector { get; private set; }
         public static ConfigEntry<float> IKDefaultBendConstraint { get; private set; }
 
         public static ConfigEntry<bool> IKReturnBodyPartAfterSync { get; private set; }
-        public static ConfigEntry<bool> PovAutoEnter { get; private set; }
+
+        #endregion
+
+
+        #region Performance
+        /// <summary>
+        /// Very expensive, about ~10-20% extra gpu load.
+        /// </summary>
+        public static ConfigEntry<bool> FixMirrors { get; private set; }
+
+        #endregion
+
         public virtual VRSettings Create(ConfigFile config)
         {
             var settings = new VRSettings();
@@ -243,6 +273,38 @@ namespace KK_VR.Settings
 
             #endregion
 
+            #region Roaming
+
+
+            ContinuousRotation = config.Bind(SectionRoaming, "Continuous rotation", true,
+                "Rotate camera continuously instead of a snap turn. Influenced by the setting 'Rotation angle'.");
+
+
+            #endregion
+
+            #region H
+
+
+            // This one can be a bit annoying currently as characters can overreact if unintentionally bullied by the controller in pov mode during animations.
+            AutomaticTouching = config.Bind(SectionH, "Automatic touching",
+#if GAME
+                SceneType.Both,
+#elif STUDIO
+                SceneType.Enable,
+#endif
+                "Touching body with controller triggers a reaction"
+                );
+
+
+            TouchReaction = config.Bind(SectionH, "Touch reaction", 0.2f,
+                new ConfigDescription(
+                    "Set probability of an alternative reaction to the touch.",
+                    new AcceptableValueRange<float>(0f, 1f),
+                    new ConfigurationManagerAttributes { Order = -10, ShowRangeAsPercent = false }
+                    ));
+
+
+            #endregion
 
             #region SectionPov
 
@@ -294,8 +356,7 @@ namespace KK_VR.Settings
 
 
             #endregion
-
-
+            
             #region SectionIK
 
 
@@ -351,7 +412,6 @@ namespace KK_VR.Settings
 
             #endregion
 
-
             #region SectionGripMove
 
 
@@ -388,7 +448,6 @@ namespace KK_VR.Settings
 
 
             #endregion
-
 
             #region SectionPerformance
 

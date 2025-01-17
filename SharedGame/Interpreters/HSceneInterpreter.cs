@@ -137,11 +137,11 @@ namespace KK_VR.Interpreters
 
             _mouth = MouthGuide.Create();
             _pov = PoV.Create();
+            _pov.CameraBusy += _mouth.OnBusy;
+            _pov.Impersonation += _mouth.OnImpersonation;
+
             adjustDirLight = true;
-            // Init after everything.
-//#if KKS
-//            MeshCollider.AddRascal(lstFemale[0]);
-//#endif
+
             HitReactionInitialize(distinctCharas);
             LocationPicker.AddComponents();
 #if KK
@@ -157,6 +157,10 @@ namespace KK_VR.Interpreters
             if (GameSettings.PovAutoEnter.Value)
             {
                 SmoothMover.Instance.MoveToPoV();
+            }
+            if (IntegrationMaleBreath.IsActive)
+            {
+                _pov.Impersonation += (active, chara) => IntegrationMaleBreath.OnPov(active, chara);
             }
         }
 

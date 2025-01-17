@@ -6,6 +6,7 @@ using KK_VR.Camera;
 using KK_VR.Holders;
 using KK_VR.Settings;
 using UnityEngine;
+using UnityEngine.Events;
 using Valve.VR;
 using VRGIN.Controls;
 using VRGIN.Core;
@@ -31,14 +32,13 @@ namespace KK_VR.Interpreters
         internal virtual bool IsTriggerPress(int index) => _pressedButtons[index, 0];
         internal virtual bool IsGripPress(int index) => _pressedButtons[index, 1];
         internal virtual bool IsTouchpadPress(int index) => _pressedButtons[index, 2];
-        internal virtual bool IsGripMove() => _pressedButtons[0, 1] || _pressedButtons[1, 1];
-
+        internal virtual bool IsGripMove => _pressedButtons[0, 1] || _pressedButtons[1, 1];
         /// <summary>
         /// Something doesn't want to share input.
         /// </summary>
         internal bool IsBusy => _busy;// _inputState != InputState.None;
         private bool _busy;
-        protected enum InputState
+        internal enum InputState
         {
             Caress = 1,
             Grasp = 2,
@@ -66,7 +66,6 @@ namespace KK_VR.Interpreters
         {
             _inputState |= state;
             var wasBusy = _busy;
-
             _busy = IsInputStateNotDefault();
             if (!wasBusy && _busy)
             {

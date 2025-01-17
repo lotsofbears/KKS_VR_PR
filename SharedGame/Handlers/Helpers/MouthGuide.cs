@@ -37,13 +37,13 @@ namespace KK_VR.Handlers
         }
         internal static MouthGuide Instance => _instance;
         private static MouthGuide _instance;
-        internal bool PauseInteractions
+        private bool PauseInteractions
         {
             get => _pauseInteractions || ActiveCo;
             set => _pauseInteractions = value;
         }
         internal Transform LookAt => _lookAt;
-        private static bool _pauseInteractions;
+        private bool _pauseInteractions;
         internal bool IsActive => ActiveCo;
         private bool ActiveCo
         {
@@ -97,15 +97,35 @@ namespace KK_VR.Handlers
             _aibu = HSceneInterpreter.mode == HFlag.EMode.aibu;
             Tracker.SetBlacklistDic(_mouthBlacklistDic);
         }
-        internal void OnImpersonation(ChaControl chara)
+        internal static void SetBusy(bool active)
         {
-            _mouthBlacklistDic.Clear();
-            _mouthBlacklistDic.Add(chara, [Tracker.Body.None]);
+            if (_instance == null) return;
+
+            _instance.PauseInteractions = active;
         }
-        internal void OnUnImpersonation()
+        internal void OnBusy(bool active)
         {
+            if (_instance == null) return;
+            
+            _pauseInteractions = active;
+        }
+        internal void OnImpersonation(bool active, ChaControl chara)
+        {
+            if (_instance == null) return;
+                
             _mouthBlacklistDic.Clear();
-            PauseInteractions = false;
+            if (active)
+            {
+                if (chara != null && !_mouthBlacklistDic.ContainsKey(chara))
+                {
+                    _mouthBlacklistDic.Add(chara, [Tracker.Body.None]);
+                }
+                _pauseInteractions = chara.sex == 1;
+            }
+            else
+            {
+                _pauseInteractions = active;
+            }
         }
         private void Update()
         {
@@ -124,8 +144,12 @@ namespace KK_VR.Handlers
             if (GameSettings.AssistedKissing.Value)
             {
                 var head = VR.Camera.Head;
+
+                // Distance check often fails if the character is extra smol,
+                // requires adjusting of '_kissDistance' based on character height.
+
                 if (Vector3.Distance(_eyes.position, head.position) < _kissDistance
-                    && Quaternion.Angle(_eyes.rotation, head.rotation * _reverse) < 60f
+                    && Quaternion.Angle(_eyes.rotation, head.rotation * _reverse) < 30f
                     && IsKissingAllowed())
                 {
                     StartKiss();
@@ -139,7 +163,7 @@ namespace KK_VR.Handlers
             if (Tracker.AddCollider(other))
             {
                 var touch = Tracker.colliderInfo.behavior.touch;
-                if (touch != AibuColliderKind.none && !PauseInteractions && (_aibu || KoikatuInterpreter.SceneInput.IsGripMove()))
+                if (touch != AibuColliderKind.none && !PauseInteractions && (_aibu || KoikatuInterpreter.SceneInput.IsGripMove))
                 {
                     if (touch == AibuColliderKind.mouth && GameSettings.AssistedKissing.Value)
                     {
@@ -573,7 +597,7 @@ namespace KK_VR.Handlers
             {
                 // Let pov handle re-engage on slower then usual speed.
                 PoV.Instance.CameraIsFar(0.25f);
-                PauseInteractions = true;
+                _pauseInteractions = true;
             }
 
             //VRPlugin.Logger.LogDebug($"MouthGuide:Disengage:End");

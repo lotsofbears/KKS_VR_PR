@@ -21,9 +21,6 @@ namespace KK_VR.Settings
 {
     public class GameSettings : KoikSettings
     {
-        public const string SectionRoaming = "1. Roaming";
-        public const string SectionEventScenes = "2. Event scenes";
-        public const string SectionH = "3. H Scene";
         public enum HandType
         {
             None,
@@ -61,8 +58,6 @@ namespace KK_VR.Settings
         public override VRSettings Create(ConfigFile config)
         {
             #region Roaming
-
-
             UsingHeadPos = config.Bind(SectionRoaming, "Use head position", true,
                 new ConfigDescription(
                     "Place the camera exactly at the protagonist's head (may cause motion sickness). If disabled, use a fixed height from the floor.",
@@ -93,6 +88,11 @@ namespace KK_VR.Settings
                     null,
                     new ConfigurationManagerAttributes { Order = -3 }
                     ));
+
+
+            // Couldn't really see the difference tbh, but oh well.
+            OptimizeHInsideRoaming = config.Bind(SectionPerformance, "Aggressive performance optimizations", true,
+                "Improve framerate and reduce stutter in H and Talk scenes inside Roaming. May cause visual glitches.");
 
 
             #endregion

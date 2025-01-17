@@ -141,7 +141,7 @@ namespace KK_VR.Interpreters
             else
             {
                 // Check if another controller still gripMoves.
-                if (!IsGripMove())
+                if (!IsGripMove)
                 {
                     _pov.OnGripMove(press);
                     _mouth.OnGripMove(press);

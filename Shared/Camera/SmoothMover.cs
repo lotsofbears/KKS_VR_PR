@@ -161,7 +161,7 @@ namespace KK_VR.Camera
             yield return CoroutineUtils.WaitForEndOfFrame;
             var origin = VR.Camera.Origin;
             var head = VR.Camera.Head;
-            MouthGuide.Instance.PauseInteractions = true;
+            MouthGuide.SetBusy(true);
 
             var chara = HSceneInterpreter.lstFemale[0];
             var eyes = chara.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
@@ -200,7 +200,7 @@ namespace KK_VR.Camera
 
             }
             var lerp = 0f;
-            var lerpModifier = GameSettings.FlightSpeed.Value * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
+            var lerpModifier = KoikSettings.FlightSpeed.Value * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
             var startPos = head.position;
             var startRot = origin.rotation;
             while (lerp < 1f)
@@ -212,7 +212,7 @@ namespace KK_VR.Camera
                 origin.position += pos - head.position;
                 yield return CoroutineUtils.WaitForEndOfFrame;
             }
-            MouthGuide.Instance.PauseInteractions = false;
+            MouthGuide.SetBusy(false);
         }
     }
 }

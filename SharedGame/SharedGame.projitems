@@ -20,6 +20,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\GameFixes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\ObiControlFix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameStandingMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\ActionSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\HSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\TalkSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\AibuItemMover.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\KissHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\MouthGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\ActionSceneInterpreter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationMaleBreath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationSensibleH.cs" />

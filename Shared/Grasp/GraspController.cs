@@ -525,10 +525,11 @@ namespace KK_VR.Grasp
                         GraspBodyPart(bodyPart, anchor);
                     }
                 }
-                if (MouthGuide.Instance != null)
-                {
-                    MouthGuide.Instance.PauseInteractions = true;
-                }
+
+                //if (MouthGuide.Instance != null)
+                //{
+                //    MouthGuide.Instance.PauseInteractions = true;
+                //}
                 _hand.OnGraspHold();
             }
         }
