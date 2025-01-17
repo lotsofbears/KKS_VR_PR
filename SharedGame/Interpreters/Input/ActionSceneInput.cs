@@ -8,7 +8,7 @@ using KK_VR.Settings;
 using UnityEngine;
 using VRGIN.Core;
 using WindowsInput.Native;
-using static KK_VR.Interpreters.ActionSceneInterpreter;
+using static KK_VR.Interpreters.ActionSceneInterp;
 using static VRGIN.Controls.Controller;
 
 namespace KK_VR.Interpreters

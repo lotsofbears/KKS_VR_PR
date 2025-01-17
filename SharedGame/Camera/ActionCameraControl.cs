@@ -122,7 +122,7 @@ namespace KK_VR.Camera
         //        VRLog.Debug($"SetIdealPositionAndRotation[isPaly]");
         //        // todo keep old height?
         //        var heroine = TalkScene.instance.targetHeroine.transform;
-        //        var newPosition = heroine.TransformPoint(new Vector3(0, GetPlayerHeight(), TalkSceneInterpreter.TalkDistance));
+        //        var newPosition = heroine.TransformPoint(new Vector3(0, GetPlayerHeight(), TalkSceneInterp.TalkDistance));
         //        if (HeadIsAwayFromPosition(newPosition))
         //            GetIdealTransformFor(t).SetPositionAndRotation(newPosition, rotation);// , heroine.rotation * Quaternion.Euler(0, 180f, 0));
         //    }
@@ -140,7 +140,7 @@ namespace KK_VR.Camera
 
         public static float GetPlayerHeight()
         {
-            return TalkSceneInterpreter.height != 0f ? TalkSceneInterpreter.height : 1.4f;
+            return TalkSceneInterp.height != 0f ? TalkSceneInterp.height : 1.4f;
         }
 
         public static bool HeadIsAwayFromPosition(Vector3 targetPosition)

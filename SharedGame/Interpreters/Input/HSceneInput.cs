@@ -5,7 +5,7 @@ using Valve.VR;
 using static HandCtrl;
 using static HFlag;
 using static VRGIN.Controls.Controller;
-using static KK_VR.Interpreters.HSceneInterpreter;
+using static KK_VR.Interpreters.HSceneInterp;
 using VRGIN.Core;
 using Random = UnityEngine.Random;
 using UnityEngine;
@@ -18,11 +18,11 @@ namespace KK_VR.Interpreters
         private int _frameWait;
         private bool _manipulateSpeed;
         private TrackpadDirection _lastDirection;
-        private HSceneInterpreter _interpreter;
+        private HSceneInterp _interpreter;
         private PoV _pov;
         private MouthGuide _mouth;
         private readonly AibuColliderKind[] _lastAibuKind = new AibuColliderKind[2];
-        internal HSceneInput(HSceneInterpreter interpreter)
+        internal HSceneInput(HSceneInterp interpreter)
         {
             _interpreter = interpreter;
             _pov = PoV.Instance;
@@ -134,7 +134,7 @@ namespace KK_VR.Interpreters
                 if (_mouth.IsActive)
                 {
                     var hand = HandHolder.GetHand(index);
-                    hand.Tool.LazyGripMove(KoikatuInterpreter.ScaleWithFps(15));
+                    hand.Tool.LazyGripMove(KoikGameInterp.ScaleWithFps(15));
                     hand.Tool.AttachGripMove(_mouth.LookAt);
                 }
             }
@@ -219,7 +219,7 @@ namespace KK_VR.Interpreters
                     }
                     else
                     {
-                        HSceneInterpreter.handCtrl.JudgeProc();
+                        HSceneInterp.handCtrl.JudgeProc();
                     }
                 }
                 else if (IsInputState(InputState.Grasp))
@@ -308,15 +308,15 @@ namespace KK_VR.Interpreters
                     }
                     else
                     {
-                        if (HSceneInterpreter.IsHPointMove)
+                        if (HSceneInterp.IsHPointMove)
                         {
                             _interpreter.MoveCategory(direction == TrackpadDirection.Down);
                         }
-                        else if (HSceneInterpreter.IsActionLoop)
+                        else if (HSceneInterp.IsActionLoop)
                         {
-                            if (HSceneInterpreter.mode == EMode.aibu)
+                            if (HSceneInterp.mode == EMode.aibu)
                             {
-                                if (HSceneInterpreter.IsHandActive)
+                                if (HSceneInterp.IsHandActive)
                                 {
                                     // Reaction if too long, speed meanwhile.
                                     wait = 3f;
@@ -482,16 +482,16 @@ namespace KK_VR.Interpreters
                         AddInputState(InputState.Caress);
                         handler.StartMovingAibuItem(touch);
                         _lastAibuKind[index] = touch;
-                        if (IntegrationSensibleH.IsActive && HSceneInterpreter.handCtrl.GetUseAreaItemActive() != -1)
+                        if (IntegrationSensibleH.IsActive && HSceneInterp.handCtrl.GetUseAreaItemActive() != -1)
                         {
                             IntegrationSensibleH.ReleaseItem(touch);
                         }
-                        HSceneInterpreter.EnableNip(touch);
+                        HSceneInterp.EnableNip(touch);
                         if (GameSettings.HideHandOnUserInput.Value != GameSettings.HandType.None)
                         {
                             if (GameSettings.HideHandOnUserInput.Value > GameSettings.HandType.ControllerItem)
                             {
-                                HSceneInterpreter.ShowAibuHand(touch, false);
+                                HSceneInterp.ShowAibuHand(touch, false);
                             }
                             if (GameSettings.HideHandOnUserInput.Value != GameSettings.HandType.CaressItem)
                             {

@@ -18,7 +18,7 @@ using UnityEngine.SceneManagement;
 
 namespace KK_VR.Interpreters
 {
-    internal class ActionSceneInterpreter : SceneInterpreter
+    internal class ActionSceneInterp : SceneInterpreter
     {
         // Roaming is in a sorry state, waiting for the VRIK to rework it.
         // But VRIK for this requires custom animations,
@@ -124,8 +124,8 @@ namespace KK_VR.Interpreters
                 //scene.GetComponent<ActionScene>().isCursorLock = false;
 
                 // カメラをプレイヤーの位置に移動
-                ((ActionSceneInput)KoikatuInterpreter.SceneInput).ResetState();
-                ((ActionSceneInput)KoikatuInterpreter.SceneInput).CameraToPlayer();
+                ((ActionSceneInput)KoikGameInterp.SceneInput).ResetState();
+                ((ActionSceneInput)KoikGameInterp.SceneInput).CameraToPlayer();
 
                 // Something interferes rarely.
                 actionScene.Player.chaCtrl.visibleAll = true;

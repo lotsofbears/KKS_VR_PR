@@ -54,9 +54,9 @@ namespace KK_VR.Trackers
         {
             // Add exp/weak point influence?
             SaveData.Heroine heroine = null;
-            if (HSceneInterpreter.hFlag != null)
+            if (HSceneInterp.hFlag != null)
             {
-                heroine = HSceneInterpreter.hFlag.lstHeroine
+                heroine = HSceneInterp.hFlag.lstHeroine
                     .Where(h => h.chaCtrl == colliderInfo.chara)
                     .FirstOrDefault();
             }
@@ -74,7 +74,7 @@ namespace KK_VR.Trackers
             {
                 _familiarity = (0.55f + (0.15f * (int)heroine.HExperience));
                 //*
-                  //  (HSceneInterpreter.hFlag != null && HSceneInterpreter.hFlag.isFreeH ?
+                  //  (HSceneInterp.hFlag != null && HSceneInterp.hFlag.isFreeH ?
                     //1f : (0.5f + heroine.intimacy * 0.005f));
             }
             else

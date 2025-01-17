@@ -147,7 +147,7 @@ namespace KK_VR.Handlers
                     _unwind = true;
                     _timer = 1f;
                     // Do we need this?
-                    HSceneInterpreter.SetSelectKindTouch(AibuColliderKind.none);
+                    HSceneInterp.SetSelectKindTouch(AibuColliderKind.none);
                     _hand.SetCollisionState(true);
                 }
             }

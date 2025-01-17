@@ -28,7 +28,7 @@ namespace KK_VR.Camera
         }
         internal void MoveToPoV()
         {
-            var mode = HSceneInterpreter.mode;
+            var mode = HSceneInterp.mode;
             if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
@@ -39,7 +39,7 @@ namespace KK_VR.Camera
         {
             //VRPlugin.Logger.LogDebug("VRMoverH:MoveToInH");
             StopAllCoroutines();
-            var mode = HSceneInterpreter.mode;
+            var mode = HSceneInterp.mode;
             if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
@@ -163,7 +163,7 @@ namespace KK_VR.Camera
             var head = VR.Camera.Head;
             MouthGuide.SetBusy(true);
 
-            var chara = HSceneInterpreter.lstFemale[0];
+            var chara = HSceneInterp.lstFemale[0];
             var eyes = chara.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
             //_torso = chara.objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03");
             var kokan = chara.objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_waist01/cf_j_waist02/cf_d_kokan/cf_j_kokan");

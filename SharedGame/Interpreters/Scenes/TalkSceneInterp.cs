@@ -24,7 +24,7 @@ using KK_VR.Settings;
 
 namespace KK_VR.Interpreters
 {
-    internal class TalkSceneInterpreter : SceneInterpreter
+    internal class TalkSceneInterp : SceneInterpreter
     {
         internal static float talkDistance = 0.55f;
         internal static float height;
@@ -73,7 +73,7 @@ namespace KK_VR.Interpreters
             }
             return _eyes.TransformPoint(0f, GameSettings.PositionOffsetY.Value, GameSettings.PositionOffsetZ.Value);
         }
-        public TalkSceneInterpreter(MonoBehaviour behaviour)
+        public TalkSceneInterp(MonoBehaviour behaviour)
         {
 #if KK
             if (behaviour != null)
@@ -138,7 +138,7 @@ namespace KK_VR.Interpreters
             if ((talkScene == null || !talkScene._isPaly) && (advScene == null || !advScene.isActiveAndEnabled))
 #endif
             {
-                KoikatuInterpreter.EndScene(KoikatuInterpreter.SceneType.TalkScene);
+                KoikGameInterp.EndScene(KoikGameInterp.SceneType.TalkScene);
             }
             
 
@@ -421,7 +421,7 @@ namespace KK_VR.Interpreters
 
             // An option to keep the head behind vr camera, allowing it to remain visible
             // so we don't see the shadow of a headless body.
-            //if (KoikatuInterpreter.settings.ForceShowMaleHeadInAdv)
+            //if (KoikGame.settings.ForceShowMaleHeadInAdv)
             //{
             //    VRMale.ForceShowHead = true;
             //    position += player.transform.forward * -0.15f;

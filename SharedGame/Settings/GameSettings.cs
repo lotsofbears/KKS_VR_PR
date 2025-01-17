@@ -247,9 +247,9 @@ namespace KK_VR.Settings
         //    {
         //        _shadowsOptimization = value;
         //        // Don't do it outside of VR.
-        //        if (KoikatuInterpreter.SceneInterpreter != null)
+        //        if (KoikGame.SceneInterpreter != null)
         //        {
-        //            KoikatuInterpreter.TweakShadowSettings(value);
+        //            KoikGame.TweakShadowSettings(value);
         //        }
         //    }
         //}

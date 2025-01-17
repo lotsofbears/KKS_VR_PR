@@ -39,7 +39,7 @@ namespace KK_VR.Handlers
         internal void StartMovingAibuItem(AibuColliderKind touch)
         {
             _hand.Shackle(touch == AibuColliderKind.kokan || touch == AibuColliderKind.anal ? 6 : 10);
-            _ikCaress = GraspHelper.Instance.StartIKCaress(touch, HSceneInterpreter.lstFemale[0], _hand);
+            _ikCaress = GraspHelper.Instance.StartIKCaress(touch, HSceneInterp.lstFemale[0], _hand);
         }
         internal void StopMovingAibuItem()
         {
@@ -53,7 +53,7 @@ namespace KK_VR.Handlers
 
         protected bool AibuKindAllowed(AibuColliderKind kind, ChaControl chara)
         {
-            var heroine = HSceneInterpreter.hFlag.lstHeroine
+            var heroine = HSceneInterp.hFlag.lstHeroine
                 .Where(h => h.chaCtrl == chara)
                 .FirstOrDefault();
             return kind switch
@@ -66,11 +66,11 @@ namespace KK_VR.Handlers
 
         public bool DoUndress(bool decrease)
         {
-            if (decrease && HSceneInterpreter.handCtrl.IsItemTouch() && IsAibuItemPresent(out var touch))
+            if (decrease && HSceneInterp.handCtrl.IsItemTouch() && IsAibuItemPresent(out var touch))
             {
-                HSceneInterpreter.ShowAibuHand(touch, true);
-                HSceneInterpreter.handCtrl.DetachItemByUseAreaItem(touch - AibuColliderKind.muneL);
-                HSceneInterpreter.hFlag.click = HFlag.ClickKind.de_muneL + (int)touch - 2;
+                HSceneInterp.ShowAibuHand(touch, true);
+                HSceneInterp.handCtrl.DetachItemByUseAreaItem(touch - AibuColliderKind.muneL);
+                HSceneInterp.hFlag.click = HFlag.ClickKind.de_muneL + (int)touch - 2;
             }
             else if (Interactors.Undresser.Undress(_tracker.colliderInfo.behavior.part, _tracker.colliderInfo.chara, decrease))
             {
@@ -93,7 +93,7 @@ namespace KK_VR.Handlers
             touch = _tracker.colliderInfo.behavior.touch;
             if (touch > AibuColliderKind.mouth && touch < AibuColliderKind.reac_head)
             {
-                return HSceneInterpreter.handCtrl.useAreaItems[touch - AibuColliderKind.muneL] != null;
+                return HSceneInterp.handCtrl.useAreaItems[touch - AibuColliderKind.muneL] != null;
             }
             return false;
         }
@@ -101,26 +101,26 @@ namespace KK_VR.Handlers
         {
             var touch = _tracker.colliderInfo.behavior.touch;
             var chara = _tracker.colliderInfo.chara;
-           //VRPlugin.Logger.LogDebug($"HSceneHandler:[{touch}][{HSceneInterpreter.handCtrl.selectKindTouch}]");
+           //VRPlugin.Logger.LogDebug($"HSceneHandler:[{touch}][{HSceneInterp.handCtrl.selectKindTouch}]");
             if (touch > AibuColliderKind.mouth
                 && touch < AibuColliderKind.reac_head
-                && chara == HSceneInterpreter.lstFemale[0])
+                && chara == HSceneInterp.lstFemale[0])
             {
-                if (IntegrationSensibleH.IsActive && !MouthGuide.Instance.IsActive && HSceneInterpreter.handCtrl.GetUseAreaItemActive() != -1)
+                if (IntegrationSensibleH.IsActive && !MouthGuide.Instance.IsActive && HSceneInterp.handCtrl.GetUseAreaItemActive() != -1)
                 {
                     // If VRMouth isn't active but automatic caress is going. Disable it.
                     IntegrationSensibleH.OnKissEnd();
                 }
                 else
                 {
-                    HSceneInterpreter.SetSelectKindTouch(touch);
+                    HSceneInterp.SetSelectKindTouch(touch);
                     HandCtrlHooks.InjectMouseButtonDown(0);
                     _injectLMB = true;
                 }
             }
             else
             {
-                HSceneInterpreter.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara, voiceWait: false);
+                HSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara, voiceWait: false);
             }
             return true;
         }
@@ -128,7 +128,7 @@ namespace KK_VR.Handlers
         {
             if (_injectLMB)
             {
-                HSceneInterpreter.SetSelectKindTouch(AibuColliderKind.none);
+                HSceneInterp.SetSelectKindTouch(AibuColliderKind.none);
                 HandCtrlHooks.InjectMouseButtonUp(0);
                 _injectLMB = false;
             }
@@ -141,7 +141,7 @@ namespace KK_VR.Handlers
                 if (velocity > 1.5f || (_tracker.reactionType == Tracker.ReactionType.HitReaction && !IsAibuItemPresent(out _)))
                 {
                     if (GameSettings.TouchReaction.Value != 0f 
-                        && HSceneInterpreter.mode == HFlag.EMode.aibu
+                        && HSceneInterp.mode == HFlag.EMode.aibu
                         && GraspHelper.Instance != null 
                         && !GraspHelper.Instance.IsGraspActive(_tracker.colliderInfo.chara)
                         && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
@@ -150,7 +150,7 @@ namespace KK_VR.Handlers
                     }
                     else
                     {
-                        HSceneInterpreter.HitReactionPlay(_tracker.colliderInfo.behavior.react, _tracker.colliderInfo.chara, voiceWait: true);
+                        HSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, _tracker.colliderInfo.chara, voiceWait: true);
                     }
                 }
                 else if (_tracker.reactionType == Tracker.ReactionType.Short)

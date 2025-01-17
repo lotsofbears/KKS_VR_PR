@@ -560,7 +560,7 @@ namespace KK_VR.Grasp
             // Only bodyParts directly from the tracker live at 0 index, i.e. firstly interacted with.
 
 #if KK
-            if (KoikatuInterpreter.IsParty) return false;
+            if (KoikGameInterp.IsParty) return false;
 #endif
 
             if (_helper != null && _heldBodyParts.Count > 0 && (_heldBodyParts[0].name == PartName.HandL || _heldBodyParts[0].name == PartName.HandR))
@@ -589,7 +589,7 @@ namespace KK_VR.Grasp
         internal bool OnFreeHorizontalScroll(Tracker.Body trackerPart, ChaControl chara, bool increase)
         {
 #if KK
-            if (KoikatuInterpreter.IsParty) return false;
+            if (KoikGameInterp.IsParty) return false;
 #endif
             if (_helper != null && trackerPart == Tracker.Body.HandL || trackerPart == Tracker.Body.HandR)
             {

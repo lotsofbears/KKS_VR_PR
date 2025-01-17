@@ -4,23 +4,15 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using KK_VR.Features;
 using KK_VR.Camera;
-using Studio;
-using static KK_VR.Interpreters.KoikatuInterpreter;
-using System.Runtime.Remoting;
-using RootMotion;
-using System.Collections.Generic;
-using KK_VR.Handlers;
-using VRGIN.Controls;
 using KK_VR.Settings;
 using KK_VR.Holders;
 using System;
-using UnityEngine.EventSystems;
 using KK_VR.Controls;
 using BepInEx;
 
 namespace KK_VR.Interpreters
 {
-    internal class KoikatuInterpreter : GameInterpreter
+    internal class KoikGameInterp : GameInterpreter
     {
         public enum SceneType
         {
@@ -40,7 +32,7 @@ namespace KK_VR.Interpreters
         private static SceneType _currentScene;
         private static SceneInterpreter _sceneInterpreter;
         private static SceneInput _sceneInput;
-        private static KoikatuInterpreter _instance;
+        private static KoikGameInterp _instance;
 #if KK
         internal static bool IsParty => _party;
         private static bool _party;
@@ -233,8 +225,8 @@ namespace KK_VR.Interpreters
             return sceneType switch
             {
                 SceneType.ActionScene => new ActionSceneInput(),
-                SceneType.HScene => new HSceneInput((HSceneInterpreter)SceneInterpreter),
-                SceneType.TalkScene => new TalkSceneInput((TalkSceneInterpreter)SceneInterpreter),
+                SceneType.HScene => new HSceneInput((HSceneInterp)SceneInterpreter),
+                SceneType.TalkScene => new TalkSceneInput((TalkSceneInterp)SceneInterpreter),
                 _ => new SceneInput(),
             };
         }
@@ -308,13 +300,13 @@ namespace KK_VR.Interpreters
         {
             return type switch
             {
-                SceneType.ActionScene => new ActionSceneInterpreter(),
+                SceneType.ActionScene => new ActionSceneInterp(),
                 //case SceneType.CustomScene:
                 //    return new CustomSceneInterpreter();
                 //case SceneType.NightMenuScene:
                 //    return new NightMenuSceneInterpreter();
-                SceneType.HScene => new HSceneInterpreter(behaviour),
-                SceneType.TalkScene => new TalkSceneInterpreter(behaviour),
+                SceneType.HScene => new HSceneInterp(behaviour),
+                SceneType.TalkScene => new TalkSceneInterp(behaviour),
                 _ => new OtherSceneInterpreter(),
             };
         }

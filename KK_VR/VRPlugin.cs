@@ -73,7 +73,7 @@ namespace KK_VR
             }
 
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
-            VRManager.Create<Interpreters.KoikatuInterpreter>(new KoikContext(settings));
+            VRManager.Create<Interpreters.KoikGameInterp>(new KoikContext(settings));
 
             VR.Manager.SetMode<GameStandingMode>();
 

@@ -38,7 +38,7 @@ namespace KK_VR.Handlers
             _follow = true;
             _target = target;
 
-            //if (KoikatuInterpreter.Settings.ShowGuideObjects) _bodyPart.visual.Show();
+            //if (KoikGame.Settings.ShowGuideObjects) _bodyPart.visual.Show();
             _bodyPart.state = State.Grasped;
 
             _offsetRot = Quaternion.Inverse(target.rotation) * _anchor.rotation;

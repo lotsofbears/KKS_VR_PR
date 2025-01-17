@@ -51,7 +51,7 @@ namespace KK_VR.Handlers
             set
             {
                 _activeCo = value;
-                KoikatuInterpreter.SceneInput.SetBusy(value);
+                KoikGameInterp.SceneInput.SetBusy(value);
             }
         }
         private bool _activeCo;
@@ -90,11 +90,11 @@ namespace KK_VR.Handlers
             rigidBody.isKinematic = true;
             Tracker = new Tracker();
 
-            _eyes = HSceneInterpreter.lstFemale[0].objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
-            _shoulders = HSceneInterpreter.lstFemale[0].objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_d_backsk_00");
+            _eyes = HSceneInterp.lstFemale[0].objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
+            _shoulders = HSceneInterp.lstFemale[0].objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_d_backsk_00");
 
             _kissHelper = new KissHelper(_eyes, _shoulders);
-            _aibu = HSceneInterpreter.mode == HFlag.EMode.aibu;
+            _aibu = HSceneInterp.mode == HFlag.EMode.aibu;
             Tracker.SetBlacklistDic(_mouthBlacklistDic);
         }
         internal static void SetBusy(bool active)
@@ -163,7 +163,7 @@ namespace KK_VR.Handlers
             if (Tracker.AddCollider(other))
             {
                 var touch = Tracker.colliderInfo.behavior.touch;
-                if (touch != AibuColliderKind.none && !PauseInteractions && (_aibu || KoikatuInterpreter.SceneInput.IsGripMove))
+                if (touch != AibuColliderKind.none && !PauseInteractions && (_aibu || KoikGameInterp.SceneInput.IsGripMove))
                 {
                     if (touch == AibuColliderKind.mouth && GameSettings.AssistedKissing.Value)
                     {
@@ -182,7 +182,7 @@ namespace KK_VR.Handlers
             {
                 if (!IsBusy)
                 {
-                    HSceneInterpreter.SetSelectKindTouch(AibuColliderKind.none);
+                    HSceneInterp.SetSelectKindTouch(AibuColliderKind.none);
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace KK_VR.Handlers
             //VRPlugin.Logger.LogDebug($"KissCo:Start");
             var origin = VR.Camera.Origin;
             var head = VR.Camera.Head;
-            var hand = HSceneInterpreter.handCtrl;
+            var hand = HSceneInterp.handCtrl;
 
             var messageDelivered = false;
             hand.selectKindTouch = AibuColliderKind.mouth;
@@ -311,7 +311,7 @@ namespace KK_VR.Handlers
         private void StartKiss()
         {
             Halt(disengage: false);
-            _lastChara = HSceneInterpreter.lstFemale[0];
+            _lastChara = HSceneInterp.lstFemale[0];
             ActiveCo = true;
             StartCoroutine(KissCo());
         }
@@ -321,7 +321,7 @@ namespace KK_VR.Handlers
             {
                 Halt(disengage: false);
                 DestroyGripMove();
-                _lastChara = HSceneInterpreter.lstFemale[0];
+                _lastChara = HSceneInterp.lstFemale[0];
                 ActiveCo = true;
                 if (IntegrationSensibleH.IsActive)
                 {
@@ -334,7 +334,7 @@ namespace KK_VR.Handlers
         private bool IsLickingAllowed(AibuColliderKind colliderKind, out int layerNum)
         {
             layerNum = 0;
-            var hand = HSceneInterpreter.handCtrl;
+            var hand = HSceneInterp.handCtrl;
             int bodyPartId = (int)colliderKind - 2;
 #if KK
             var layerInfos = hand.dicAreaLayerInfos[bodyPartId];
@@ -382,7 +382,7 @@ namespace KK_VR.Handlers
            //VRPlugin.Logger.LogDebug($"VRMouth:IsKissingAllowed");
             //if (!_disengage)
             //{
-            if (!HSceneInterpreter.hFlag.isFreeH)
+            if (!HSceneInterp.hFlag.isFreeH)
             {
 
                 var heroine =
@@ -395,9 +395,9 @@ namespace KK_VR.Handlers
                     .FirstOrDefault();
                 if (heroine != null && heroine.denial.kiss == false && heroine.isGirlfriend == false)
                 {
-                    if (HSceneInterpreter.IsVoiceActive)
+                    if (HSceneInterp.IsVoiceActive)
                     {
-                        HSceneInterpreter.hFlag.voice.playVoices[0] = 103;
+                        HSceneInterp.hFlag.voice.playVoices[0] = 103;
                         _proximityTimestamp = Time.time + 10f;
                     }
                     return false;
@@ -416,7 +416,7 @@ namespace KK_VR.Handlers
             // after that we inject button down and wait for an aibu item to activate, then inform SensH and we good to go.
             // Not sure if we still can get a bad state, but just in case.
 
-            var hand = HSceneInterpreter.handCtrl;
+            var hand = HSceneInterp.handCtrl;
 
             int bodyPartId = (int)colliderKind - 2;
             var usedItem = hand.useAreaItems[bodyPartId];
@@ -433,7 +433,7 @@ namespace KK_VR.Handlers
             _mousePress = true;
             HandCtrlHooks.InjectMouseButtonDown(0);
             var timer = Time.time + 3f;
-            while (!GameCursor.isLock || HSceneInterpreter.handCtrl.GetUseAreaItemActive() == -1)
+            while (!GameCursor.isLock || HSceneInterp.handCtrl.GetUseAreaItemActive() == -1)
             {
                 hand.selectKindTouch = colliderKind;
                 if (timer < Time.time)
@@ -446,7 +446,7 @@ namespace KK_VR.Handlers
             {
                 IntegrationSensibleH.OnLickStart(colliderKind);
             }
-            HSceneInterpreter.EnableNip(colliderKind);
+            HSceneInterp.EnableNip(colliderKind);
         }
 
         private IEnumerator AttachCo(AibuColliderKind colliderKind)
@@ -461,7 +461,7 @@ namespace KK_VR.Handlers
             var lookAt = _lastChara.objBodyBone.transform.Find(dic.path);
             _lookAt = lookAt;
             var prevLookAt = lookAt.position;
-            var hand = HSceneInterpreter.handCtrl;
+            var hand = HSceneInterp.handCtrl;
             _lookOffsetPos = lookAt.InverseTransformPoint(head.TransformPoint(0f, 0f, Mathf.Max(0.1f, Vector3.Distance(lookAt.position, head.position))));
             while (hand.useItems[2] == null)
             {
@@ -470,7 +470,7 @@ namespace KK_VR.Handlers
                 origin.position += lookAt.position - prevLookAt;// * 1.5f;
                 prevLookAt = lookAt.position;
                 yield return CoroutineUtils.WaitForEndOfFrame;
-                if (HSceneInterpreter.hFlag.isDenialvoiceWait)
+                if (HSceneInterp.hFlag.isDenialvoiceWait)
                 {
                     // There is a proper kill switch for bad states now, this shouldn't be necessary.
                     Halt();
@@ -504,7 +504,7 @@ namespace KK_VR.Handlers
                 var moveTo = Vector3.MoveTowards(head.position, adjTongue, step * 0.2f);
                 origin.rotation = Quaternion.RotateTowards(origin.rotation, Quaternion.LookRotation(lookAt.TransformPoint(_lookOffsetPos) - moveTo), step * 30f);
                 origin.position += (moveTo - head.position) + (tongue.position - oldTonguePos);
-                if (_gripMove || (!HSceneInterpreter.IsTouch && Vector3.Distance(adjTongue, head.position) < 0.002f))
+                if (_gripMove || (!HSceneInterp.IsTouch && Vector3.Distance(adjTongue, head.position) < 0.002f))
                 {
                     break;
                 }
@@ -563,7 +563,7 @@ namespace KK_VR.Handlers
                     {
                         if (lerp == 0f)
                         {
-                            //if (KoikatuInterpreter.Settings.ImperfectRotation)
+                            //if (KoikGame.Settings.ImperfectRotation)
                             //{
                             //    uprightRot = Quaternion.Euler(
                             //        headPitch ? head.eulerAngles.x : 0f,
@@ -622,8 +622,8 @@ namespace KK_VR.Handlers
                 ActiveCo = false;
                 _disengage = false;
                 _followRotation = false;
-                HSceneInterpreter.handCtrl.DetachItemByUseItem(2);
-                HSceneInterpreter.handCtrl.selectKindTouch = AibuColliderKind.none;
+                HSceneInterp.handCtrl.DetachItemByUseItem(2);
+                HSceneInterp.handCtrl.selectKindTouch = AibuColliderKind.none;
                 UnlazyGripMove();
             }
             if (_mousePress)

@@ -20,7 +20,7 @@ namespace KK_VR.Handlers.Helpers
             _itemId = (int)touch - 2;
             _anchor = anchor;
             _lastPos = anchor.position;
-            _item = HSceneInterpreter.handCtrl.useAreaItems[_itemId].obj.transform;
+            _item = HSceneInterp.handCtrl.useAreaItems[_itemId].obj.transform;
         }
         private readonly int _itemId;
         private readonly Transform _item;
@@ -32,7 +32,7 @@ namespace KK_VR.Handlers.Helpers
         {
             var vec = (Vector2)_item.InverseTransformVector(_lastPos - _anchor.position);
             vec.y = 0f - vec.y;
-            HSceneInterpreter.hFlag.xy[_itemId] += vec * 10f;
+            HSceneInterp.hFlag.xy[_itemId] += vec * 10f;
             _lastPos = _anchor.position;
         }
 

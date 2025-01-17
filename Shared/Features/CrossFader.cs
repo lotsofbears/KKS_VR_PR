@@ -109,7 +109,7 @@ namespace KK_VR.Features
             {
                 // Make the animation cross fade from the current one, uses stock game code
                 __instance.isCrossFade = true;
-                if (KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.TalkScene)
+                if (KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.TalkScene)
                 {
                     // Speed up considerably crossFade after Talk/AdvScene TouchReaction function.
                     __instance.transitionDuration = Reaction ? Random.Range(0.1f, 0.2f) : Random.Range(0.5f, 1f);

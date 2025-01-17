@@ -222,7 +222,7 @@ namespace KK_VR.Controls
                 UpdateAttachVec(); 
                 if (_moveLag == null && KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.YawAndRotation)
                 {
-                    _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
+                    _moveLag = new GripMoveLag(_controller, KoikGameInterp.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
                 }
             }
         }
@@ -238,7 +238,7 @@ namespace KK_VR.Controls
                         && (KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.YawAndRotation
                         || KoikSettings.GripMoveStabilize.Value == KoikSettings.GripMoveStabilization.OnlyRotation))
                     {
-                        _moveLag = new GripMoveLag(_controller, KoikatuInterpreter.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
+                        _moveLag = new GripMoveLag(_controller, KoikGameInterp.ScaleWithFps(KoikSettings.GripMoveStabilizationAmount.Value));
                     }
                 }
                 else

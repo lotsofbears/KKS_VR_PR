@@ -86,7 +86,7 @@ namespace KK_VR.Features
         public event UnityAction<bool, ChaControl> Impersonation;
 
         private Vector3 GetEyesPosition() => _targetEyes.TransformPoint(_offsetVecEyes);
-        private bool IsClimax => HSceneInterpreter.hFlag.nowAnimStateName.EndsWith("_Loop", System.StringComparison.Ordinal);
+        private bool IsClimax => HSceneInterp.hFlag.nowAnimStateName.EndsWith("_Loop", System.StringComparison.Ordinal);
 
         internal static PoV Create()
         {
@@ -482,7 +482,7 @@ namespace KK_VR.Features
         {
             if (_active)
             {
-                if (KoikatuInterpreter.SceneInput.IsBusy// || _mouth.IsActive
+                if (KoikGameInterp.SceneInput.IsBusy// || _mouth.IsActive
 #if KK
                     || !Scene.Instance.AddSceneName.Equals("HProc"))
 #else

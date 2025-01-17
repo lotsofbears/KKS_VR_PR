@@ -86,7 +86,7 @@ namespace KK_VR.Features
                     _isFade = false;
                     _alpha = 0f;
                 }
-                if (TalkSceneInterpreter.advScene != null && KoikatuInterpreter.SceneInterpreter is TalkSceneInterpreter talkInterpreter)
+                if (TalkSceneInterp.advScene != null && KoikGame.SceneInterpreter is TalkSceneInterp talkInterpreter)
                 {
                     talkInterpreter.AdjustAdvScene();
                 }

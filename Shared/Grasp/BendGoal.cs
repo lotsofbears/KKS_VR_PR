@@ -30,7 +30,7 @@ namespace KK_VR.Grasp
             var goal = gameObject.AddComponent<BendGoal>();
             var baseData = bodyPart.chain.bendConstraint.bendGoal.GetComponent<BaseData>();
             // Male doesn't have bendGoals by default outside of H.
-            if (KoikatuInterpreter.CurrentScene != KoikatuInterpreter.SceneType.HScene && baseData.bone == null)
+            if (KoikGameInterp.CurrentScene != KoikGameInterp.SceneType.HScene && baseData.bone == null)
             {
                 baseData.bone = bodyPart.chain.bendConstraint.bone2;
             }

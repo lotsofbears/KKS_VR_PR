@@ -41,15 +41,15 @@ namespace KK_VR.Handlers
             {
                 var chara = _tracker.colliderInfo.chara;
                 var touch = _tracker.colliderInfo.behavior.touch;
-                if (TalkSceneInterpreter.talkScene != null
+                if (TalkSceneInterp.talkScene != null
                     && touch != AibuColliderKind.none
-                    && chara == TalkSceneInterpreter.talkScene.targetHeroine.chaCtrl
+                    && chara == TalkSceneInterp.talkScene.targetHeroine.chaCtrl
                     && !CrossFader.AdvHooks.Reaction
                     // Add familiarity here too ? prob
                     && (velocity > 1f || UnityEngine.Random.value < 0.3f)
                     && (GraspHelper.Instance == null || !GraspHelper.Instance.IsGraspActive(chara)))
                 {
-                    TalkSceneInterpreter.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
+                    TalkSceneInterp.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
                 }
                 else if (velocity > 1f || _tracker.reactionType == Tracker.ReactionType.HitReaction)
                 {
@@ -59,7 +59,7 @@ namespace KK_VR.Handlers
                     }
                     else
                     {
-                        TalkSceneInterpreter.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara);
+                        TalkSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara);
                     }
                 }
                 else if (_tracker.reactionType == Tracker.ReactionType.Short)
@@ -77,12 +77,12 @@ namespace KK_VR.Handlers
         {
             var chara = _tracker.colliderInfo.chara;
             var touch = _tracker.colliderInfo.behavior.touch;
-            if (TalkSceneInterpreter.talkScene != null
+            if (TalkSceneInterp.talkScene != null
                 && touch != AibuColliderKind.none
-                && chara == TalkSceneInterpreter.talkScene.targetHeroine.chaCtrl
+                && chara == TalkSceneInterp.talkScene.targetHeroine.chaCtrl
                 && !CrossFader.AdvHooks.Reaction)
             {
-                TalkSceneInterpreter.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
+                TalkSceneInterp.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
                 return true;
             }
             return false;

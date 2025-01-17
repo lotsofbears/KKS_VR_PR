@@ -26,23 +26,26 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\AibuItemMover.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\KissHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\MouthGuide.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\ActionSceneInterpreter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\ActionSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationMaleBreath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationSensibleH.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\MeshCollider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\SceneExtras.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\HSceneInterpreter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\HSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\ActionSceneInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\HSceneInput.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\TalkSceneInput.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\InterpreterHooks.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\KoikGameInterpreter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\InterpreterHooks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\KoikGameInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\ActionScenePatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\GraspPatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\HScenePatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\TalkScenePatches.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\TalkSceneInterpreter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\TalkSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettingsManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\" />
   </ItemGroup>
 </Project>

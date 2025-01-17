@@ -500,7 +500,7 @@ namespace KK_VR.Holders
         }
         internal void AddLag(int numberOfFrames)
         {
-            _itemLag = new ItemLag(_anchor, KoikatuInterpreter.ScaleWithFps(numberOfFrames));
+            _itemLag = new ItemLag(_anchor, KoikGameInterp.ScaleWithFps(numberOfFrames));
         }
         internal void RemoveLag()
         {

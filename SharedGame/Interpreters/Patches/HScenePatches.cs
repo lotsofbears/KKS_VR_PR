@@ -30,7 +30,7 @@ namespace KK_VR.Patches
         {
             if (suppressSetIdle)
             {
-                __instance.backIdle = HSceneInterpreter.GetBackIdle;
+                __instance.backIdle = HSceneInterp.GetBackIdle;
                 _setplay = false;
                 suppressSetIdle = false;
             }
@@ -47,7 +47,7 @@ namespace KK_VR.Patches
         public static int GetBackIdle()
         {
             var list = new List<int>();
-            foreach (var item in HSceneInterpreter.handCtrl.useItems)
+            foreach (var item in HSceneInterp.handCtrl.useItems)
             {
                 if (item != null)
                 {
@@ -86,18 +86,18 @@ namespace KK_VR.Patches
                     _fakeKiss = false;
 
                     // Temporal solution.
-                    if (HSceneInterpreter.hAibu.backIdle == -1 || !HSceneInterpreter.IsHandAttached)
+                    if (HSceneInterp.hAibu.backIdle == -1 || !HSceneInterp.IsHandAttached)
                     {
-                        HSceneInterpreter.hAibu.backIdle = GetBackIdle();
+                        HSceneInterp.hAibu.backIdle = GetBackIdle();
                     }
 
                     if (hand.action == HandCtrl.HandAction.none)
                     {
-                        HSceneInterpreter.SetPlay("Idle");
+                        HSceneInterp.SetPlay("Idle");
                         //CaressHelper.Instance.Halt(disengage: false, haltVRMouth: false);
-                        if (!HSceneInterpreter.IsVoiceActive)
+                        if (!HSceneInterp.IsVoiceActive)
                         {
-                            HSceneInterpreter.hFlag.voice.playVoices[0] = 100;
+                            HSceneInterp.hFlag.voice.playVoices[0] = 100;
                         }
                         return true;
                     }

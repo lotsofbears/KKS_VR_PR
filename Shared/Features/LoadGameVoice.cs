@@ -128,22 +128,22 @@ namespace KK_VR.Features
 #endif
 
             // We respect hScene voices.
-            if (KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.HScene)
+            if (KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.HScene)
             {
-                for (var i = 0; i < HSceneInterpreter.lstFemale.Count; i++)
+                for (var i = 0; i < HSceneInterp.lstFemale.Count; i++)
                 {
-                    if (HSceneInterpreter.lstFemale[i] == chara)
+                    if (HSceneInterp.lstFemale[i] == chara)
                     {
                         // Something of this is probably unnecessary, but figuring it out is a huge pain, given 'HVoiceCtrl' structure.
-                        var voice = HSceneInterpreter.hVoice.nowVoices[i];
+                        var voice = HSceneInterp.hVoice.nowVoices[i];
                         voice.state = HVoiceCtrl.VoiceKind.breathShort;
                         voice.notOverWrite = true;
                         voice.shortInfo.isPlay = true;
                         voice.link = new HVoiceCtrl.LinkInfo();
                         voice.shortInfo.pathAsset = bundle;
                         voice.shortInfo.nameFile = asset;
-                        HSceneInterpreter.hVoice.linkUseBreathPtn[i] = null;
-                        HSceneInterpreter.hVoice.linkUseVoicePtn[i] = null;
+                        HSceneInterp.hVoice.linkUseBreathPtn[i] = null;
+                        HSceneInterp.hVoice.linkUseVoicePtn[i] = null;
                         break;
                     }
                 }
@@ -158,13 +158,13 @@ namespace KK_VR.Features
         }
         private static bool IsVoiceActive(ChaControl chara)
         {
-            if (KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.HScene)
+            if (KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.HScene)
             {
-                for (var i = 0; i < HSceneInterpreter.lstFemale.Count; i++)
+                for (var i = 0; i < HSceneInterp.lstFemale.Count; i++)
                 {
-                    if (HSceneInterpreter.lstFemale[i] == chara)
+                    if (HSceneInterp.lstFemale[i] == chara)
                     {
-                        return HSceneInterpreter.hVoice.nowVoices[i].state != HVoiceCtrl.VoiceKind.breath || HSceneInterpreter.IsKissAnim;
+                        return HSceneInterp.hVoice.nowVoices[i].state != HVoiceCtrl.VoiceKind.breath || HSceneInterp.IsKissAnim;
                     }
                 }
             }

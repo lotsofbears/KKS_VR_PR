@@ -45,7 +45,7 @@ namespace KK_VR.Fixes
         public static bool SafeToSkipUpdate(ChaControl chara)
         {
             return GameSettings.OptimizeHInsideRoaming.Value
-                && KoikatuInterpreter.CurrentScene > KoikatuInterpreter.SceneType.ActionScene
+                && KoikGameInterp.CurrentScene > KoikGameInterp.SceneType.ActionScene
                 && chara.objTop != null
                 && !chara.objTop.activeSelf;
         }
@@ -137,7 +137,7 @@ namespace KK_VR.Fixes
     {
         public static void UpdateVRCamera()
         {
-            KoikatuInterpreter.RunAfterUpdate(VRGIN.Core.VRCamera.Instance.UpdateCameraBlueprint);
+            KoikGame.RunAfterUpdate(VRGIN.Core.VRCamera.Instance.UpdateCameraBlueprint);
         }
         static MethodBase TargetMethod()
         {
@@ -179,9 +179,9 @@ namespace KK_VR.Fixes
     //     private static void SunLightInfoSet(SunLightInfo.Info.Type? type, ref UnityEngine.Camera cam)
     //     {
     //        //VRPlugin.Logger.LogDebug($"SunLightInfo.Set:{(int)type}:{cam.name}");
-    //         if (cam == VR.Camera.MainCamera && KoikatuInterpreter.mainCamera != null)
+    //         if (cam == VR.Camera.MainCamera && KoikGame.mainCamera != null)
     //         {
-    //             cam = KoikatuInterpreter.mainCamera;
+    //             cam = KoikGame.mainCamera;
     //            //VRPlugin.Logger.LogDebug($"Camera substitute:{cam.name}");
     //         }
     //     }
@@ -347,7 +347,7 @@ namespace KK_VR.Fixes
     //    [HarmonyPatch(typeof(TalkScene), nameof(TalkScene.Introduction), MethodType.Normal)]
     //    private static void IntroductionPostfix(TalkScene __instance, UniTask __result)
     //    {
-    //        __instance.StartCoroutine(__result.WaitForFinishCo().AppendCo(() => TalkSceneInterpreter.AdjustPosition(__instance)));
+    //        __instance.StartCoroutine(__result.WaitForFinishCo().AppendCo(() => TalkSceneInterp.AdjustPosition(__instance)));
     //    }
     //}
 

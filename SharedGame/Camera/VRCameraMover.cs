@@ -111,7 +111,7 @@ namespace KK_VR.Camera
 
                 //if (Vector3.Angle(positionNoY, averageNoY) < 90)
                 {
-                    var closerPosition = Vector3.MoveTowards(positionNoY, averageNoY, Vector3.Distance(positionNoY, averageNoY) - TalkSceneInterpreter.talkDistance);
+                    var closerPosition = Vector3.MoveTowards(positionNoY, averageNoY, Vector3.Distance(positionNoY, averageNoY) - TalkSceneInterp.talkDistance);
 
                     closerPosition.y = averageV.y + ActionCameraControl.GetPlayerHeight();
 
@@ -134,7 +134,7 @@ namespace KK_VR.Camera
 
             //VRLog.Debug("HandleTextScenarioProgress isFadingOut={0}", isFadingOut);
             
-            // We catch it in TalkSceneInterpreter as we have visible male all the time.
+            // We catch it in TalkSceneInterp as we have visible male all the time.
             //if (_settings.FirstPersonADV &&
             //    FindMaleToImpersonate(out var male) &&
             //    male.objHead != null)
@@ -145,9 +145,9 @@ namespace KK_VR.Camera
             if (ShouldApproachCharacter(textScenario, out var character))
             {
 #if KK
-                var distance = InCafe() ? 0.75f : TalkSceneInterpreter.talkDistance;
+                var distance = InCafe() ? 0.75f : TalkSceneInterp.talkDistance;
 #elif KKS
-                var distance = TalkSceneInterpreter.talkDistance;
+                var distance = TalkSceneInterp.talkDistance;
 #endif
                 float height;
                 Quaternion rotation;

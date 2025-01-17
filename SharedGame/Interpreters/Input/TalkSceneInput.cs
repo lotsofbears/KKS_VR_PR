@@ -7,7 +7,7 @@ using KK_VR.Holders;
 using KK_VR.Interpreters;
 using Valve.VR;
 using static VRGIN.Controls.Controller;
-using static KK_VR.Interpreters.TalkSceneInterpreter;
+using static KK_VR.Interpreters.TalkSceneInterp;
 using Manager;
 using UnityEngine.UI;
 using System.Linq;
@@ -21,10 +21,10 @@ namespace KK_VR.Interpreters
 {
     internal class TalkSceneInput : SceneInput
     {
-        TalkSceneInterpreter _interpreter;
+        TalkSceneInterp _interpreter;
         private Button _lastSelectedCategory;
         private Button _lastSelectedButton;
-        internal TalkSceneInput(TalkSceneInterpreter interpreter)
+        internal TalkSceneInput(TalkSceneInterp interpreter)
         {
             _interpreter = interpreter;
         }

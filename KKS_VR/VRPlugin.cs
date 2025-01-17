@@ -118,7 +118,7 @@ namespace KK_VR
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
             //TopmostToolIcons.Patch();
 
-            VRManager.Create<Interpreters.KoikatuInterpreter>(new KoikContext(settings));
+            VRManager.Create<Interpreters.KoikGame>(new KoikContext(settings));
 
             //// VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
             //UpdateNearClipPlane(settings);

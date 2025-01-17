@@ -105,7 +105,7 @@ namespace KK_VR.Grasp
             var oldIK = _auxDic[chara].oldFbik;
             if (ik == null || oldIK == null) return;
             // MotionIK makes adjusts animations based on the body size, doesn't seem to be used outside of H.
-            var withMotionIK = KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.HScene;
+            var withMotionIK = KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.HScene;
             _bodyPartsDic.Add(chara,
             [
 
@@ -195,7 +195,7 @@ namespace KK_VR.Grasp
                 }
                 bodyPart.guide.Init(bodyPart);
 
-                //if (KoikatuInterpreter.Settings.IKShowDebug)
+                //if (KoikGame.Settings.IKShowDebug)
                 //{
                 //    Fixes.Util.CreatePrimitive(PrimitiveType.Sphere, new Vector3(0.06f, 0.06f, 0.06f), bodyPart.anchor, Color.yellow, 0.5f);
                 //    //Util.CreatePrimitive(PrimitiveType.Sphere, new Vector3(0.12f, 0.12f, 0.12f), bodyPart.afterIK, Color.yellow, 0.4f);
@@ -490,6 +490,10 @@ namespace KK_VR.Grasp
                 {
                     _auxDic[kv.Key].newFbik.enabled = false;
                     continue;
+                }
+                else
+                {
+                    _auxDic[kv.Key].newFbik.enabled = true;
                 }
                 var baseDataEmpty = false;
                 var count = kv.Value.Count;

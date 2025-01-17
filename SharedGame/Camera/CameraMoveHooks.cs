@@ -114,7 +114,7 @@ namespace KK_VR.Camera
         [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
         public static void PostChangeAnimator(HSceneProc.AnimationListInfo _nextAinmInfo, bool _isForceCameraReset, HSceneProc __instance, List<ChaControl> ___lstFemale)
         {
-            HSceneInterpreter.OnPoseChange(_nextAinmInfo);
+            HSceneInterp.OnPoseChange(_nextAinmInfo);
             UpdateVRCamera(__instance, ___lstFemale);
 #if KKS
             Fixes.ObiCtrlFix.SetFluidsState(false);
@@ -125,7 +125,7 @@ namespace KK_VR.Camera
         [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeCategory))]
         public static void PostChangeCategory(HSceneProc __instance, List<ChaControl> ___lstFemale)//, float __state)
         {
-            HSceneInterpreter.OnSpotChange();
+            HSceneInterp.OnSpotChange();
             UpdateVRCamera(__instance, ___lstFemale);
 
 #if KKS
@@ -212,7 +212,7 @@ namespace KK_VR.Camera
     //    //public static void PostChangeAnimator(HSceneProc.AnimationListInfo _nextAinmInfo, bool _isForceCameraReset, HSceneProc __instance, List<ChaControl> ___lstFemale)
     //    //{
     //    //    UpdateVRCamera(__instance, ___lstFemale, null);
-    //    //    HSceneInterpreter.OnPoseChange(_nextAinmInfo);
+    //    //    HSceneInterp.OnPoseChange(_nextAinmInfo);
 
     //    //    Fixes.ObiCtrlFix.SetFluidsState(false);
     //    //}
@@ -229,7 +229,7 @@ namespace KK_VR.Camera
     //    //[HarmonyPostfix]
     //    //public static void PostChangeCategory(HSceneProc __instance, List<ChaControl> ___lstFemale)//, float __state)
     //    //{
-    //    //    if (KoikatuInterpreter.SceneInterpreter is HSceneInterpreter hScene)
+    //    //    if (KoikGame.SceneInterpreter is HSceneInterp hScene)
     //    //        hScene.OnSpotChangePost();
     //    //    UpdateVRCamera(__instance, ___lstFemale, null);// __state);
 
@@ -289,7 +289,7 @@ namespace KK_VR.Camera
     //    //        // We are starting from scratch.
     //    //        // TODO: the height calculation below assumes standing mode.
 
-    //    //        if (VRMoverH.Instance != null && KoikatuInterpreter.settings.FlyInH)
+    //    //        if (VRMoverH.Instance != null && KoikGame.settings.FlyInH)
     //    //        {
     //    //            VRMoverH.Instance.MoveToInH(cameraPosition, cameraRotation, previousFemaleY == null, instance.flags.mode);
     //    //        }

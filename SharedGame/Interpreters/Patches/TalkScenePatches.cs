@@ -16,14 +16,14 @@ namespace KK_VR.Patches
         public static void TalkSceneAwakePrefix(TalkScene __instance)
         {
             // A cheap surefire way to differentiate between TalkScene/ADV.
-            //VRPlugin.Logger.LogDebug($"TalkScene:Awake:{KoikatuInterpreter.CurrentScene}");
-            if (KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.TalkScene)
+            //VRPlugin.Logger.LogDebug($"TalkScene:Awake:{KoikGame.CurrentScene}");
+            if (KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.TalkScene)
             {
-                ((TalkSceneInterpreter)KoikatuInterpreter.SceneInterpreter).OverrideAdv(__instance);
+                ((TalkSceneInterp)KoikGameInterp.SceneInterpreter).OverrideAdv(__instance);
             }
             else
             {
-                KoikatuInterpreter.StartScene(KoikatuInterpreter.SceneType.TalkScene, __instance);
+                KoikGameInterp.StartScene(KoikGameInterp.SceneType.TalkScene, __instance);
             }
         }
     }

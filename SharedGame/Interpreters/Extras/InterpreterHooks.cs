@@ -14,11 +14,11 @@ namespace KK_VR.Interpreters
     {
         protected override void OnStartH(MonoBehaviour proc, HFlag hFlag, bool vr)
         {
-            KoikatuInterpreter.StartScene(KoikatuInterpreter.SceneType.HScene, proc);
+            KoikGameInterp.StartScene(KoikGameInterp.SceneType.HScene, proc);
         }
         protected override void OnEndH(MonoBehaviour proc, HFlag hFlag, bool vr)
         {
-            KoikatuInterpreter.EndScene(KoikatuInterpreter.SceneType.HScene);
+            KoikGameInterp.EndScene(KoikGameInterp.SceneType.HScene);
         }
     }
 }

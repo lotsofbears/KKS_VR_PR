@@ -30,7 +30,7 @@ namespace KK_VR.Grasp
             _itemId = (int)colliderKind - 2;
             _anchor = anchor;
             _lastPos = anchor.position;
-            _item = HSceneInterpreter.handCtrl.useAreaItems[_itemId].obj.transform;
+            _item = HSceneInterp.handCtrl.useAreaItems[_itemId].obj.transform;
 
             var slaves = new List<int>();
             foreach (var masterIndex in GetMasterIndex(colliderKind))
@@ -68,7 +68,7 @@ namespace KK_VR.Grasp
         {
             var vec = (Vector2)_item.InverseTransformVector(_lastPos - _anchor.position);
             vec.y = 0f - vec.y;
-            HSceneInterpreter.hFlag.xy[_itemId] += vec * 10f;
+            HSceneInterp.hFlag.xy[_itemId] += vec * 10f;
             _lastPos = _anchor.position;
         }
         private float _lerp;
@@ -88,7 +88,7 @@ namespace KK_VR.Grasp
                 {
                     link.weight = Mathf.Clamp01(link.weight * step);
                 }
-                HSceneInterpreter.hFlag.xy[_itemId] = (HSceneInterpreter.hFlag.xy[_itemId] - _midVec) * step + _midVec;
+                HSceneInterp.hFlag.xy[_itemId] = (HSceneInterp.hFlag.xy[_itemId] - _midVec) * step + _midVec;
                 if (step == 0f)
                 {
                     Component.Destroy(this);

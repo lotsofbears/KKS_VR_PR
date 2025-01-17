@@ -32,7 +32,7 @@ using KK_VR.Settings;
 
 namespace KK_VR.Interpreters
 {
-    internal class HSceneInterpreter : SceneInterpreter
+    internal class HSceneInterp : SceneInterpreter
     {
         
         private readonly PoV _pov;
@@ -110,7 +110,7 @@ namespace KK_VR.Interpreters
             }
         }
 
-        internal HSceneInterpreter(MonoBehaviour proc)
+        internal HSceneInterp(MonoBehaviour proc)
         {
             var traverse = Traverse.Create(proc);
             hFlag = traverse.Field("flags").GetValue<HFlag>();
@@ -174,7 +174,7 @@ namespace KK_VR.Interpreters
             SceneExtras.ReturnDirLight();
             HandHolder.DestroyHandlers();
             LocationPicker.DestroyComponents();
-            TalkSceneInterpreter.afterH = true;
+            TalkSceneInterp.afterH = true;
 #if KKS
             ObiCtrlFix.OnHSceneEnd();
 #endif
@@ -187,7 +187,7 @@ namespace KK_VR.Interpreters
         internal override void OnUpdate()
         {
             // Exit through the title button in config doesn't trigger hook.
-            if (hFlag == null) KoikatuInterpreter.EndScene(KoikatuInterpreter.SceneType.HScene);
+            if (hFlag == null) KoikGameInterp.EndScene(KoikGameInterp.SceneType.HScene);
             base.OnUpdate();
         }
 
