@@ -43,11 +43,8 @@ namespace KK_VR.Camera
             }
         }
 
-        public static PoV Instance;
-        /// <summary>
-        /// girlPOV is NOT set proactively, use "active" to monitor state.
-        /// </summary>
-        public static bool GirlPoV;
+        public static PoV Instance {  get; private set; }
+        public static bool GirlPoV {  get; private set; }
         public static bool Active => Instance != null && Instance._active;
         public static ChaControl Target => _target;
 
@@ -61,31 +58,62 @@ namespace KK_VR.Camera
 
         private bool _active;
         private static ChaControl _target;
+
+        // Used after switch between characters to keep the head hidden while the camera still in it.
         private ChaControl _prevTarget;
 
+        // cf_J_FaceUp_tz
         private Transform _targetEyes;
+
+        // Assuming position of the head / following the head / disengaging from the head.
         private Mode _mode;
+
+        // Indicates follow with custom vec offset.
         private bool _newAttachPoint;
+
+        // Vec to follow the head from ~remote position with custom offset.
         private Vector3 _offsetVecNewAttach;
+
+        // If rotation isn't required only delta vec applied on each frame.
         private bool _rotationRequired;
+
+        // Threshold for the start of incrementally aggressive camera follow.
         private int _rotDeviationThreshold;
+
+        // Threshold to stop incrementing aggressiveness of the camera follow
         private int _rotDeviationHalf;
+
+        // Vec to follow the head with offset from the settings.
         private Vector3 _offsetVecEyes;
+
+        // Type that handles travel of the camera to the head.
         private OneWayTrip _trip;
+
+        // Type that handles travel of the camera from the head after disable.
         private MoveToPoi _moveTo;
+
+        // Wrapped Mathf.SmoothDamp for comfy use.
         private SmoothDamp _smoothDamp;
+
+        // How fast camera is allowed to rotate per frame, fps + setting driven.
         private float _degPerSec;
+
+        // State of synchronization of camera with the head. Go for relaxed mode if available after achieved.
         private bool _sync;
+
+        // Start of sync, we wait for ~1 sec of stability before declaring it stable '_sync'.
         private float _syncTimestamp;
+
+        // For delta position to follow in relaxed mode.
         private Vector3 _prevFramePos;
         private bool _forceHideHead;
 
 
-        // EventHandler with custom generic arguments gives me a hard time, thus the unity implimentation.
+        // EventHandler with custom generic arguments gives a hard time, thus the unity implementation.
         public event UnityAction<bool> CameraBusy;
         public event UnityAction<bool, ChaControl> Impersonation;
 
-        private Vector3 GetEyesPosition() => _targetEyes.TransformPoint(_offsetVecEyes);
+        private Vector3 GetEyesPosition => _targetEyes.TransformPoint(_offsetVecEyes);
         private bool IsClimax => HSceneInterp.hFlag.nowAnimStateName.EndsWith("_Loop", System.StringComparison.Ordinal);
 
         internal static PoV Create()
@@ -190,21 +218,21 @@ namespace KK_VR.Camera
                         {
                             sDamp = _smoothDamp.Increase();
                         }
-                        var moveTowards = Vector3.MoveTowards(VR.Camera.Head.position, GetEyesPosition(), 0.05f);
+                        var moveTowards = Vector3.MoveTowards(VR.Camera.Head.position, GetEyesPosition, 0.05f);
                         origin.rotation = Quaternion.RotateTowards(origin.rotation, _targetEyes.rotation, Time.deltaTime * _degPerSec * sDamp);
                         origin.position += moveTowards - VR.Camera.Head.position;
                         return;
                     }
                     if (_sync)
                     {
-                        var pos = GetEyesPosition();
+                        var pos = GetEyesPosition;
                         origin.position += (pos - _prevFramePos); // + (Vector3.MoveTowards(VR.Camera.Head.position, pos, 0.01f) - VR.Camera.Head.position);
                         _prevFramePos = pos;
                     }
                     else
                     {
                         // We don't branch here anymore?
-                        origin.position += GetEyesPosition() - VR.Camera.Head.position;
+                        origin.position += GetEyesPosition - VR.Camera.Head.position;
                     }
                 }
             }
@@ -268,7 +296,7 @@ namespace KK_VR.Camera
             {
                 // Only one mode is currently operational.
                 _trip = new OneWayTrip(Mathf.Min(
-                    KoikSettings.FlightSpeed.Value * speed / Vector3.Distance(VR.Camera.Head.position, GetEyesPosition()),
+                    KoikSettings.FlightSpeed.Value * speed / Vector3.Distance(VR.Camera.Head.position, GetEyesPosition),
                     KoikSettings.FlightSpeed.Value * 60f / Quaternion.Angle(VR.Camera.Origin.rotation, _targetEyes.rotation)),
                     _targetEyes.rotation);
             }
@@ -279,7 +307,7 @@ namespace KK_VR.Camera
             {
                 StartMoveToHead();
             }
-            else if (_trip.Move(GetEyesPosition()) >= 1f)
+            else if (_trip.Move(GetEyesPosition) >= 1f)
             {
                 CameraIsNear();
                 _newAttachPoint = false;
