@@ -30,23 +30,23 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\BepInExVrLogBackend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\Mirror\Manager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\Mirror\VRReflection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\BendGoal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Parts\BendGoal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Grasp\Translate\TranslateCompensate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Grasp\Translate\TranslateMove.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Grasp\Translate\Translate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Obsolete\Fixes\ReduceAssetUnloads.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\UnityPatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fixes\Util.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\BodyPart.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\BaseHold.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\BodyPartHead.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Parts\BodyPart.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Helpers\BaseHold.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Parts\BodyPartHead.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Grasp\GraspController.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\GraspHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\HandScroll.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\IKCaress.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\SlapReaction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\TouchReaction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Grasp\VisualObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Helpers\GraspHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Helpers\HandScroll.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\IK\IKCaress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\IK\SlapReaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\IK\TouchReaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Grasp\Parts\VisualObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\BodyPartGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\HeadPartGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForGrasp\PartGuide.cs" />
@@ -127,6 +127,9 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)SFX\Traverse\Skin\Soft\SUFFLE AND TAPPING 5_1.ogg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Grasp\IK\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Grasp\Helpers\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Grasp\Parts\" />
     <Folder Include="$(MSBuildThisFileDirectory)SFX\Slap\Cloth\" />
     <Folder Include="$(MSBuildThisFileDirectory)SFX\Tap\Skin\Wet\" />
     <Folder Include="$(MSBuildThisFileDirectory)SFX\Traverse\Cloth\" />
