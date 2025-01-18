@@ -30,12 +30,16 @@ The studio part is a fork of the [KKS_CharaStudioVR](https://vr-erogamer.com/arc
 
 The game (not the studio) also can be launched without any added arguments if SteamVR is running.
 
+## Incompatibilities
+ * A plugin *CrossFader.dll*, this plugin won't launch.
+ * A plugin [Stiletto](https://github.com/IllusionMods/Stiletto), IK Manipulator won't work.
+
 ## Tips
  * Be advised to set InterPupillary Distance (IPD) in the settings to change the scale of the world according to own taste and used hardware.
  * If VR mode doesn't launch, make sure that neither of controllers is asleep during game launch.
  * For best compatibility use together with [KK HF Patch](https://github.com/ManlyMarco/KK-HF_Patch) or [KKS HF Patch](https://github.com/ManlyMarco/KKS-HF_Patch).
 
-## Controls in the main game and FreeH
+ ## Controls in the main game and FreeH
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/IllusionMods/KKS_VR/master/Images/logo-github.gif">
