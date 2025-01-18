@@ -116,36 +116,38 @@ namespace KK_VR.Handlers
                 _injectLMB = false;
             }
         }
+
         protected override void DoReaction(float velocity)
         {
-           //VRPlugin.Logger.LogDebug($"DoReaction:{_tracker.colliderInfo.behavior.react}:{_tracker.colliderInfo.behavior.touch}:{_tracker.reactionType}:{velocity}");
-            if (GameSettings.AutomaticTouching.Value > GameSettings.SceneType.TalkScene)
+            //VRPlugin.Logger.LogDebug($"DoReaction:{_tracker.colliderInfo.behavior.react}:{_tracker.colliderInfo.behavior.touch}:{_tracker.reactionType}:{velocity}");
+            var chara = _tracker.colliderInfo.chara;
+            if (!IsReactionEligible(chara)) return;
+
+            if (velocity > 1.5f || (_tracker.reactionType == Tracker.ReactionType.HitReaction && !IsAibuItemPresent(out _)))
             {
-                if (velocity > 1.5f || (_tracker.reactionType == Tracker.ReactionType.HitReaction && !IsAibuItemPresent(out _)))
+                if (GameSettings.TouchReaction.Value != 0f
+                    && HSceneInterp.mode == HFlag.EMode.aibu
+                    && GraspHelper.Instance != null
+                    && !GraspHelper.Instance.IsGraspActive(chara)
+                    && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
                 {
-                    if (GameSettings.TouchReaction.Value != 0f 
-                        && HSceneInterp.mode == HFlag.EMode.aibu
-                        && GraspHelper.Instance != null 
-                        && !GraspHelper.Instance.IsGraspActive(_tracker.colliderInfo.chara)
-                        && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
-                    {
-                        GraspHelper.Instance.TouchReaction(_tracker.colliderInfo.chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
-                    }
-                    else
-                    {
-                        HSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, _tracker.colliderInfo.chara, voiceWait: true);
-                    }
+                    GraspHelper.Instance.TouchReaction(chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
                 }
-                else if (_tracker.reactionType == Tracker.ReactionType.Short)
+                else
                 {
-                    Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Short, _tracker.colliderInfo.chara, voiceWait: true);
+                    HSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara, voiceWait: true);
                 }
-                else //if (_tracker.reactionType == ControllerTracker.ReactionType.Laugh)
-                {
-                    Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Laugh, _tracker.colliderInfo.chara, voiceWait: true);
-                }
-                _controller.StartRumble(new RumbleImpulse(1000));
             }
+            else if (_tracker.reactionType == Tracker.ReactionType.Short)
+            {
+                Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Short, chara, voiceWait: true);
+            }
+            else //if (_tracker.reactionType == ControllerTracker.ReactionType.Laugh)
+            {
+                Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Laugh, chara, voiceWait: true);
+            }
+            _controller.StartRumble(new RumbleImpulse(1000));
         }
+
     }
 }

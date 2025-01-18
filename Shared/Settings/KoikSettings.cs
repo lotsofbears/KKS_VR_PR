@@ -24,17 +24,6 @@ namespace KK_VR.Settings
         public const string SectionGripMove = "6. GripMove";
         public const string SectionPerformance = "7. Performance";
 
-        public enum SceneType
-        {
-            Disable,
-#if GAME
-            TalkScene,
-            HScene,
-            Both,
-#elif STUDIO
-            Enable,
-#endif
-        }
         public enum Handedness
         {
             Left,
@@ -52,9 +41,9 @@ namespace KK_VR.Settings
             OnDemand,
             Always
         }
-        public enum Impersonation
+        public enum Genders
         {
-            Disabled,
+            Disable,
             Boys,
             Girls,
             Both
@@ -97,7 +86,7 @@ namespace KK_VR.Settings
 
         #region Pov
 
-        public static ConfigEntry<Impersonation> Pov { get; private set; }
+        public static ConfigEntry<Genders> Pov { get; private set; }
         public static ConfigEntry<PovMovementType> FlyInPov { get; private set; }
         public static ConfigEntry<bool> HideHeadInPov { get; private set; }
         public static ConfigEntry<float> FlightSpeed { get; private set; }
@@ -109,7 +98,7 @@ namespace KK_VR.Settings
 
         #region H
 
-        public static ConfigEntry<SceneType> AutomaticTouching { get; private set; }
+        public static ConfigEntry<Genders> AutomaticTouching { get; private set; }
         public static ConfigEntry<float> TouchReaction { get; private set; }
 
         #endregion
@@ -287,12 +276,7 @@ namespace KK_VR.Settings
 
 
             // This one can be a bit annoying currently as characters can overreact if unintentionally bullied by the controller in pov mode during animations.
-            AutomaticTouching = config.Bind(SectionH, "Automatic touching",
-#if GAME
-                SceneType.Both,
-#elif STUDIO
-                SceneType.Enable,
-#endif
+            AutomaticTouching = config.Bind(SectionH, "Automatic touching",Genders.Both,
                 "Touching body with controller triggers a reaction"
                 );
 
@@ -310,7 +294,7 @@ namespace KK_VR.Settings
             #region SectionPov
 
 
-            Pov = config.Bind(SectionPov, "Enable", Impersonation.Boys,
+            Pov = config.Bind(SectionPov, "Enable", Genders.Boys,
                 new ConfigDescription(
                     "The range of targets for impersonations.",
                     null,

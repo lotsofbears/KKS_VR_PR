@@ -4,6 +4,7 @@ using KK_VR.Interpreters;
 using KK_VR.Features;
 using static HandCtrl;
 using KK_VR.Holders;
+using KK_VR.Settings;
 
 namespace KK_VR.Handlers
 {
@@ -121,6 +122,17 @@ namespace KK_VR.Handlers
             };
         }
 
+        protected bool IsReactionEligible(ChaControl chara)
+        {
+            var config = KoikSettings.AutomaticTouching.Value;
+            if (config == KoikSettings.Genders.Disable
+                || (config == KoikSettings.Genders.Boys && chara.sex == 1)
+                || (config == KoikSettings.Genders.Girls && chara.sex == 0))
+            {
+                return false;
+            }
+            return true;
+        }
         protected override void OnTriggerExit(Collider other)
         {
             if (_tracker.RemoveCollider(other))
@@ -151,7 +163,8 @@ namespace KK_VR.Handlers
         }
         protected virtual void DoReaction(float velocity)
         {
-
+            var chara = _tracker.colliderInfo.chara;
+            if (!IsReactionEligible(chara)) return;
         }
     }
 }

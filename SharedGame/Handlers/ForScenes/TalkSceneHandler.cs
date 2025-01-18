@@ -23,42 +23,41 @@ namespace KK_VR.Handlers
 
         protected override void DoReaction(float velocity)
         {
-            if (GameSettings.AutomaticTouching.Value == GameSettings.SceneType.Both
-                || GameSettings.AutomaticTouching.Value == GameSettings.SceneType.TalkScene)
+            var chara = _tracker.colliderInfo.chara;
+            if (!IsReactionEligible(chara)) return;
+
+            var touch = _tracker.colliderInfo.behavior.touch;
+            if (TalkSceneInterp.talkScene != null
+                && touch != AibuColliderKind.none
+                && chara == TalkSceneInterp.talkScene.targetHeroine.chaCtrl
+                && !CrossFader.AdvHooks.Reaction
+                // Add familiarity here too ? prob
+                && (velocity > 1f || UnityEngine.Random.value < 0.3f)
+                && (GraspHelper.Instance == null || !GraspHelper.Instance.IsGraspActive(chara)))
             {
-                var chara = _tracker.colliderInfo.chara;
-                var touch = _tracker.colliderInfo.behavior.touch;
-                if (TalkSceneInterp.talkScene != null
-                    && touch != AibuColliderKind.none
-                    && chara == TalkSceneInterp.talkScene.targetHeroine.chaCtrl
-                    && !CrossFader.AdvHooks.Reaction
-                    // Add familiarity here too ? prob
-                    && (velocity > 1f || UnityEngine.Random.value < 0.3f)
-                    && (GraspHelper.Instance == null || !GraspHelper.Instance.IsGraspActive(chara)))
-                {
-                    TalkSceneInterp.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
-                }
-                else if (velocity > 1f || _tracker.reactionType == Tracker.ReactionType.HitReaction)
-                {
-                    if (GraspHelper.Instance != null && !GraspHelper.Instance.IsGraspActive(chara) && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
-                    {
-                        GraspHelper.Instance.TouchReaction(chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
-                    }
-                    else
-                    {
-                        TalkSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara);
-                    }
-                }
-                else if (_tracker.reactionType == Tracker.ReactionType.Short)
-                {
-                    Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Short, chara, voiceWait: UnityEngine.Random.value < 0.5f);
-                }
-                else if (_tracker.reactionType == Tracker.ReactionType.Laugh)
-                {
-                    Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Laugh, chara, voiceWait: UnityEngine.Random.value < 0.5f);
-                }
-                _controller.StartRumble(new RumbleImpulse(1000));
+                TalkSceneInterp.talkScene.TouchFunc(TouchReaction(touch), Vector3.zero);
             }
+            else if (velocity > 1f || _tracker.reactionType == Tracker.ReactionType.HitReaction)
+            {
+                if (GraspHelper.Instance != null && !GraspHelper.Instance.IsGraspActive(chara) && UnityEngine.Random.value < GameSettings.TouchReaction.Value)
+                {
+                    GraspHelper.Instance.TouchReaction(chara, _hand.Anchor.position, _tracker.colliderInfo.behavior.part);
+                }
+                else
+                {
+                    TalkSceneInterp.HitReactionPlay(_tracker.colliderInfo.behavior.react, chara);
+                }
+            }
+            else if (_tracker.reactionType == Tracker.ReactionType.Short)
+            {
+                Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Short, chara, voiceWait: UnityEngine.Random.value < 0.5f);
+            }
+            else if (_tracker.reactionType == Tracker.ReactionType.Laugh)
+            {
+                Features.LoadGameVoice.PlayVoice(Features.LoadGameVoice.VoiceType.Laugh, chara, voiceWait: UnityEngine.Random.value < 0.5f);
+            }
+            _controller.StartRumble(new RumbleImpulse(1000));
+            
         }
         public bool TriggerPress()
         {
