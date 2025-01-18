@@ -17,12 +17,14 @@ namespace KK_VR.Controls
         internal bool IsAttached => _attached;
         private bool _attached;
         private static GUIQuad _gui;
-        internal KoikMenuTool(int index)
+        internal KoikMenuTool(Controller controller)
         {
-            if (!_gui && index == (int)KoikSettings.MainHand.Value)
+            if (!_gui 
+                && ((KoikSettings.MainHand.Value == KoikSettings.Handedness.Left && controller == VR.Mode.Left)
+                || (KoikSettings.MainHand.Value == KoikSettings.Handedness.Right && controller == VR.Mode.Right)))
             {
                 _gui = GUIQuad.Create();
-                _gui.transform.parent = VR.Mode.Right.transform;
+                _gui.transform.parent = controller.transform;
                 _gui.transform.localScale = Vector3.one * 0.3f;
                 _gui.transform.localPosition = new Vector3(0, 0.05f, -0.06f);
                 _gui.transform.localRotation = Quaternion.Euler(90, 0, 0);

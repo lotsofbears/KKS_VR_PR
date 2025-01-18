@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Camera\EffectorVFX.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Camera\SmoothMover.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Locomotion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\KoikMenuHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\GameplayTool.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\GripMove.cs" />
@@ -22,7 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Features\CrossFader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\Voice\LoadGameVoice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Obsolete\OldVRFade.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Camera\Pov.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\PoV.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\PrivacyScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\Voice\VoiceBundles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Holders\VRBoop.cs" />

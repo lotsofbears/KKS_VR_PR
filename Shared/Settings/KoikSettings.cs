@@ -121,6 +121,7 @@ namespace KK_VR.Settings
         public static ConfigEntry<bool> GripMoveLimitRotation { get; private set; }
         public static ConfigEntry<int> GripMoveStabilizationAmount { get; private set; }
         public static ConfigEntry<bool> GripMoveEnableRotation { get; private set; }
+        public static ConfigEntry<bool> GripMoveLocomotion { get; private set; }
 
         #endregion
 
@@ -442,6 +443,14 @@ namespace KK_VR.Settings
             GripMoveEnableRotation = config.Bind(SectionGripMove, "Enable rotation", false,
                 new ConfigDescription(
                     "Enable rotation while pressing 'Touchpad'",
+                    null,
+                    new ConfigurationManagerAttributes { Order = 10 }
+                    ));
+
+
+            GripMoveLocomotion = config.Bind(SectionGripMove, "Locomotion", true,
+                new ConfigDescription(
+                    "",
                     null,
                     new ConfigurationManagerAttributes { Order = 10 }
                     ));

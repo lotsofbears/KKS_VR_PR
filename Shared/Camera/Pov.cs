@@ -11,7 +11,8 @@ using KK_VR.Camera;
 using System;
 using UnityEngine.Events;
 
-namespace KK_VR.Camera
+// Will make proper namespace once fixed in SensibleH
+namespace KK_VR.Features
 {
     public class PoV : MonoBehaviour
     {
@@ -44,7 +45,9 @@ namespace KK_VR.Camera
         }
 
         public static PoV Instance {  get; private set; }
-        public static bool GirlPoV {  get; private set; }
+
+        // Gotta fix SensibleH first to change this.
+        public static bool GirlPoV;
         public static bool Active => Instance != null && Instance._active;
         public static ChaControl Target => _target;
 
