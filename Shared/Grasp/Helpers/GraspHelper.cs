@@ -328,7 +328,6 @@ namespace KK_VR.Grasp
         internal static void SetWorkingState(ChaControl chara)
         {
             // By default only limbs are used, the rest is limited to offset play by hitReaction.
-            //VRPlugin.Logger.LogDebug($"Helper:Grasp:SetWorkingState:{chara}");
             if (_bodyPartsDic != null && _bodyPartsDic.ContainsKey(chara))
             {
                 foreach (var bodyPart in _bodyPartsDic[chara])
@@ -337,13 +336,14 @@ namespace KK_VR.Grasp
                     {
                         bodyPart.effector.target = bodyPart.anchor;
 
-                        if (bodyPart.chain != null)
+                        if (bodyPart.IsLimb)
                         {
                             bodyPart.chain.bendConstraint.weight = bodyPart.state == State.Default || bodyPart.goal.IsBusy ? 1f : KoikSettings.IKDefaultBendConstraint.Value;
                         }
                     }
                 }
-                _auxDic[chara].oldFbik.enabled = false;
+    
+                    _auxDic[chara].oldFbik.enabled = false;
                 AnimLoaderHelper.FixExtraAnim(chara, _bodyPartsDic[chara]);
             }
         }
