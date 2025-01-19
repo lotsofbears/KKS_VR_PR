@@ -56,7 +56,7 @@ namespace KK_VR.Handlers
         private bool _activeCo;
         private bool _disengage;
         private ChaControl _lastChara;
-        private float _kissDistance = 0.2f;
+        private float _kissDistance;
         private bool _mousePress;
 
         private bool _followRotation;
@@ -89,10 +89,23 @@ namespace KK_VR.Handlers
             rigidBody.isKinematic = true;
             Tracker = new Tracker();
 
-            _eyes = HSceneInterp.lstFemale[0].objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
-            _shoulders = HSceneInterp.lstFemale[0].objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_d_backsk_00");
+            if (HSceneInterp.lstFemale.Count > 0)
+            {
+                var female = HSceneInterp.lstFemale[0];
+                _eyes = female.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
+                _shoulders = female.objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03/cf_d_backsk_00");
 
-            _kissHelper = new KissHelper(_eyes, _shoulders);
+                _kissHelper = new KissHelper(_eyes, _shoulders);
+
+                if (female.fileBody != null && female.fileBody.shapeValueBody.Length > 0)
+                {
+                    _kissDistance = 0.17f + female.fileBody.shapeValueBody[0] * 0.05f;
+                }
+                else
+                {
+                    _kissDistance = 0.2f;
+                }
+            }
             _aibu = HSceneInterp.mode == HFlag.EMode.aibu;
             Tracker.SetBlacklistDic(_mouthBlacklistDic);
         }
@@ -129,7 +142,7 @@ namespace KK_VR.Handlers
         private void Update()
         {
             // Current version might be able to handle cross fader? test it?
-            if (_aibu && !PauseInteractions && !CrossFader.InTransition)
+            if (_kissHelper != null && _aibu && !PauseInteractions && !CrossFader.InTransition)
             {
                 if (!HandleKissing())
                 {
@@ -143,9 +156,6 @@ namespace KK_VR.Handlers
             if (GameSettings.AssistedKissing.Value)
             {
                 var head = VR.Camera.Head;
-
-                // Distance check often fails if the character is extra smol,
-                // requires adjusting of '_kissDistance' based on character height.
 
                 if (Vector3.Distance(_eyes.position, head.position) < _kissDistance
                     && Quaternion.Angle(_eyes.rotation, head.rotation * _reverse) < 30f
@@ -401,10 +411,6 @@ namespace KK_VR.Handlers
                     }
                     return false;
                 }
-            }
-            else
-            {
-                return true;
             }
             return true;
         }
