@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\GripMoveLag.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\KoikMenuTool.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\CrossFader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Features\CustomCollider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Features\Voice\LoadGameVoice.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Obsolete\OldVRFade.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Camera\PoV.cs" />

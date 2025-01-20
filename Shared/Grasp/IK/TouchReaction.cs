@@ -218,7 +218,7 @@ namespace KK_VR.Grasp
         internal void React(int id, Vector3 direction)
         {
             // Direction doesn't have Y axis.
-           //VRPlugin.Logger.LogInfo($"TouchReaction:{id}:{direction}");
+            //VRPlugin.Logger.LogInfo($"TouchReaction:{id}:{direction}");
             var list = _reactionList[id];
             var duration = 0f;
             var upVec = GetUpVec(list[0].id);
@@ -232,14 +232,14 @@ namespace KK_VR.Grasp
                 var left = Vector3.SignedAngle(direction, _effectors[0].bone.forward, _effectors[0].bone.up) > 0f;
 #endif
                 //var left = Mathf.DeltaAngle(0f, (Quaternion.Inverse(Quaternion.LookRotation(direction) * Quaternion.Euler(0f, 180f, 0f)) * _effectors[0].bone.rotation).eulerAngles.y) < 0f;
-               //VRPlugin.Logger.LogInfo($"Left = {left}");
+                //VRPlugin.Logger.LogInfo($"Left = {left}");
 
                 list[5].weight = left ? 0f : 0.05f;
                 list[6].weight = left ? 0.05f : 0f;
                 list[7].weight = left ? 0f : Random.Range(0.3f, 0.5f);
                 list[8].weight = left ? Random.Range(0.3f, 0.5f) : 0f;
 
-                
+
             }
             if (!_currentReactions.ContainsKey(list))
             {
