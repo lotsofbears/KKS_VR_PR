@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharaStudioVR", "CharaStudioVR\CharaStudioVR.csproj", "{07ECD6A8-61D0-4409-A009-C138E76DFA1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_Studio", "CharaStudioVR\KKS_Studio.csproj", "{07ECD6A8-61D0-4409-A009-C138E76DFA1F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B6E4305-C95A-4274-94A6-B04A1B01989D} = {4B6E4305-C95A-4274-94A6-B04A1B01989D}
 	EndProjectSection
@@ -88,6 +88,7 @@ Global
 		SolutionGuid = {6A44D8C4-D4F0-4951-A1F2-B64FFDD9A290}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{07ecd6a8-61d0-4409-a009-c138e76dfa1f}*SharedItemsImports = 4
 		SharedGame\SharedGame.projitems*{0aa55027-91a2-4fc5-b657-8c2a2b96f160}*SharedItemsImports = 13
 		SharedGame\SharedGame.projitems*{1f36ab35-19d3-4553-a166-af8dfca39d50}*SharedItemsImports = 4
 		Shared\Shared.projitems*{1f36ab35-19d3-4553-a166-af8dfca39d50}*SharedItemsImports = 4

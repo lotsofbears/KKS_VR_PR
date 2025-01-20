@@ -25,11 +25,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\TalkSceneHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\AibuItemMover.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\KissHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\MouthGuide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\MouthGuide.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\ActionSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationMaleBreath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationSensibleH.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\MeshCollider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\SceneExtras.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\HSceneInterp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\ActionSceneInput.cs" />
