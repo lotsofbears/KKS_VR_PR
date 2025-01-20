@@ -6,6 +6,7 @@ using VRGIN.Core;
 using KK_VR.Interpreters;
 using KK_VR.Handlers;
 using KKAPI.Utilities;
+using KK_VR.Settings;
 
 namespace KK_VR.Camera
 {
@@ -27,8 +28,8 @@ namespace KK_VR.Camera
         }
         internal void MoveToPoV()
         {
-            var mode = HSceneInterpreter.mode;
-            if (PoV.Active || (KoikatuInterpreter.Settings.AutoEnterPov && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
+            var mode = HSceneInterp.mode;
+            if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
                 StartCoroutine(WaitForLag(PoV.Instance.StartPov, null));
@@ -38,8 +39,8 @@ namespace KK_VR.Camera
         {
             //VRPlugin.Logger.LogDebug("VRMoverH:MoveToInH");
             StopAllCoroutines();
-            var mode = HSceneInterpreter.mode;
-            if (PoV.Active || (KoikatuInterpreter.Settings.AutoEnterPov && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
+            var mode = HSceneInterp.mode;
+            if (PoV.Active || (KoikSettings.PovAutoEnter.Value && (mode == HFlag.EMode.houshi || mode == HFlag.EMode.sonyu)))
             {
                 PoV.Instance.TryDisable(moveTo: false);
                 if (spotChange)
@@ -76,7 +77,7 @@ namespace KK_VR.Camera
                 var head = VR.Camera.Head;
                 var uprightRot = Quaternion.Euler(0f, origin.eulerAngles.y, 0f);
                 //var uprightRot = Quaternion.Euler(0f, head.eulerAngles.y, 0f);
-                var lerpMultiplier = KoikatuInterpreter.Settings.FlightSpeed * 90f / Quaternion.Angle(head.rotation, uprightRot);
+                var lerpMultiplier = KoikSettings.FlightSpeed.Value * 90f / Quaternion.Angle(head.rotation, uprightRot);
                 var lerp = 0f;
                 var startRot = origin.rotation;
                 Vector3 oldPos;
@@ -160,9 +161,9 @@ namespace KK_VR.Camera
             yield return CoroutineUtils.WaitForEndOfFrame;
             var origin = VR.Camera.Origin;
             var head = VR.Camera.Head;
-            MouthGuide.Instance.PauseInteractions = true;
+            MouthGuide.SetBusy(true);
 
-            var chara = HSceneInterpreter.lstFemale[0];
+            var chara = HSceneInterp.lstFemale[0];
             var eyes = chara.objHeadBone.transform.Find("cf_J_N_FaceRoot/cf_J_FaceRoot/cf_J_FaceBase/cf_J_FaceUp_ty/cf_J_FaceUp_tz/cf_J_Eye_tz");
             //_torso = chara.objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_spine01/cf_j_spine02/cf_j_spine03");
             var kokan = chara.objBodyBone.transform.Find("cf_n_height/cf_j_hips/cf_j_waist01/cf_j_waist02/cf_d_kokan/cf_j_kokan");
@@ -199,7 +200,7 @@ namespace KK_VR.Camera
 
             }
             var lerp = 0f;
-            var lerpModifier = KoikatuInterpreter.Settings.FlightSpeed * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
+            var lerpModifier = KoikSettings.FlightSpeed.Value * (spotChange ? 3f : 1f) / Vector3.Distance(head.position, position);
             var startPos = head.position;
             var startRot = origin.rotation;
             while (lerp < 1f)
@@ -211,7 +212,7 @@ namespace KK_VR.Camera
                 origin.position += pos - head.position;
                 yield return CoroutineUtils.WaitForEndOfFrame;
             }
-            MouthGuide.Instance.PauseInteractions = false;
+            MouthGuide.SetBusy(false);
         }
     }
 }

@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharaStudioVR", "CharaStudioVR\CharaStudioVR.csproj", "{07ECD6A8-61D0-4409-A009-C138E76DFA1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_Studio", "CharaStudioVR\KKS_Studio.csproj", "{07ECD6A8-61D0-4409-A009-C138E76DFA1F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B6E4305-C95A-4274-94A6-B04A1B01989D} = {4B6E4305-C95A-4274-94A6-B04A1B01989D}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRGIN_OpenXR", "VRGIN_OpenXR\VRGIN_OpenXR.csproj", "{4B6E4305-C95A-4274-94A6-B04A1B01989D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_VR", "KK_VR\KK_VR.csproj", "{ABE9B34C-6644-4E93-A8A1-5CAD5FA638EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_Game", "KK_VR\KK_Game.csproj", "{ABE9B34C-6644-4E93-A8A1-5CAD5FA638EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_VR", "KKS_VR\KKS_VR.csproj", "{1F36AB35-19D3-4553-A166-AF8DFCA39D50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KKS_Game", "KKS_VR\KKS_Game.csproj", "{1F36AB35-19D3-4553-A166-AF8DFCA39D50}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{447CA481-4806-48D1-8E95-D545D8294620}"
 EndProject
@@ -25,6 +25,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KK", "KK", "{E661FA02-7FDD-48B3-9FC2-B3994452A408}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KKS", "KKS", "{3471EB1C-E7CE-4B16-826B-2B19A46FF61E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedGame", "SharedGame\SharedGame.shproj", "{0AA55027-91A2-4FC5-B657-8C2A2B96F160}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedStudio", "SharedStudio\SharedStudio.shproj", "{9472FDE9-73D0-4F62-ADC0-8D0828EE2DE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KK_Studio", "KK_Studio\KK_Studio.csproj", "{4D035737-4A50-4FB8-BD73-7703EDF944BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +66,10 @@ Global
 		{30177590-0ADF-4817-9D9B-804C7C4C749A}.Debug|x64.Build.0 = Debug|x64
 		{30177590-0ADF-4817-9D9B-804C7C4C749A}.Release|x64.ActiveCfg = Release|x64
 		{30177590-0ADF-4817-9D9B-804C7C4C749A}.Release|x64.Build.0 = Release|x64
+		{4D035737-4A50-4FB8-BD73-7703EDF944BD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D035737-4A50-4FB8-BD73-7703EDF944BD}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D035737-4A50-4FB8-BD73-7703EDF944BD}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D035737-4A50-4FB8-BD73-7703EDF944BD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,14 +82,21 @@ Global
 		{22788A2C-7695-4A6A-A9F0-115AB9A05FD4} = {E661FA02-7FDD-48B3-9FC2-B3994452A408}
 		{7B4A46E3-629C-46CC-ADF4-8FE8FCED992D} = {E661FA02-7FDD-48B3-9FC2-B3994452A408}
 		{30177590-0ADF-4817-9D9B-804C7C4C749A} = {E661FA02-7FDD-48B3-9FC2-B3994452A408}
+		{4D035737-4A50-4FB8-BD73-7703EDF944BD} = {E661FA02-7FDD-48B3-9FC2-B3994452A408}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A44D8C4-D4F0-4951-A1F2-B64FFDD9A290}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Shared\Shared.projitems*{07ecd6a8-61d0-4409-a009-c138e76dfa1f}*SharedItemsImports = 4
+		SharedGame\SharedGame.projitems*{0aa55027-91a2-4fc5-b657-8c2a2b96f160}*SharedItemsImports = 13
+		SharedGame\SharedGame.projitems*{1f36ab35-19d3-4553-a166-af8dfca39d50}*SharedItemsImports = 4
 		Shared\Shared.projitems*{1f36ab35-19d3-4553-a166-af8dfca39d50}*SharedItemsImports = 4
 		Shared\Shared.projitems*{447ca481-4806-48d1-8e95-d545d8294620}*SharedItemsImports = 13
+		SharedStudio\SharedStudio.projitems*{4d035737-4a50-4fb8-bd73-7703edf944bd}*SharedItemsImports = 4
+		Shared\Shared.projitems*{4d035737-4a50-4fb8-bd73-7703edf944bd}*SharedItemsImports = 4
+		SharedStudio\SharedStudio.projitems*{9472fde9-73d0-4f62-adc0-8d0828ee2de6}*SharedItemsImports = 13
+		SharedGame\SharedGame.projitems*{abe9b34c-6644-4e93-a8a1-5cad5fa638ee}*SharedItemsImports = 4
 		Shared\Shared.projitems*{abe9b34c-6644-4e93-a8a1-5cad5fa638ee}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

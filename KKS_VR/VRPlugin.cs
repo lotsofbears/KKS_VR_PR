@@ -15,6 +15,7 @@ using UnityEngine;
 using Valve.VR;
 using VRGIN.Core;
 using VRGIN.Helpers;
+using KK_VR.Camera;
 
 namespace KK_VR
 {
@@ -39,7 +40,7 @@ namespace KK_VR
 
             var enabled = Environment.CommandLine.Contains("--vr") || SteamVRDetector.IsRunning;
             // The presence of settings even outside of vr mode for comfy editing.
-            var settings = SettingsManager.Create(Config);
+            var settings = new GameSettings().Create(Config);
             if (enabled)
             {
                 BepInExVrLogBackend.ApplyYourself();
@@ -55,7 +56,7 @@ namespace KK_VR
             CrossFader.Initialize(Config, enabled);
         }
 
-        private IEnumerator LoadDevice(KoikatuSettings settings)
+        private IEnumerator LoadDevice(VRSettings settings)
         {
             yield return new WaitUntil(() => Manager.Scene.initialized);
             //yield return new WaitUntil(() => Manager.Scene.initialized && Manager.Scene.LoadSceneName == "Title");
@@ -118,18 +119,17 @@ namespace KK_VR
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
             //TopmostToolIcons.Patch();
 
-            VRManager.Create<Interpreters.KoikatuInterpreter>(new KoikatuContext(settings));
+            VRManager.Create<Interpreters.KoikGameInterp>(new KoikContext(settings));
 
-            // VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
-            UpdateNearClipPlane(settings);
-            UpdateIPD(settings);
-            settings.AddListener("NearClipPlane", (_, _1) => UpdateNearClipPlane(settings));
-            settings.AddListener("IPDScale", (_, _1) => UpdateIPD(settings));
+            //// VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
+            //UpdateNearClipPlane(settings);
+            //UpdateIPD(settings);
+            //settings.AddListener("NearClipPlane", (_, _1) => UpdateNearClipPlane(settings));
+            //settings.AddListener("IPDScale", (_, _1) => UpdateIPD(settings));
             VR.Manager.SetMode<GameStandingMode>();
 
 
             VRFade.Create();
-            PrivacyScreen.Initialize();
             GraphicRaycasterPatches.Initialize();
 
             // It's been reported in #28 that the game window defocues when
@@ -137,25 +137,9 @@ namespace KK_VR
             // an attempt to counter this.
             NativeMethods.DisableProcessWindowsGhosting();
 
-            DontDestroyOnLoad(VRCamera.Instance.gameObject);
-
-            // Probably unnecessary, but just to be safe
-            VR.Mode.MoveToPosition(Vector3.zero, Quaternion.Euler(Vector3.zero), true);
+            GameAPI.RegisterExtraBehaviour<InterpreterHooks>(GUID);
 
             Logger.LogInfo("Finished loading into VR mode!");
-
-            if (SettingsManager.EnableBoop.Value)
-                VRBoop.Initialize();
-            GameAPI.RegisterExtraBehaviour<InterpreterHooks>(GUID);
-        }
-
-        private void UpdateNearClipPlane(KoikatuSettings settings)
-        {
-            VR.Camera.gameObject.GetComponent<UnityEngine.Camera>().nearClipPlane = settings.NearClipPlane;
-        }
-        private void UpdateIPD(KoikatuSettings settings)
-        {
-            VRCamera.Instance.SteamCam.origin.localScale = Vector3.one * settings.IPDScale;
         }
 
         private static class NativeMethods

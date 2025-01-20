@@ -14,6 +14,7 @@ using UnityEngine;
 using VRGIN.Core;
 using VRGIN.Helpers;
 using VRGIN.Controls.Handlers;
+using KK_VR.Camera;
 
 namespace KK_VR
 {
@@ -35,7 +36,7 @@ namespace KK_VR
         {
             Logger = base.Logger;
 
-            var settings = SettingsManager.Create(Config);
+            var settings = new GameSettings().Create(Config);
 
             if (Environment.CommandLine.Contains("--vr") || SteamVRDetector.IsRunning)
             {
@@ -46,7 +47,7 @@ namespace KK_VR
         }
 
         private const string DeviceOpenVR = "OpenVR";
-        private IEnumerator LoadDevice(KoikatuSettings settings)
+        private IEnumerator LoadDevice(VRSettings settings)
         {
             //yield return new WaitUntil(() => Manager.Scene. initialized);
             //yield return new WaitUntil(() => Manager.Scene.initialized && Manager.Scene.LoadSceneName == "Title");
@@ -73,54 +74,28 @@ namespace KK_VR
             }
 
             new Harmony(GUID).PatchAll(typeof(VRPlugin).Assembly);
-            VRManager.Create<Interpreters.KoikatuInterpreter>(new KoikatuContext(settings));
-
-            // VRGIN doesn't update the near clip plane until a first "main" camera is created, so we set it here.
-            UpdateNearClipPlane(settings);
-            UpdateIPD(settings);
-            settings.AddListener("NearClipPlane", (_, _1) => UpdateNearClipPlane(settings));
-            settings.AddListener("IPDScale", (_, _1) => UpdateIPD(settings));
+            VRManager.Create<Interpreters.KoikGameInterp>(new KoikContext(settings));
 
             VR.Manager.SetMode<GameStandingMode>();
 
             VRFade.Create();
-            PrivacyScreen.Initialize();
             GraphicRaycasterPatches.Initialize();
-
-            // It's been reported in #28 that the game window defocues when
-            // the game is under heavy load. We disable window ghosting in
-            // an attempt to counter this.
             NativeMethods.DisableProcessWindowsGhosting();
 
-            //DontDestroyOnLoad(VRCamera.Instance.gameObject);
 
-            // Probably unnecessary, but just to be safe
-            //VR.Mode.MoveToPosition(Vector3.zero, Quaternion.Euler(Vector3.zero), true);
-
-
-            if (SettingsManager.EnableBoop.Value)
-            {
-                VRBoop.Initialize();
-            }
             GameAPI.RegisterExtraBehaviour<InterpreterHooks>(GUID);
-
-            // In KK they refuse to assume proper position on init.
 
             Logger.LogInfo("Finished loading into VR mode!");
         }
 
-        private void UpdateNearClipPlane(KoikatuSettings settings)
-        {
-            VR.Camera.gameObject.GetComponent<UnityEngine.Camera>().nearClipPlane = settings.NearClipPlane;
-        }
-        private void UpdateIPD(KoikatuSettings settings)
-        {
-            VRCamera.Instance.SteamCam.origin.localScale = Vector3.one * settings.IPDScale;
-        }
+        
         
 
         private static class NativeMethods
         {
+            // It's been reported in #28 that the game window defocues when
+            // the game is under heavy load. We disable window ghosting in
+            // an attempt to counter this.
             [DllImport("user32.dll")]
             public static extern void DisableProcessWindowsGhosting();
         }

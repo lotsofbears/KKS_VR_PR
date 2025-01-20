@@ -1,30 +1,15 @@
-﻿using BepInEx;
-using KK_VR.Features;
-using KK_VR.Fixes;
+﻿using KK_VR.Features;
 using KK_VR.Interpreters;
-using ADV.Commands.Object;
 using Illusion.Game;
-using IllusionUtility.GetUtility;
-using SceneAssist;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
 using VRGIN.Core;
-using static HandCtrl;
-using static RootMotion.FinalIK.RagdollUtility;
-using KK_VR.Interactors;
 using VRGIN.Controls;
-using ADV.Commands.Base;
 using KK_VR.Controls;
-using RootMotion.FinalIK;
 using KK_VR.Handlers;
 using KK_VR.Grasp;
-using System.Text.RegularExpressions;
-using UnityEngine.EventSystems;
 
 namespace KK_VR.Holders
 {
@@ -515,7 +500,7 @@ namespace KK_VR.Holders
         }
         internal void AddLag(int numberOfFrames)
         {
-            _itemLag = new ItemLag(_anchor, KoikatuInterpreter.ScaleWithFps(numberOfFrames));
+            _itemLag = new ItemLag(_anchor, KoikGameInterp.ScaleWithFps(numberOfFrames));
         }
         internal void RemoveLag()
         {

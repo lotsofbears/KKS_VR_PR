@@ -45,7 +45,7 @@ namespace KK_VR.Features
                 VRPlugin.Logger.LogWarning("Disabling the AnimationCrossFader feature because KKS_CrossFader is installed");
                 return;
             }
-            var enabled = config.Bind(SettingsManager.SectionGeneral, "Cross-fade character animations", CrossFaderMode.OnlyInVr,
+            var enabled = config.Bind(KoikSettings.SectionGeneral, "Cross-fade character animations", CrossFaderMode.OnlyInVr,
                                       "Interpolate between animations/poses to make transitions look less jarring.\nChanges take effect after a scene change.");
 
             // Apply changes only after a scene change to avoid cutting off animations and possibly messing up state
@@ -109,7 +109,7 @@ namespace KK_VR.Features
             {
                 // Make the animation cross fade from the current one, uses stock game code
                 __instance.isCrossFade = true;
-                if (KoikatuInterpreter.CurrentScene == KoikatuInterpreter.SceneType.TalkScene)
+                if (KoikGameInterp.CurrentScene == KoikGameInterp.SceneType.TalkScene)
                 {
                     // Speed up considerably crossFade after Talk/AdvScene TouchReaction function.
                     __instance.transitionDuration = Reaction ? Random.Range(0.1f, 0.2f) : Random.Range(0.5f, 1f);

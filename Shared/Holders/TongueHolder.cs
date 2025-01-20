@@ -154,7 +154,7 @@
 //        //    }
 //        //    else
 //        //    {
-//        //        KoikatuInterpreter.Instance.StartCoroutine(ChangeTongueCo(item, anm, oldLayer, newLayer));
+//        //        KoikGame.Instance.StartCoroutine(ChangeTongueCo(item, anm, oldLayer, newLayer));
 //        //    }
 //        //   //VRPlugin.Logger.LogDebug($"TestLayer:{newLayer}");
 

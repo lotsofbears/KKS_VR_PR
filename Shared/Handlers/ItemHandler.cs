@@ -1,25 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
-using VRGIN.Core;
-using VRGIN.Controls;
-using VRGIN.Helpers;
-using HarmonyLib;
+﻿using VRGIN.Controls;
 using UnityEngine;
 using KK_VR.Interpreters;
-using KK_VR.Settings;
-using KK_VR.Fixes;
 using KK_VR.Features;
-using KK_VR.Controls;
-using RootMotion.FinalIK;
 using static HandCtrl;
-using KK_VR.Caress;
-using ADV.Commands.Game;
-using KK_VR.Trackers;
-using System.Runtime.Remoting.Messaging;
 using KK_VR.Holders;
+using KK_VR.Settings;
 
 namespace KK_VR.Handlers
 {
@@ -35,7 +20,6 @@ namespace KK_VR.Handlers
             set => _tracker = value is ControllerTracker t ? t : null;
         }
         protected HandHolder _hand;
-        protected KoikatuSettings _settings;
         protected Controller _controller;
         //protected ModelHandler.ItemType _item;
         private bool _unwind;
@@ -56,7 +40,6 @@ namespace KK_VR.Handlers
             _tracker = new ControllerTracker();
             _tracker.SetBlacklistDic(_hand.Grasp.GetBlacklistDic);
 
-            _settings = VR.Context.Settings as KoikatuSettings;
             _controller = _hand.Controller;
         }
         protected virtual void Update()
@@ -126,7 +109,7 @@ namespace KK_VR.Handlers
             return part switch
             {
                 Tracker.Body.Head => SFXLoader.Surface.Hair,
-                _ => Interactors.Undresser.IsBodyPartClothed(_tracker.colliderInfo.chara, part) ? SFXLoader.Surface.Cloth : SFXLoader.Surface.Skin
+                _ => Undresser.IsBodyPartClothed(_tracker.colliderInfo.chara, part) ? SFXLoader.Surface.Cloth : SFXLoader.Surface.Skin
             };
         }
         protected SFXLoader.Intensity GetIntensityType(Tracker.Body part)
@@ -139,6 +122,17 @@ namespace KK_VR.Handlers
             };
         }
 
+        protected bool IsReactionEligible(ChaControl chara)
+        {
+            var config = KoikSettings.AutomaticTouching.Value;
+            if (config == KoikSettings.Genders.Disable
+                || (config == KoikSettings.Genders.Boys && chara.sex == 1)
+                || (config == KoikSettings.Genders.Girls && chara.sex == 0))
+            {
+                return false;
+            }
+            return true;
+        }
         protected override void OnTriggerExit(Collider other)
         {
             if (_tracker.RemoveCollider(other))
@@ -149,7 +143,7 @@ namespace KK_VR.Handlers
                     _unwind = true;
                     _timer = 1f;
                     // Do we need this?
-                    HSceneInterpreter.SetSelectKindTouch(AibuColliderKind.none);
+                    HSceneInterp.SetSelectKindTouch(AibuColliderKind.none);
                     _hand.SetCollisionState(true);
                 }
             }
@@ -169,7 +163,8 @@ namespace KK_VR.Handlers
         }
         protected virtual void DoReaction(float velocity)
         {
-
+            var chara = _tracker.colliderInfo.chara;
+            if (!IsReactionEligible(chara)) return;
         }
     }
 }

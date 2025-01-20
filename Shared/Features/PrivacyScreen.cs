@@ -13,16 +13,9 @@ namespace KK_VR.Features
     {
         private static Canvas _blocker;
 
-        public static void Initialize()
+        internal static void UpdatePrivacyScreen()
         {
-            var settings = VR.Settings as KoikatuSettings;
-            CreateOrDestroy(settings);
-            settings.AddListener("PrivacyScreen", (_, _1) => CreateOrDestroy(settings));
-        }
-
-        private static void CreateOrDestroy(KoikatuSettings settings)
-        {
-            if (settings.PrivacyScreen)
+            if (KoikSettings.PrivacyScreen.Value)
                 Create();
             else
                 Destroy();

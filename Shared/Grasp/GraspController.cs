@@ -1,24 +1,12 @@
-﻿using ADV.Commands.Base;
-using Illusion.Component.Correct;
-using KK.RootMotion.FinalIK;
-using KK_VR.Handlers;
+﻿using KK_VR.Handlers;
 using KK_VR.Holders;
-using KK_VR.IK;
 using KK_VR.Interpreters;
 using KK_VR.Settings;
-using KK_VR.Trackers;
-using KK_VR.Grasp;
-using RootMotion.FinalIK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UniRx;
-using Unity.Linq;
 using UnityEngine;
-using VRGIN.Core;
-using BodyPart = KK_VR.Grasp.BodyPart;
-using static KK_VR.Grasp.GraspController;
-using System.Runtime.CompilerServices;
 
 namespace KK_VR.Grasp
 {
@@ -177,7 +165,7 @@ namespace KK_VR.Grasp
                     GameObject.Destroy(bodyPart.anchor.parent.gameObject);
                 }
                 bodyPart.anchor.SetParent(bodyPart.beforeIK, worldPositionStays: true);
-                if (instant || KoikatuInterpreter.Settings.ReturnBodyPartAfterSync)
+                if (instant || KoikSettings.IKReturnBodyPartAfterSync.Value)
                 {
                     bodyPart.guide.Sleep(instant);
                 }
@@ -525,10 +513,11 @@ namespace KK_VR.Grasp
                         GraspBodyPart(bodyPart, anchor);
                     }
                 }
-                if (MouthGuide.Instance != null)
-                {
-                    MouthGuide.Instance.PauseInteractions = true;
-                }
+
+                //if (MouthGuide.Instance != null)
+                //{
+                //    MouthGuide.Instance.PauseInteractions = true;
+                //}
                 _hand.OnGraspHold();
             }
         }
@@ -559,7 +548,7 @@ namespace KK_VR.Grasp
             // Only bodyParts directly from the tracker live at 0 index, i.e. firstly interacted with.
 
 #if KK
-            if (KoikatuInterpreter.IsParty) return false;
+            if (KoikGameInterp.IsParty) return false;
 #endif
 
             if (_helper != null && _heldBodyParts.Count > 0 && (_heldBodyParts[0].name == PartName.HandL || _heldBodyParts[0].name == PartName.HandR))
@@ -588,7 +577,7 @@ namespace KK_VR.Grasp
         internal bool OnFreeHorizontalScroll(Tracker.Body trackerPart, ChaControl chara, bool increase)
         {
 #if KK
-            if (KoikatuInterpreter.IsParty) return false;
+            if (KoikGameInterp.IsParty) return false;
 #endif
             if (_helper != null && trackerPart == Tracker.Body.HandL || trackerPart == Tracker.Body.HandR)
             {
@@ -711,7 +700,7 @@ namespace KK_VR.Grasp
             {
                 bodyGuide.OnSyncStart();
             }
-            bodyPart.chain.bendConstraint.weight = KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+            bodyPart.chain.bendConstraint.weight = KoikSettings.IKDefaultBendConstraint.Value;
             bodyPart.goal.Sleep();
         }
 
@@ -721,7 +710,7 @@ namespace KK_VR.Grasp
         {
             if (bodyPart.chain != null)
             {
-                bodyPart.chain.bendConstraint.weight = bodyPart.goal.IsBusy ? 1f : KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+                bodyPart.chain.bendConstraint.weight = bodyPart.goal.IsBusy ? 1f : KoikSettings.IKDefaultBendConstraint.Value;
             }
             bodyPart.guide.Attach(attachPoint);
             

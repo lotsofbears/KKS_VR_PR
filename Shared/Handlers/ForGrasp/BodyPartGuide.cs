@@ -1,21 +1,7 @@
-﻿using KK.RootMotion.FinalIK;
-using KK_VR.Fixes;
-using KK_VR.Grasp;
-using KK_VR.Handlers;
-using KK_VR.Holders;
-using KK_VR.IK;
-using KK_VR.Interactors;
-using KK_VR.Interpreters;
-using KK_VR.Trackers;
-using RootMotion.FinalIK;
+﻿using KK_VR.Holders;
+using KK_VR.Settings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using VRGIN.Controls;
-using VRGIN.Helpers;
-using static KK.RootMotion.FinalIK.IKSolverVR;
 using static KK_VR.Grasp.GraspController;
 using BodyPart = KK_VR.Grasp.BodyPart;
 
@@ -74,9 +60,9 @@ namespace KK_VR.Handlers
             //_bodyPart.effector.target = _bodyPart.anchor;
             if (_bodyPart.goal != null && !_bodyPart.goal.IsBusy)
             {
-                _bodyPart.chain.bendConstraint.weight = KoikatuInterpreter.Settings.IKDefaultBendConstraint;
+                _bodyPart.chain.bendConstraint.weight = KoikSettings.IKDefaultBendConstraint.Value;
             }
-            if (_bodyPart.effector.maintainRelativePositionWeight != 1f && KoikatuInterpreter.Settings.MaintainLimbOrientation && _bodyPart.IsHand)
+            if (_bodyPart.effector.maintainRelativePositionWeight != 1f && KoikSettings.IKMaintainRelativePosition.Value && _bodyPart.IsHand)
             {
                 _translateEx = true;
                 //_translateOffset = _bodyPart.afterIK.position - transform.position;
@@ -93,7 +79,7 @@ namespace KK_VR.Handlers
 
             if (hand != null)
             {
-                if (KoikatuInterpreter.Settings.ShowGuideObjects) _bodyPart.visual.Show();
+                if (KoikSettings.IKShowGuideObjects.Value) _bodyPart.visual.Show();
                 Tracker.SetBlacklistDic(hand.Grasp.GetBlacklistDic);
                 ClearBlacks();
                 _bodyPart.visual.SetColor(IsBusy);
@@ -183,7 +169,7 @@ namespace KK_VR.Handlers
                 {
                     if (!_attach)
                     {
-                        if (KoikatuInterpreter.Settings.MaintainLimbOrientation)
+                        if (KoikSettings.IKMaintainRelativePosition.Value)
                         {
                             TranslateOnFollow();
                         }

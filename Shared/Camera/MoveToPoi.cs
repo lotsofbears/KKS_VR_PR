@@ -1,4 +1,5 @@
 ﻿using KK_VR.Interpreters;
+using KK_VR.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,8 +56,8 @@ namespace KK_VR.Camera
             _targetRotation = Quaternion.LookRotation(_lookAt.position - offsetPos);
 
             _lerpMultiplier = Mathf.Min(
-                KoikatuInterpreter.Settings.FlightSpeed / Vector3.Distance(offsetPos, _startPosition),
-                KoikatuInterpreter.Settings.FlightSpeed * 60f / Quaternion.Angle(_startRotation, _targetRotation));
+                KoikSettings.FlightSpeed.Value / Vector3.Distance(offsetPos, _startPosition),
+                KoikSettings.FlightSpeed.Value * 60f / Quaternion.Angle(_startRotation, _targetRotation));
 
         }
         private readonly Quaternion _startRotation;

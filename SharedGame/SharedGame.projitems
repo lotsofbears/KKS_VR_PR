@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0aa55027-91a2-4fc5-b657-8c2a2b96f160</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>KK_VR</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\ActionCameraControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\BackgroundDisplayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\CameraMoveHooks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Camera\CameraMover.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caress\CaressUtil.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caress\HandCtrlHooks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\LocationPicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Features\HideMaleHead.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fixes\GameFixes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Fixes\ObiControlFix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GameStandingMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\ActionSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\HSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\ForScenes\TalkSceneHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\AibuItemMover.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\Helpers\KissHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handlers\MouthGuide.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\ActionSceneInterp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationMaleBreath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\IntegrationSensibleH.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\SceneExtras.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\HSceneInterp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\ActionSceneInput.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\HSceneInput.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Input\TalkSceneInput.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Extras\InterpreterHooks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\KoikGameInterp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\ActionScenePatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\GraspPatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\HScenePatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Patches\TalkScenePatches.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\TalkSceneInterp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\GameSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\[obsolete]GameSettingsManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Interpreters\Scenes\" />
+  </ItemGroup>
+</Project>

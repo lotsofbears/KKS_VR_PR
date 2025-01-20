@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using VRGIN.Controls;
 using VRGIN.Controls.Tools;
 using VRGIN.Core;
 using KK_VR.Interpreters;
 using Valve.VR;
 using KK_VR.Holders;
-//using EVRButtonId = Unity.XR.OpenVR.EVRButtonId;
+using static VRGIN.Controls.Controller;
 
 namespace KK_VR.Controls
 {
@@ -13,77 +12,64 @@ namespace KK_VR.Controls
     {
         private int _index;
 
-        private KoikatuMenuTool _menu;
+        private KoikMenuTool _menu;
 
-        private KoikatuMenuHandler _menuHandler;
+        private KoikMenuHandler _menuHandler;
 
-        private Controller.TrackpadDirection _lastDirection;
+        private TrackpadDirection _lastDirection;
 
-        private GripMove _grip;
+        private GripMove _gripMove;
 
-        internal bool IsGrip => _grip != null;
+        internal bool IsGrip => _gripMove != null;
 
-        internal bool IsInit => _init;
-
-        private bool _init;
         public override Texture2D Image
         {
             get;
         }
-
         protected override void OnDisable()
         {
             DestroyGripMove();
             base.OnDisable();
         }
+        protected override void OnStart()
+        {
+            base.OnStart();
+            // A clutch for init to avoid null-refs as I'd rather not touch VRGIN's init.
+            this.enabled = false;
+        }
         protected override void OnDestroy()
         {
 
         }
-        protected override void OnEnable()
-        {
-            if (!_init
-                && Neighbor != null
-                && Neighbor.Tools[0] is GameplayTool tool
-                && tool.IsInit)
-            {
-                // Ancient bug, can happen if controller was asleep at the VRGIN's init phase.
-                OnRenderModelLoaded();
-            }
-            base.OnEnable();
-        }
         protected override void OnUpdate()
         {
-            if (_init)
-            {
-                HandleInput();
-                _grip?.HandleGrabbing();
-            }
+            HandleInput();
+            _gripMove?.HandleGrabbing();
         }
         internal void OnRenderModelLoaded()
         {
-            _init = true;
+            this.enabled = true;
             _index = Owner == VR.Mode.Left ? 0 : 1;
-            _menu = new KoikatuMenuTool(_index);
-            _menuHandler = new KoikatuMenuHandler(Owner);
+            _menu ??= new KoikMenuTool(Owner);
+            _menuHandler ??= new KoikMenuHandler(Owner);
         }
         internal void DestroyGripMove()
         {
-            _grip = null;
-            KoikatuInterpreter.SceneInput.OnGripMove(_index, active: false);
+            _gripMove = null;
+            KoikGameInterp.SceneInput.OnGripMove(_index, active: false);
         }
         internal void LazyGripMove(int avgFrame)
         {
             // In all honesty tho, the proper name would be retarded, not lazy as it does way more in this mode and lags behind.
-            _grip?.StartLag(avgFrame);
+            _gripMove?.StartLag(avgFrame);
         }
         internal void AttachGripMove(Transform attachPoint)
         {
-            _grip?.AttachGripMove(attachPoint);
+            _gripMove?.AttachGripMove(attachPoint);
         }
         internal void UnlazyGripMove()
         {
-            _grip?.StopLag();
+            _gripMove?.StopLag();
         }
         internal void HideLaser()
         {
@@ -92,14 +78,14 @@ namespace KK_VR.Controls
 
         private void HandleInput()
         {
-            var direction = Owner.GetTrackpadDirection();
+            var direction = _gripMove != null ? TrackpadDirection.Center : Owner.GetTrackpadDirection();
             var menuInteractable = !_menu.IsAttached && _menuHandler.CheckMenu();
 
             if (menuInteractable && !_menuHandler.LaserVisible)
             {
                 // Don't show laser if something of interest is going on.
                 var handler = HandHolder.GetHand(_index).Handler;
-                if (KoikatuInterpreter.SceneInput.IsBusy || (handler != null && handler.IsBusy))
+                if (KoikGameInterp.SceneInput.IsBusy || (handler != null && handler.IsBusy))
                 {
                     menuInteractable = false;
                 }
@@ -111,9 +97,9 @@ namespace KK_VR.Controls
 
             if (Controller.GetPressDown(EVRButtonId.k_EButton_ApplicationMenu))
             {
-                if (!KoikatuInterpreter.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_ApplicationMenu, direction))
+                if (!KoikGameInterp.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_ApplicationMenu, direction))
                 {
-                    KoikatuMenuTool.ToggleState();
+                    KoikMenuTool.ToggleState();
                 }
             }
 
@@ -123,9 +109,9 @@ namespace KK_VR.Controls
                 {
                     _menuHandler.OnTrigger(true);
                 }
-                else if (!KoikatuInterpreter.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_SteamVR_Trigger, direction))
+                else if (!KoikGameInterp.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_SteamVR_Trigger, direction))
                 {
-                    _grip?.OnTrigger(true);
+                    _gripMove?.OnTrigger(true);
                 }
 
             }
@@ -137,8 +123,8 @@ namespace KK_VR.Controls
                 }
                 else
                 {
-                    _grip?.OnTrigger(false);
-                    KoikatuInterpreter.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_SteamVR_Trigger, direction);
+                    _gripMove?.OnTrigger(false);
+                    KoikGameInterp.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_SteamVR_Trigger, direction);
                 }
             }
 
@@ -154,13 +140,13 @@ namespace KK_VR.Controls
                     _menuHandler.OnGrip(true);
                 }
                 // If particular interpreter doesn't want grip move right now, it will be blocked.
-                else if (!KoikatuInterpreter.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_Grip, direction))
+                else if (!KoikGameInterp.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_Grip, direction))
                 {
-                    _grip = new GripMove(HandHolder.GetHand(_index), HandHolder.GetHand(_index == 0 ? 1 : 0));
+                    _gripMove = new GripMove(HandHolder.GetHand(_index), HandHolder.GetHand(_index == 0 ? 1 : 0));
                     // Grab initial Trigger/Touchpad modifiers, if they were already pressed.
-                    if (Controller.GetPress(EVRButtonId.k_EButton_SteamVR_Trigger)) _grip.OnTrigger(true);
-                    if (Controller.GetPress(EVRButtonId.k_EButton_SteamVR_Touchpad)) _grip.OnTouchpad(true);
-                    KoikatuInterpreter.SceneInput.OnGripMove(_index, active: true);
+                    if (Controller.GetPress(EVRButtonId.k_EButton_SteamVR_Trigger)) _gripMove.OnTrigger(true);
+                    if (Controller.GetPress(EVRButtonId.k_EButton_SteamVR_Touchpad)) _gripMove.OnTouchpad(true);
+                    KoikGameInterp.SceneInput.OnGripMove(_index, active: true);
                 }
             }
             else if (Controller.GetPressUp(EVRButtonId.k_EButton_Grip))
@@ -171,8 +157,8 @@ namespace KK_VR.Controls
                 }
                 else
                 {
-                    KoikatuInterpreter.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_Grip, direction);
-                    if (_grip != null)
+                    KoikGameInterp.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_Grip, direction);
+                    if (_gripMove != null)
                     {
                         DestroyGripMove();
                     }
@@ -185,9 +171,9 @@ namespace KK_VR.Controls
                 {
                     _menuHandler.OnTouchpad(true);
                 }
-                else if (!KoikatuInterpreter.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_SteamVR_Touchpad, direction))
+                else if (!KoikGameInterp.SceneInput.OnButtonDown(_index, EVRButtonId.k_EButton_SteamVR_Touchpad, direction))
                 {
-                    _grip?.OnTouchpad(true);
+                    _gripMove?.OnTouchpad(true);
                 }
             }
             else if (Controller.GetPressUp(EVRButtonId.k_EButton_SteamVR_Touchpad))
@@ -198,8 +184,8 @@ namespace KK_VR.Controls
                 }
                 else
                 {
-                    _grip?.OnTouchpad(false);
-                    KoikatuInterpreter.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_SteamVR_Touchpad, direction);
+                    _gripMove?.OnTouchpad(false);
+                    KoikGameInterp.SceneInput.OnButtonUp(_index, EVRButtonId.k_EButton_SteamVR_Touchpad, direction);
                 }
             }
 
@@ -213,11 +199,11 @@ namespace KK_VR.Controls
                 {
                     if (_lastDirection != VRGIN.Controls.Controller.TrackpadDirection.Center)
                     {
-                        KoikatuInterpreter.SceneInput.OnDirectionUp(_index, _lastDirection);
+                        KoikGameInterp.SceneInput.OnDirectionUp(_index, _lastDirection);
                     }
                     if (direction != VRGIN.Controls.Controller.TrackpadDirection.Center)
                     {
-                        KoikatuInterpreter.SceneInput.OnDirectionDown(_index, direction);
+                        KoikGameInterp.SceneInput.OnDirectionDown(_index, direction);
                     }
                 }
                 _lastDirection = direction;
